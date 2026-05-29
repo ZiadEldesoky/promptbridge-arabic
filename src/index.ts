@@ -11,6 +11,16 @@ export type {
   PromptBridgeOutput
 } from "./config/types.js";
 export {
+  containsArabic,
+  convertClipboardOnce,
+  convertClipboardText,
+  watchClipboard
+} from "./clipboard/watchClipboard.js";
+export type {
+  ClipboardConversionEvent,
+  WatchClipboardOptions
+} from "./clipboard/watchClipboard.js";
+export {
   preserveTechnicalTokens,
   restoreTechnicalTokens
 } from "./translator/preserveTechnicalTokens.js";

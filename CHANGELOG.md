@@ -2,6 +2,13 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.3.0
+
+- Added `promptbridge watch` to monitor the clipboard and convert copied Arabic prompts automatically.
+- Added `promptbridge watch --once` for one-shot clipboard conversion, suitable for global shortcuts and launchers.
+- Exported clipboard watch utilities from the package entry point.
+- Added tests for Arabic detection and clipboard conversion behavior.
+
 ## v0.2.2
 
 - Removed submission-specific wording and documents from the repository.

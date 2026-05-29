@@ -63,6 +63,29 @@ promptbridge "اشرحلي الكود دا ببساطة" --mode explain --biling
 promptbridge "استخدم sk-... في src/api.ts" --redact
 ```
 
+## Clipboard automation
+
+If you do not want to type `promptbridge` before every prompt, run clipboard watch mode:
+
+```bash
+promptbridge watch --redact
+```
+
+Then use this workflow in any app:
+
+1. Write your prompt in Arabic.
+2. Copy it.
+3. PromptBridge replaces the clipboard with the English coding-agent prompt.
+4. Paste it into Codex, Cursor, Claude, Gemini, ChatGPT, or any other AI tool.
+
+For a one-shot conversion suitable for a global shortcut or Raycast command:
+
+```bash
+promptbridge watch --once --redact
+```
+
+This is intentionally app-agnostic. Direct in-app replacement while typing requires a future OS-level input method, browser extension, editor extension, or app-specific integration.
+
 ## Options
 
 ```text
@@ -169,6 +192,7 @@ src/
     formatOutput.ts
   clipboard/
     copyToClipboard.ts
+    watchClipboard.ts
   config/
     loadConfig.ts
     types.ts
@@ -177,6 +201,7 @@ tests/
   redactSecrets.test.ts
   preserveTechnicalTokens.test.ts
   loadConfig.test.ts
+  watchClipboard.test.ts
 ```
 
 The core flow is:
@@ -221,12 +246,14 @@ npm run build
 - The glossary is intentionally small in the early MVP.
 - There are no direct agent adapters yet.
 - Direct agent adapters are planned for later versions.
+- Automatic replacement while typing inside arbitrary GUI apps needs a future OS-level or app-specific integration.
 
 ## Roadmap
 
 Near-term improvements:
 
 - Add `--agent` adapters for Codex, Cursor, Claude, and Gemini CLI.
+- Add a Raycast/global-shortcut helper for one-shot clipboard conversion.
 - Add more Arabic dialect examples.
 - Add interactive stdin mode.
 
