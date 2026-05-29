@@ -2,11 +2,16 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.2.2
+
+- Removed submission-specific wording and documents from the repository.
+- Kept OSS project polish focused on public usefulness, contribution workflow, and package readiness.
+
 ## v0.2.1
 
-- Added OSS submission polish: CI, issue templates, PR template, contribution guide, security policy, changelog, and code of conduct.
+- Added OSS readiness polish: CI, issue templates, PR template, contribution guide, security policy, changelog, and code of conduct.
 - Added README badges and terminal-style demo image.
-- Added OpenAI OSS submission draft and launch checklist.
+- Added launch checklist.
 - Added release notes documentation.
 - Added package metadata for repository, bugs, homepage, and additional keywords.
 

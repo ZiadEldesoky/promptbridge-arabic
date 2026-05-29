@@ -21,7 +21,7 @@ program
   .description(
     "Convert Arabic or Egyptian Arabic developer prompts into structured English prompts for AI coding agents."
   )
-  .version("0.2.1")
+  .version("0.2.2")
   .argument("[prompt...]", "Arabic or Egyptian Arabic coding prompt")
   .option("--config <path>", "Path to a PromptBridge JSON config file")
   .addOption(
