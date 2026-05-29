@@ -6,6 +6,7 @@ import {
   convertClipboardOnce,
   watchClipboard
 } from "./clipboard/watchClipboard.js";
+import { replaceSelectedText } from "./clipboard/replaceSelection.js";
 import { loadConfig } from "./config/loadConfig.js";
 import type { LoadedPromptBridgeConfig } from "./config/types.js";
 import { promptModes, type PromptMode } from "./translator/modes.js";
@@ -23,6 +24,13 @@ interface WatchOptions extends CliOptions {
   interval?: string;
   once?: boolean;
   quiet?: boolean;
+}
+
+interface ReplaceSelectionOptions extends CliOptions {
+  copyDelay?: string;
+  pasteDelay?: string;
+  quiet?: boolean;
+  restoreClipboard?: boolean;
 }
 
 const program = new Command();
@@ -67,7 +75,7 @@ program
   .description(
     "Convert Arabic or Egyptian Arabic developer prompts into structured English prompts for AI coding agents."
   )
-  .version("0.3.0");
+  .version("0.4.0");
 
 addPromptOptions(
   program
@@ -109,6 +117,46 @@ addPromptOptions(
     intervalMs,
     quiet: options.quiet
   });
+});
+
+addPromptOptions(
+  program
+    .command("replace-selection")
+    .description(
+      "Convert selected Arabic text and paste the English prompt back into the active app. macOS only."
+    )
+    .option("--copy-delay <ms>", "Delay after copying selected text", "120")
+    .option("--paste-delay <ms>", "Delay before and after pasting output", "120")
+    .option("--restore-clipboard", "Restore the previous clipboard after pasting")
+    .option("--quiet", "Do not print replacement status messages")
+).action(async (options: ReplaceSelectionOptions) => {
+  const loadedConfig = await loadConfig({ configPath: options.config });
+  const translateOptions = translateOptionsFromConfig(options, loadedConfig);
+  const copyDelayMs = Number.parseInt(options.copyDelay ?? "120", 10);
+  const pasteDelayMs = Number.parseInt(options.pasteDelay ?? "120", 10);
+
+  if (!Number.isFinite(copyDelayMs) || !Number.isFinite(pasteDelayMs)) {
+    program.error("--copy-delay and --paste-delay must be numbers.");
+  }
+
+  const event = await replaceSelectedText({
+    translateOptions,
+    copyDelayMs,
+    pasteDelayMs,
+    restoreClipboard: options.restoreClipboard
+  });
+
+  if (!event.converted && event.reason === "unsupported_platform") {
+    program.error("replace-selection is currently macOS-only.");
+  }
+
+  if (!options.quiet) {
+    console.error(
+      event.converted
+        ? "Replaced selected Arabic text with an English prompt."
+        : `Selected text was not converted: ${event.reason ?? "unknown"}.`
+    );
+  }
 });
 
 addPromptOptions(

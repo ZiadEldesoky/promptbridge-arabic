@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.4.0
+
+- Added `promptbridge replace-selection` for macOS selected-text replacement workflows.
+- Added tests for selected-text replacement through injectable clipboard and shortcut functions.
+- Documented Raycast/global-shortcut style workflows for replacing selected Arabic text in any app.
+
 ## v0.3.0
 
 - Added `promptbridge watch` to monitor the clipboard and convert copied Arabic prompts automatically.

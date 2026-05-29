@@ -84,6 +84,20 @@ For a one-shot conversion suitable for a global shortcut or Raycast command:
 promptbridge watch --once --redact
 ```
 
+For replacing selected text on macOS:
+
+```bash
+promptbridge replace-selection --redact
+```
+
+Workflow:
+
+1. Select Arabic text inside any app.
+2. Run `promptbridge replace-selection --redact` from a global shortcut, Raycast script command, or terminal.
+3. The command copies the selected text, converts it, then pastes the English prompt back into the active app.
+
+macOS will require Accessibility permission for the app that runs the command, such as Terminal, iTerm, Raycast, or Automator.
+
 This is intentionally app-agnostic. Direct in-app replacement while typing requires a future OS-level input method, browser extension, editor extension, or app-specific integration.
 
 ## Options
@@ -246,14 +260,15 @@ npm run build
 - The glossary is intentionally small in the early MVP.
 - There are no direct agent adapters yet.
 - Direct agent adapters are planned for later versions.
-- Automatic replacement while typing inside arbitrary GUI apps needs a future OS-level or app-specific integration.
+- Replacing selected text is currently macOS-only.
+- Automatic replacement while typing without selecting text needs a future OS-level input method or app-specific integration.
 
 ## Roadmap
 
 Near-term improvements:
 
 - Add `--agent` adapters for Codex, Cursor, Claude, and Gemini CLI.
-- Add a Raycast/global-shortcut helper for one-shot clipboard conversion.
+- Add a packaged Raycast/global-shortcut helper for selected-text replacement.
 - Add more Arabic dialect examples.
 - Add interactive stdin mode.
 

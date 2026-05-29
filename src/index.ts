@@ -16,10 +16,12 @@ export {
   convertClipboardText,
   watchClipboard
 } from "./clipboard/watchClipboard.js";
+export { replaceSelectedText } from "./clipboard/replaceSelection.js";
 export type {
   ClipboardConversionEvent,
   WatchClipboardOptions
 } from "./clipboard/watchClipboard.js";
+export type { ReplaceSelectedTextOptions } from "./clipboard/replaceSelection.js";
 export {
   preserveTechnicalTokens,
   restoreTechnicalTokens
