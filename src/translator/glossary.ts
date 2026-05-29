@@ -92,18 +92,30 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
   }
 ];
 
-export function findGlossaryMatches(input: string): GlossaryEntry[] {
+export function mergeGlossaries(
+  customGlossary: GlossaryEntry[] = []
+): GlossaryEntry[] {
+  return [...customGlossary, ...egyptianDeveloperGlossary];
+}
+
+export function findGlossaryMatches(
+  input: string,
+  glossary: GlossaryEntry[] = egyptianDeveloperGlossary
+): GlossaryEntry[] {
   const normalizedInput = input.toLowerCase();
 
-  return egyptianDeveloperGlossary.filter((entry) =>
+  return glossary.filter((entry) =>
     normalizedInput.includes(entry.arabic.toLowerCase())
   );
 }
 
-export function normalizeDeveloperPhrases(input: string): string[] {
+export function normalizeDeveloperPhrases(
+  input: string,
+  glossary: GlossaryEntry[] = egyptianDeveloperGlossary
+): string[] {
   const seen = new Set<string>();
 
-  return findGlossaryMatches(input)
+  return findGlossaryMatches(input, glossary)
     .map((entry) => entry.english)
     .filter((english) => {
       if (seen.has(english)) {

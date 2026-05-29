@@ -1,0 +1,12 @@
+[
+  {
+    "arabic": "راجع الصلاحيات",
+    "english": "review authorization rules",
+    "tags": ["security"]
+  },
+  {
+    "arabic": "ظبط الفلو",
+    "english": "improve the user flow while preserving behavior",
+    "tags": ["refactor"]
+  }
+]

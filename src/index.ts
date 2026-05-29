@@ -4,6 +4,12 @@ export type {
   TranslatePromptResult
 } from "./translator/translatePrompt.js";
 export { translatePrompt } from "./translator/translatePrompt.js";
+export { loadConfig } from "./config/loadConfig.js";
+export type {
+  LoadedPromptBridgeConfig,
+  PromptBridgeConfig,
+  PromptBridgeOutput
+} from "./config/types.js";
 export {
   preserveTechnicalTokens,
   restoreTechnicalTokens

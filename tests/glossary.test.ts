@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   findGlossaryMatches,
+  mergeGlossaries,
   normalizeDeveloperPhrases
 } from "../src/translator/glossary.js";
 
@@ -27,5 +28,19 @@ describe("glossary", () => {
     expect(hints).toContain("fix or improve this for me");
     expect(hints).toContain("make the smallest safe change");
     expect(new Set(hints).size).toBe(hints.length);
+  });
+
+  it("lets custom glossary entries participate before built-in entries", () => {
+    const glossary = mergeGlossaries([
+      {
+        arabic: "راجع الصلاحيات",
+        english: "review authorization rules",
+        tags: ["security"]
+      }
+    ]);
+
+    const hints = normalizeDeveloperPhrases("راجع الصلاحيات كويس", glossary);
+
+    expect(hints[0]).toBe("review authorization rules");
   });
 });

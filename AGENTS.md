@@ -15,6 +15,8 @@ The project should work with any coding agent. Do not add direct Codex, VS Code,
 - Use deterministic template-based rewriting.
 - Preserve code blocks, inline code, file paths, commands, stack traces, package names, URLs, and environment variables.
 - Redact secrets only when the caller enables redaction.
+- Config files may set defaults, but explicit CLI flags should override config.
+- Custom glossary entries should be merged into the built-in Egyptian Arabic glossary.
 - Keep the architecture modular so future integrations can reuse the translator core.
 
 ## Useful commands

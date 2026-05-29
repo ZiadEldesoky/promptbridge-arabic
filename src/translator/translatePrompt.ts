@@ -4,7 +4,12 @@ import {
   type StructuredPrompt
 } from "../formatting/formatOutput.js";
 import { redactSecrets } from "../redaction/redactSecrets.js";
-import { findGlossaryMatches, normalizeDeveloperPhrases } from "./glossary.js";
+import {
+  findGlossaryMatches,
+  mergeGlossaries,
+  normalizeDeveloperPhrases,
+  type GlossaryEntry
+} from "./glossary.js";
 import {
   modeTemplates,
   type ModeTemplate,
@@ -19,6 +24,7 @@ export interface TranslatePromptOptions {
   mode?: PromptMode;
   bilingual?: boolean;
   redact?: boolean;
+  glossary?: GlossaryEntry[];
 }
 
 export interface TranslatePromptResult {
@@ -55,13 +61,15 @@ export function translatePrompt(
     ? redactSecrets(input)
     : { text: input, redactionCount: 0, redactedPatternNames: [] };
   const preserved = preserveTechnicalTokens(redaction.text);
+  const glossary = mergeGlossaries(options.glossary);
   const signals = detectSignals(redaction.text);
-  const mode = options.mode ?? inferMode(redaction.text, signals);
+  const mode = options.mode ?? inferMode(redaction.text, signals, glossary);
   const structuredPrompt = buildStructuredPrompt(
     mode,
     signals,
     redaction.text,
-    preserved.tokens
+    preserved.tokens,
+    glossary
   );
 
   if (redaction.redactionCount > 0) {
@@ -91,8 +99,12 @@ export function translatePrompt(
   };
 }
 
-function inferMode(text: string, signals: PromptSignals): PromptMode {
-  const glossaryMatches = findGlossaryMatches(text);
+function inferMode(
+  text: string,
+  signals: PromptSignals,
+  glossary: GlossaryEntry[]
+): PromptMode {
+  const glossaryMatches = findGlossaryMatches(text, glossary);
   const tags = new Set(glossaryMatches.flatMap((match) => match.tags));
 
   if (signals.security || tags.has("security")) {
@@ -127,12 +139,13 @@ function buildStructuredPrompt(
   mode: PromptMode,
   signals: PromptSignals,
   text: string,
-  tokens: PreservedTechnicalToken[]
+  tokens: PreservedTechnicalToken[],
+  glossary: GlossaryEntry[]
 ): StructuredPrompt {
   const template = modeTemplates[mode];
   const prompt: StructuredPrompt = {
     task: buildTask(mode, signals, template),
-    context: contextFromInput(text, signals),
+    context: contextFromInput(text, signals, glossary),
     requirements: unique([
       ...modeRequirements(mode, template, signals),
       ...signalRequirements(mode, signals)
@@ -167,9 +180,10 @@ function buildStructuredPrompt(
 
 function contextFromInput(
   text: string,
-  signals: PromptSignals
+  signals: PromptSignals,
+  glossary: GlossaryEntry[]
 ): string[] {
-  const phraseContext = normalizeDeveloperPhrases(text);
+  const phraseContext = normalizeDeveloperPhrases(text, glossary);
   const context = [...phraseContext];
 
   if (signals.buildError) {

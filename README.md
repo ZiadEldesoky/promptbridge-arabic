@@ -4,7 +4,7 @@ Arabic-first prompt translator and optimizer for AI coding agents.
 
 PromptBridge Arabic lets Arabic-speaking developers write coding prompts in Arabic or Egyptian Arabic, then converts them into structured English prompts that work well with Codex, Claude Code, Cursor, Gemini CLI, and other AI developer tools.
 
-The v0.1 MVP is intentionally local and deterministic:
+The current MVP is intentionally local and deterministic:
 
 - No API key required.
 - No AI translation yet.
@@ -57,9 +57,60 @@ promptbridge "استخدم sk-... في src/api.ts" --redact
 
 ```text
 --mode <mode>   Choose one of: fix, refactor, review, tests, explain, security
+--config <path> Load a custom PromptBridge config file
 --copy          Copy the generated prompt to the clipboard
 --bilingual     Include an Arabic summary after the English prompt
 --redact        Redact common secrets before generating the prompt
+```
+
+## Config files
+
+PromptBridge can load optional JSON config from:
+
+```text
+.promptbridge.json
+promptbridge.config.json
+~/.promptbridge/config.json
+```
+
+You can also pass an explicit file:
+
+```bash
+promptbridge "راجع الصلاحيات" --config ./promptbridge.config.json
+```
+
+Example config:
+
+```json
+{
+  "defaultMode": "fix",
+  "defaultOutput": "english",
+  "preserveArabicUIText": true,
+  "redactSecrets": true,
+  "agent": "codex",
+  "style": "structured",
+  "glossaryPath": "./promptbridge.glossary.json"
+}
+```
+
+Custom glossary files can be arrays:
+
+```json
+[
+  {
+    "arabic": "راجع الصلاحيات",
+    "english": "review authorization rules",
+    "tags": ["security"]
+  }
+]
+```
+
+Or simple objects:
+
+```json
+{
+  "راجع الصلاحيات": "review authorization rules"
+}
 ```
 
 ## Example output
@@ -147,14 +198,12 @@ npm run build
 - Translation is deterministic and template-based, so it does not deeply translate every Arabic sentence yet.
 - The glossary is intentionally small in v0.1.
 - There are no direct agent adapters yet.
-- Config files and custom glossary loading are planned for the next version.
+- Direct agent adapters are planned for later versions.
 
 ## Roadmap
 
 Near-term improvements:
 
-- Add config file support.
-- Add custom glossary loading.
 - Add `--agent` adapters for Codex, Cursor, Claude, and Gemini CLI.
 - Add more Arabic dialect examples.
 - Add interactive stdin mode.

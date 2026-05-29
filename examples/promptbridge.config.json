@@ -1,0 +1,9 @@
+{
+  "defaultMode": "fix",
+  "defaultOutput": "english",
+  "preserveArabicUIText": true,
+  "redactSecrets": true,
+  "agent": "codex",
+  "style": "structured",
+  "glossaryPath": "./promptbridge.glossary.json"
+}

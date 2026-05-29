@@ -74,4 +74,20 @@ describe("translatePrompt", () => {
       "The user is likely reporting a build failure."
     );
   });
+
+  it("uses custom glossary entries for context and mode inference", () => {
+    const result = translatePrompt("راجع الصلاحيات في middleware.ts", {
+      glossary: [
+        {
+          arabic: "راجع الصلاحيات",
+          english: "review authorization rules",
+          tags: ["security"]
+        }
+      ]
+    });
+
+    expect(result.mode).toBe("security");
+    expect(result.englishPrompt).toContain("review authorization rules");
+    expect(result.englishPrompt).toContain("middleware.ts");
+  });
 });
