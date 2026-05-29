@@ -16,13 +16,14 @@ Use this checklist before sharing PromptBridge Arabic publicly.
 ## Package
 
 - [x] `npm pack --dry-run` succeeds.
+- [x] Browser extension build is covered by CI.
 - [ ] Package is published to npm.
 - [ ] npm package page is checked after publish.
 
 ## GitHub
 
-- [x] `v0.2.0` tag is pushed.
-- [ ] GitHub Release is created from `v0.2.0`.
+- [x] Version tags are pushed through `v0.5.0`.
+- [ ] GitHub Release is created from the latest tag.
 - [ ] Repository topics are added.
 - [ ] Good-first issues are opened.
 

@@ -2,6 +2,15 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.6.0
+
+- Added a browser extension prototype for replacing selected Arabic prompt text inside editable web AI prompt boxes.
+- Added browser popup controls for mode selection, bilingual output, and optional secret redaction.
+- Added browser context menu actions for normal conversion and conversion with redaction.
+- Added a Raycast script command for macOS GUI selected-text replacement.
+- Added `npm run build:browser` and CI coverage for the browser extension bundle.
+- Updated integration-level documentation for CLI, clipboard, desktop GUI, and browser GUI workflows.
+
 ## v0.5.0
 
 - Added `promptbridge run <agentCommand> [...args]` to convert Arabic prompt arguments before running CLI coding agents.

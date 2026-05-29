@@ -42,12 +42,27 @@ promptbridge run codex "ظبطلي الكود دا وخليه responsive"
 
 PromptBridge converts Arabic arguments before executing the real agent command.
 
-## Level 5: Direct app integrations
+## Level 5: Browser GUI integration
+
+```bash
+npm run build:browser
+```
+
+The browser extension lets the user select Arabic text inside an editable web prompt box and replace it in place through a context menu, popup action, or keyboard shortcut.
+
+Useful for GUI-heavy AI workflows in ChatGPT, Claude, Gemini, Cursor web tools, and similar browser-based apps.
+
+Current limits:
+
+- It converts selected text, not every keystroke while typing.
+- Redaction is only applied when the user chooses the redaction action.
+- Some custom web editors may need adapter-specific handling later.
+
+## Level 6: Direct app integrations and input methods
 
 For true conversion while typing inside GUI apps, PromptBridge needs app-specific or OS-level integrations:
 
 - macOS input method.
-- Browser extension.
 - VS Code/Cursor extension.
 - Native app integration.
 

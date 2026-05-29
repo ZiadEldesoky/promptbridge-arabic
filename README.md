@@ -14,8 +14,8 @@ The current MVP is intentionally local and deterministic:
 
 - No API key required.
 - No AI translation yet.
-- No desktop app, browser extension, VS Code extension, or direct agent integration yet.
-- CLI-first, clipboard-friendly, and built around a reusable TypeScript core.
+- CLI-first core with clipboard automation, selected-text replacement, browser extension, and Raycast helper workflows.
+- Built around a reusable TypeScript core that future integrations can share.
 
 ## Why this exists
 
@@ -98,6 +98,39 @@ Workflow:
 
 macOS will require Accessibility permission for the app that runs the command, such as Terminal, iTerm, Raycast, or Automator.
 
+## GUI workflows
+
+PromptBridge now includes early GUI helpers for people who write prompts inside browser or desktop AI apps.
+
+### Browser extension
+
+The browser extension converts selected Arabic prompt text in editable web fields, including common AI chat prompt boxes.
+
+```bash
+npm run build:browser
+```
+
+Then load `extensions/browser` as an unpacked extension from `chrome://extensions`.
+
+Workflow:
+
+1. Write Arabic text inside a web AI prompt box.
+2. Select the Arabic text.
+3. Use right click -> **Convert selected Arabic prompt**, the extension popup, or `Command+Shift+Y` on macOS.
+4. PromptBridge replaces the selected text with the structured English prompt.
+
+The extension uses the local deterministic core and does not call external AI services. Redaction is available from the context menu or popup, but is not applied unless selected.
+
+### Raycast helper
+
+For macOS GUI apps, use the Raycast script command in `extensions/raycast`.
+
+```bash
+promptbridge replace-selection --redact
+```
+
+Raycast runs the same command behind a shortcut, so the workflow is: select Arabic text -> trigger Raycast command -> paste-ready English prompt replaces the selection.
+
 ## CLI agent wrappers
 
 For CLI coding agents, you can set up shell wrappers once and then write Arabic directly in the normal agent command:
@@ -117,7 +150,7 @@ promptbridge run claude "راجع الكود وشوف فيه مشاكل security
 promptbridge run gemini "اشرحلي الكود دا ببساطة"
 ```
 
-This is intentionally app-agnostic. Direct in-app replacement while typing requires a future OS-level input method, browser extension, editor extension, or app-specific integration.
+This is intentionally app-agnostic. Direct conversion while typing with no selection or shortcut still requires a future OS-level input method or app-specific integration.
 
 ## Options
 
@@ -240,6 +273,12 @@ tests/
   replaceSelection.test.ts
   runAgent.test.ts
   watchClipboard.test.ts
+  guiIntegrations.test.ts
+extensions/
+  browser/
+  raycast/
+scripts/
+  build-browser-extension.mjs
 ```
 
 The core flow is:
@@ -253,6 +292,7 @@ The core flow is:
 7. Optionally copy the result to the clipboard.
 8. Optionally load defaults and custom glossary entries from config.
 9. Optionally wrap CLI agent commands and convert Arabic arguments before execution.
+10. Optionally reuse the core engine from GUI integrations such as the browser extension.
 
 ## Development
 
@@ -261,12 +301,13 @@ npm install
 npm test
 npm run typecheck
 npm run build
+npm run build:browser
 ```
 
 ## Project health
 
 - Tests: Vitest coverage for translation modes, glossary matching, config loading, token preservation, and redaction.
-- CI: GitHub Actions runs install, tests, typecheck, and build on every push and pull request.
+- CI: GitHub Actions runs install, tests, typecheck, CLI build, and browser extension build on every push and pull request.
 - Security: optional redaction is local-only and does not send prompts to external services.
 - Maintenance: see [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CHANGELOG.md](CHANGELOG.md).
 
@@ -283,18 +324,17 @@ npm run build
 
 - Translation is deterministic and template-based, so it does not deeply translate every Arabic sentence yet.
 - The glossary is intentionally small in the early MVP.
-- There are no direct agent adapters yet.
-- Direct agent adapters are planned for later versions.
 - Replacing selected text is currently macOS-only.
-- Automatic replacement while typing without selecting text needs a future OS-level input method or app-specific integration.
+- The browser extension currently works through selected text in editable fields.
+- Automatic replacement while typing without selecting text needs a future OS-level input method or deeper app-specific integration.
 
 ## Roadmap
 
 Near-term improvements:
 
-- Add `--agent` adapters for Codex, Cursor, Claude, and Gemini CLI.
-- Add a packaged Raycast/global-shortcut helper for selected-text replacement.
-- Add first-class wrappers for more CLI agents.
+- Add a packaged browser extension release with settings persistence.
+- Add a native input-method or keyboard workflow for near-zero-step conversion.
+- Add first-class wrappers for more CLI agents and GUI launchers.
 - Add more Arabic dialect examples.
 - Add interactive stdin mode.
 
