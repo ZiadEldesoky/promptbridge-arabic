@@ -1,0 +1,55 @@
+{
+  "name": "promptbridge-arabic",
+  "version": "0.1.0",
+  "description": "Arabic-first prompt translator and optimizer for AI coding agents.",
+  "type": "module",
+  "bin": {
+    "promptbridge": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "docs",
+    "examples",
+    "AGENTS.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "arabic",
+    "egyptian-arabic",
+    "cli",
+    "prompt-engineering",
+    "coding-agent",
+    "codex",
+    "cursor",
+    "claude"
+  ],
+  "author": "Ziad Eldesoky",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.18"
+  },
+  "dependencies": {
+    "clipboardy": "^4.0.0",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
