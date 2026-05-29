@@ -98,6 +98,25 @@ Workflow:
 
 macOS will require Accessibility permission for the app that runs the command, such as Terminal, iTerm, Raycast, or Automator.
 
+## CLI agent wrappers
+
+For CLI coding agents, you can set up shell wrappers once and then write Arabic directly in the normal agent command:
+
+```bash
+source examples/shell/promptbridge-agents.zsh
+codex "ظبطلي الكود دا وخليه responsive"
+```
+
+The wrapper runs PromptBridge before the real agent command, converts Arabic prompt arguments to English, then passes the English prompt to the agent.
+
+Direct usage:
+
+```bash
+promptbridge run codex "ظبطلي الكود دا وخليه responsive"
+promptbridge run claude "راجع الكود وشوف فيه مشاكل security"
+promptbridge run gemini "اشرحلي الكود دا ببساطة"
+```
+
 This is intentionally app-agnostic. Direct in-app replacement while typing requires a future OS-level input method, browser extension, editor extension, or app-specific integration.
 
 ## Options
@@ -192,6 +211,8 @@ Expected output:
 
 ```text
 src/
+  agents/
+    runAgent.ts
   cli.ts
   index.ts
   translator/
@@ -206,6 +227,7 @@ src/
     formatOutput.ts
   clipboard/
     copyToClipboard.ts
+    replaceSelection.ts
     watchClipboard.ts
   config/
     loadConfig.ts
@@ -215,6 +237,8 @@ tests/
   redactSecrets.test.ts
   preserveTechnicalTokens.test.ts
   loadConfig.test.ts
+  replaceSelection.test.ts
+  runAgent.test.ts
   watchClipboard.test.ts
 ```
 
@@ -228,6 +252,7 @@ The core flow is:
 6. Optionally include a bilingual Arabic summary.
 7. Optionally copy the result to the clipboard.
 8. Optionally load defaults and custom glossary entries from config.
+9. Optionally wrap CLI agent commands and convert Arabic arguments before execution.
 
 ## Development
 
@@ -269,6 +294,7 @@ Near-term improvements:
 
 - Add `--agent` adapters for Codex, Cursor, Claude, and Gemini CLI.
 - Add a packaged Raycast/global-shortcut helper for selected-text replacement.
+- Add first-class wrappers for more CLI agents.
 - Add more Arabic dialect examples.
 - Add interactive stdin mode.
 

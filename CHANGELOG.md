@@ -2,6 +2,13 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.5.0
+
+- Added `promptbridge run <agentCommand> [...args]` to convert Arabic prompt arguments before running CLI coding agents.
+- Added shell wrapper examples for Codex, Claude, Gemini, and Cursor-style agent commands.
+- Added integration-level documentation explaining what is possible with CLI, clipboard, shortcuts, wrappers, and future direct app integrations.
+- Added tests for agent argument preparation.
+
 ## v0.4.0
 
 - Added `promptbridge replace-selection` for macOS selected-text replacement workflows.

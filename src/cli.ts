@@ -9,6 +9,7 @@ import {
 import { replaceSelectedText } from "./clipboard/replaceSelection.js";
 import { loadConfig } from "./config/loadConfig.js";
 import type { LoadedPromptBridgeConfig } from "./config/types.js";
+import { runAgentCommand } from "./agents/runAgent.js";
 import { promptModes, type PromptMode } from "./translator/modes.js";
 import { translatePrompt } from "./translator/translatePrompt.js";
 
@@ -31,6 +32,10 @@ interface ReplaceSelectionOptions extends CliOptions {
   pasteDelay?: string;
   quiet?: boolean;
   restoreClipboard?: boolean;
+}
+
+interface RunOptions extends CliOptions {
+  verbose?: boolean;
 }
 
 const program = new Command();
@@ -75,7 +80,39 @@ program
   .description(
     "Convert Arabic or Egyptian Arabic developer prompts into structured English prompts for AI coding agents."
   )
-  .version("0.4.0");
+  .version("0.5.0");
+
+addPromptOptions(
+  program
+    .command("run")
+    .description(
+      "Run a CLI coding agent and automatically convert Arabic prompt arguments before execution."
+    )
+    .argument("<agentCommand>", "Agent command to run, such as codex or claude")
+    .argument("[agentArgs...]", "Arguments passed to the agent command")
+    .option("--verbose", "Print when Arabic arguments are converted")
+    .allowUnknownOption(true)
+)
+  .allowExcessArguments(true)
+  .action(
+    async (
+      agentCommand: string,
+      agentArgs: string[],
+      options: RunOptions
+    ) => {
+      const loadedConfig = await loadConfig({ configPath: options.config });
+      const translateOptions = translateOptionsFromConfig(options, loadedConfig);
+      const exitCode = await runAgentCommand([agentCommand, ...agentArgs], {
+        translateOptions
+      });
+
+      if (options.verbose) {
+        console.error("Agent command finished.");
+      }
+
+      process.exitCode = exitCode;
+    }
+  );
 
 addPromptOptions(
   program

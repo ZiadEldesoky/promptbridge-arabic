@@ -1,6 +1,6 @@
 {
   "name": "promptbridge-arabic",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Arabic-first prompt translator and optimizer for AI coding agents.",
   "type": "module",
   "repository": {

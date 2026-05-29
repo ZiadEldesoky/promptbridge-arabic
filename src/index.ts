@@ -23,6 +23,15 @@ export type {
 } from "./clipboard/watchClipboard.js";
 export type { ReplaceSelectedTextOptions } from "./clipboard/replaceSelection.js";
 export {
+  prepareAgentArgs,
+  runAgentCommand
+} from "./agents/runAgent.js";
+export type {
+  PreparedAgentArgs,
+  PrepareAgentArgsOptions,
+  RunAgentOptions
+} from "./agents/runAgent.js";
+export {
   preserveTechnicalTokens,
   restoreTechnicalTokens
 } from "./translator/preserveTechnicalTokens.js";
