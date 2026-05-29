@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Project roadmap
+    url: https://github.com/ZiadEldesoky/promptbridge-arabic#roadmap
+    about: Check planned features before opening a new request.

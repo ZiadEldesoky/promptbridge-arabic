@@ -1,0 +1,32 @@
+name: Glossary request
+description: Suggest Arabic or dialect terms for the developer glossary.
+title: "glossary: "
+labels: ["glossary", "good first issue"]
+body:
+  - type: input
+    id: phrase
+    attributes:
+      label: Arabic phrase
+      placeholder: "مثال: مش راضي يشتغل"
+    validations:
+      required: true
+  - type: input
+    id: meaning
+    attributes:
+      label: Suggested English meaning
+      placeholder: "does not work"
+    validations:
+      required: true
+  - type: dropdown
+    id: dialect
+    attributes:
+      label: Dialect
+      options:
+        - Egyptian Arabic
+        - Modern Standard Arabic
+        - Gulf Arabic
+        - Levantine Arabic
+        - Moroccan Arabic
+        - Other
+    validations:
+      required: true

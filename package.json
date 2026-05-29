@@ -3,6 +3,14 @@
   "version": "0.2.0",
   "description": "Arabic-first prompt translator and optimizer for AI coding agents.",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZiadEldesoky/promptbridge-arabic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ZiadEldesoky/promptbridge-arabic/issues"
+  },
+  "homepage": "https://github.com/ZiadEldesoky/promptbridge-arabic#readme",
   "bin": {
     "promptbridge": "dist/cli.js"
   },
@@ -17,6 +25,10 @@
     "docs",
     "examples",
     "AGENTS.md",
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
     "README.md",
     "LICENSE"
   ],
@@ -35,7 +47,9 @@
     "coding-agent",
     "codex",
     "cursor",
-    "claude"
+    "claude",
+    "accessibility",
+    "developer-tools"
   ],
   "author": "Ziad Eldesoky",
   "license": "MIT",

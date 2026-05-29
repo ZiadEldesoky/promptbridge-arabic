@@ -1,8 +1,14 @@
 # PromptBridge Arabic
 
+[![CI](https://github.com/ZiadEldesoky/promptbridge-arabic/actions/workflows/ci.yml/badge.svg)](https://github.com/ZiadEldesoky/promptbridge-arabic/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/ZiadEldesoky/promptbridge-arabic?include_prereleases)](https://github.com/ZiadEldesoky/promptbridge-arabic/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 Arabic-first prompt translator and optimizer for AI coding agents.
 
 PromptBridge Arabic lets Arabic-speaking developers write coding prompts in Arabic or Egyptian Arabic, then converts them into structured English prompts that work well with Codex, Claude Code, Cursor, Gemini CLI, and other AI developer tools.
+
+![PromptBridge Arabic CLI demo](docs/assets/demo.svg)
 
 The current MVP is intentionally local and deterministic:
 
@@ -10,6 +16,10 @@ The current MVP is intentionally local and deterministic:
 - No AI translation yet.
 - No desktop app, browser extension, VS Code extension, or direct agent integration yet.
 - CLI-first, clipboard-friendly, and built around a reusable TypeScript core.
+
+## Why this exists
+
+Arabic-speaking developers often describe bugs, UI constraints, and product behavior more naturally in Arabic or Egyptian Arabic. Most coding agents respond better to precise structured English. PromptBridge Arabic bridges that gap while preserving technical tokens such as code, paths, commands, package names, stack traces, URLs, and environment variables.
 
 ## Install locally
 
@@ -159,10 +169,14 @@ src/
     formatOutput.ts
   clipboard/
     copyToClipboard.ts
+  config/
+    loadConfig.ts
+    types.ts
 tests/
   translatePrompt.test.ts
   redactSecrets.test.ts
   preserveTechnicalTokens.test.ts
+  loadConfig.test.ts
 ```
 
 The core flow is:
@@ -174,6 +188,7 @@ The core flow is:
 5. Format an agent-ready English prompt.
 6. Optionally include a bilingual Arabic summary.
 7. Optionally copy the result to the clipboard.
+8. Optionally load defaults and custom glossary entries from config.
 
 ## Development
 
@@ -183,6 +198,13 @@ npm test
 npm run typecheck
 npm run build
 ```
+
+## Project health
+
+- Tests: Vitest coverage for translation modes, glossary matching, config loading, token preservation, and redaction.
+- CI: GitHub Actions runs install, tests, typecheck, and build on every push and pull request.
+- Security: optional redaction is local-only and does not send prompts to external services.
+- Maintenance: see [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CHANGELOG.md](CHANGELOG.md).
 
 ## Current modes
 
@@ -196,7 +218,7 @@ npm run build
 ## Current limitations
 
 - Translation is deterministic and template-based, so it does not deeply translate every Arabic sentence yet.
-- The glossary is intentionally small in v0.1.
+- The glossary is intentionally small in the early MVP.
 - There are no direct agent adapters yet.
 - Direct agent adapters are planned for later versions.
 

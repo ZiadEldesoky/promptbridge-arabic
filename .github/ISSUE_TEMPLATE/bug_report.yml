@@ -1,0 +1,31 @@
+name: Bug report
+description: Report a reproducible problem in the CLI or core engine.
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: input
+    attributes:
+      label: Input prompt
+      description: Paste the prompt that caused the issue. Remove secrets first.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual output
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected output
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "0.2.0"
+    validations:
+      required: false

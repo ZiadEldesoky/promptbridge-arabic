@@ -1,0 +1,20 @@
+<svg width="960" height="520" viewBox="0 0 960 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PromptBridge Arabic CLI demo</title>
+  <desc id="desc">A terminal-style demo showing an Arabic prompt converted to a structured English coding-agent prompt.</desc>
+  <rect width="960" height="520" rx="16" fill="#111827"/>
+  <rect x="24" y="24" width="912" height="472" rx="12" fill="#0B1220" stroke="#263244"/>
+  <circle cx="54" cy="54" r="7" fill="#F87171"/>
+  <circle cx="78" cy="54" r="7" fill="#FBBF24"/>
+  <circle cx="102" cy="54" r="7" fill="#34D399"/>
+  <text x="36" y="96" fill="#93C5FD" font-family="SFMono-Regular, Consolas, monospace" font-size="18">$ promptbridge "ظبطلي الكود دا وخليه responsive من غير ما تغير الديزاين"</text>
+  <text x="36" y="146" fill="#E5E7EB" font-family="SFMono-Regular, Consolas, monospace" font-size="18">Refactor this code to make it responsive.</text>
+  <text x="36" y="196" fill="#F9FAFB" font-family="SFMono-Regular, Consolas, monospace" font-size="18">Context:</text>
+  <text x="56" y="228" fill="#D1D5DB" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- make it responsive</text>
+  <text x="56" y="258" fill="#D1D5DB" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- without changing the design</text>
+  <text x="36" y="308" fill="#F9FAFB" font-family="SFMono-Regular, Consolas, monospace" font-size="18">Requirements:</text>
+  <text x="56" y="340" fill="#D1D5DB" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- Make the affected UI responsive across common screen sizes.</text>
+  <text x="56" y="370" fill="#D1D5DB" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- Preserve the existing visual design.</text>
+  <text x="56" y="400" fill="#D1D5DB" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- Make the smallest safe changes.</text>
+  <text x="56" y="430" fill="#D1D5DB" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- Explain what was changed and why.</text>
+  <text x="36" y="470" fill="#86EFAC" font-family="SFMono-Regular, Consolas, monospace" font-size="16">Local-only. No API key. Works with any coding agent.</text>
+</svg>

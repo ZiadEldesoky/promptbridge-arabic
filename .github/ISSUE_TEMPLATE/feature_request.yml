@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest a focused improvement.
+title: "feature: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow would this improve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Keep the proposal scoped to the CLI/core unless this is an integration roadmap item.
+    validations:
+      required: true
