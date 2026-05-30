@@ -21,7 +21,112 @@ The current MVP is intentionally local and deterministic:
 
 Arabic-speaking developers often describe bugs, UI constraints, and product behavior more naturally in Arabic or Egyptian Arabic. Most coding agents respond better to precise structured English. PromptBridge Arabic bridges that gap while preserving technical tokens such as code, paths, commands, package names, stack traces, URLs, and environment variables.
 
-## Install locally
+## Quick Start / التشغيل السريع
+
+PromptBridge can be used in different ways depending on where you write prompts.
+
+PromptBridge تقدر تستخدمه بأكتر من طريقة حسب المكان اللي بتكتب فيه الـ prompts.
+
+### Browser users / مستخدمي المتصفح
+
+Use this if you write prompts in ChatGPT, Claude, Gemini, Cursor web tools, or any browser-based AI app.
+
+استخدم الطريقة دي لو بتكتب prompts جوه ChatGPT أو Claude أو Gemini أو أي AI app في المتصفح.
+
+1. Download the latest browser extension zip from [GitHub Releases](https://github.com/ZiadEldesoky/promptbridge-arabic/releases).
+2. Unzip the file.
+3. Open `chrome://extensions`.
+4. Enable Developer mode.
+5. Click **Load unpacked** and select the unzipped folder.
+
+لو عامل clone للريبو، تقدر تحمل الامتداد مباشرة من غير build:
+
+```text
+extensions/browser
+```
+
+Workflow / طريقة الاستخدام:
+
+1. Write Arabic in the AI prompt box.
+2. Select the Arabic text, or keep the prompt box focused.
+3. Use right click -> **Convert Arabic prompt with saved settings**, the extension popup, or `Command+Shift+Y` on macOS.
+4. PromptBridge replaces it with a structured English coding-agent prompt.
+
+### CLI users / مستخدمي التيرمنال
+
+Use this if you work from terminal or CLI coding agents.
+
+استخدم الطريقة دي لو بتشتغل من التيرمنال أو مع CLI coding agents.
+
+```bash
+npm install
+npm run build
+npm link
+```
+
+Then run / وبعدها شغل:
+
+```bash
+promptbridge "ظبطلي الكود دا وخليه responsive من غير ما تغير الديزاين"
+```
+
+For development without linking / للتجربة أثناء التطوير:
+
+```bash
+npm run dev -- "ظبطلي الكود دا وخليه responsive من غير ما تغير الديزاين"
+```
+
+### IDE users / مستخدمي VS Code و Cursor
+
+Use this if you want PromptBridge inside VS Code-compatible editors.
+
+استخدم الطريقة دي لو عايز PromptBridge جوه VS Code أو editors متوافقة مع VS Code extensions.
+
+Build a local VSIX:
+
+```bash
+npm run release:vscode
+```
+
+Install in VS Code:
+
+```bash
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.0.vsix
+```
+
+Available commands / الأوامر المتاحة:
+
+- `PromptBridge: Convert Arabic Selection`
+- `PromptBridge: Convert Arabic Prompt to Clipboard`
+- `PromptBridge: Insert Converted Arabic Prompt`
+
+Cursor and other VS Code-compatible editors may support installing the generated `.vsix` manually.
+
+Cursor وأي editor متوافق مع VS Code ممكن يدعم تثبيت ملف `.vsix` يدويًا حسب نسخة الـ editor.
+
+### macOS shortcut users / مستخدمي اختصارات macOS
+
+Use this if you want selected Arabic text in any desktop app to be replaced in place.
+
+استخدم الطريقة دي لو عايز تحدد نص عربي في أي desktop app ويتبدل مكانه بالـ prompt الإنجليزي.
+
+```bash
+promptbridge replace-selection --redact
+```
+
+You can run it from Raycast using the helper in:
+
+تقدر تشغله من Raycast باستخدام الملف الموجود في:
+
+```text
+extensions/raycast
+```
+
+macOS requires Accessibility permission for the app that runs the command.
+
+macOS هيطلب Accessibility permission للتطبيق اللي بيشغل الأمر، مثل Raycast أو Terminal.
+
+## Install Locally / التثبيت المحلي
 
 ```bash
 npm install
@@ -314,8 +419,14 @@ extensions/
       settings.ts
       siteAdapters.ts
   raycast/
+  vscode/
+    src/
+      extension.ts
 scripts/
   build-browser-extension.mjs
+  package-browser-extension.mjs
+  build-vscode-extension.mjs
+  package-vscode-extension.mjs
 ```
 
 The core flow is:
@@ -344,6 +455,8 @@ npm run package:browser
 npm run typecheck:vscode
 npm run build:vscode
 npm run package:vscode
+npm run release:browser
+npm run release:vscode
 ```
 
 ## Project health
