@@ -7,7 +7,7 @@ The extension is designed for:
 - Visual Studio Code.
 - Cursor, when it supports manual VSIX installation or compatible extension APIs.
 - Other VS Code-compatible editors through VSIX or Open VSX, depending on editor support.
-- Antigravity should be verified manually because its current public docs do not clearly document VSIX marketplace compatibility.
+- Antigravity IDE through manual VSIX installation or Open VSX, depending on editor support.
 
 ## What is ready
 
@@ -149,17 +149,49 @@ Open VSX is useful for VS Code-compatible editors that use the Open VSX registry
 1. Create an Eclipse account.
 2. Sign the Open VSX Publisher Agreement.
 3. Create an Open VSX access token.
-4. Create the namespace matching the `publisher` field:
+4. Add the token locally as an environment variable:
 
 ```bash
-npx ovsx create-namespace ziadeldesoky -p <token>
+export OVSX_PAT=<token>
 ```
 
-5. Publish the packaged VSIX:
+5. Build and package:
 
 ```bash
-npx ovsx publish artifacts/promptbridge-arabic-vscode-v<version>.vsix -p <token>
+npm run release:vscode
 ```
+
+6. Create or verify the namespace matching the `publisher` field:
+
+```bash
+npm run openvsx:ensure-namespace
+npm run openvsx:verify
+```
+
+7. Publish the packaged VSIX:
+
+```bash
+npm run openvsx:publish
+```
+
+The `OVSX_PAT` value is a secret. Do not commit it, paste it into issues, or send it in chat.
+
+## GitHub Actions Open VSX publishing
+
+The repository includes a manual workflow:
+
+```text
+.github/workflows/publish-open-vsx.yml
+```
+
+To use it:
+
+1. Create an Open VSX access token.
+2. Add it to the repository as a GitHub Actions secret named `OVSX_PAT`.
+3. Open GitHub Actions.
+4. Run the **Publish Open VSX** workflow manually.
+
+The workflow runs tests, typechecks, packages the VSIX, ensures the namespace exists, and publishes to Open VSX.
 
 ## Cursor and other VS Code-compatible editors
 
@@ -169,13 +201,26 @@ Use the generated VSIX first:
 code --install-extension artifacts/promptbridge-arabic-vscode-v<version>.vsix
 ```
 
-For Cursor or other VS Code-compatible editors, use the editor's "Install from VSIX" command when available. Marketplace support varies by editor and version, so verify the installed commands manually before announcing official support.
+Cursor can install the generated VSIX manually:
+
+```bash
+/Applications/Cursor.app/Contents/Resources/app/bin/cursor --install-extension artifacts/promptbridge-arabic-vscode-v<version>.vsix --force
+```
+
+Other VS Code-compatible editors often expose an "Install from VSIX" command in the Extensions view. Marketplace support varies by editor and version, so verify the installed commands manually before announcing official support.
 
 ## Antigravity note
 
-Treat Antigravity as compatibility testing for now. Publish the VSIX to general VS Code channels first, then test whether Antigravity supports manual VSIX installation or marketplace ingestion before claiming support in public copy.
+Antigravity IDE can install the generated VSIX manually:
+
+```bash
+"/Applications/Antigravity IDE.app/Contents/Resources/app/bin/antigravity-ide" --install-extension artifacts/promptbridge-arabic-vscode-v<version>.vsix --force
+```
+
+Open VSX publishing should make discovery easier in Antigravity-style editors that use Open VSX. Keep manual VSIX installation documented as a fallback.
 
 ## Official references
 
 - VS Code publishing: https://code.visualstudio.com/api/working-with-extensions/publishing-extension
+- Open VSX registry: https://open-vsx.org/about
 - Open VSX publishing: https://github.com/eclipse-openvsx/openvsx/wiki/Publishing-Extensions
