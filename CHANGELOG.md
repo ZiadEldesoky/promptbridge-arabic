@@ -2,7 +2,7 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
-## Unreleased
+## v0.9.1
 
 - Added marketplace-ready PNG icons for the browser and VS Code-compatible extensions.
 - Updated the browser extension to inject its conversion script only after user action.
