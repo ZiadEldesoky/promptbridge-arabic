@@ -13,7 +13,7 @@
       }
 
       body {
-        width: 280px;
+        width: 310px;
         margin: 0;
         padding: 14px;
         color: #17202a;
@@ -69,6 +69,13 @@
         cursor: pointer;
       }
 
+      .hint {
+        margin: -4px 0 0;
+        font-size: 11px;
+        line-height: 1.45;
+        color: #667085;
+      }
+
       #status {
         min-height: 18px;
         margin: 2px 0 0;
@@ -83,6 +90,7 @@
         }
 
         label,
+        .hint,
         #status {
           color: #cbd5e1;
         }
@@ -118,6 +126,14 @@
         <input id="bilingual" type="checkbox" />
         Include Arabic summary
       </label>
+      <label class="check">
+        <input id="fallback-to-field" type="checkbox" />
+        Convert focused prompt box when nothing is selected
+      </label>
+      <p class="hint">
+        Settings are saved locally and used by the popup, context menu, and
+        shortcut.
+      </p>
       <button type="submit">Convert Selection</button>
       <p id="status">Select Arabic text inside a prompt box first.</p>
     </form>

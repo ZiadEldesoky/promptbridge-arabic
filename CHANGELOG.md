@@ -2,6 +2,16 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.7.0
+
+- Added persistent browser extension settings through local browser storage.
+- Added saved defaults for mode, bilingual output, redaction, and focused-field fallback.
+- Updated browser context menu and keyboard shortcut flows to use saved settings.
+- Added site-aware prompt field selectors for ChatGPT, Claude, Gemini, Cursor web tools, and generic editable prompt boxes.
+- Added fallback conversion for the focused prompt box when no text is selected.
+- Added tests for browser settings normalization and site adapter selectors.
+- Added browser extension TypeScript checking in CI.
+
 ## v0.6.0
 
 - Added a browser extension prototype for replacing selected Arabic prompt text inside editable web AI prompt boxes.

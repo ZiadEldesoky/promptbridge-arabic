@@ -48,7 +48,7 @@ PromptBridge converts Arabic arguments before executing the real agent command.
 npm run build:browser
 ```
 
-The browser extension lets the user select Arabic text inside an editable web prompt box and replace it in place through a context menu, popup action, or keyboard shortcut.
+The browser extension lets the user select Arabic text inside an editable web prompt box and replace it in place through a context menu, popup action, or keyboard shortcut. It can also convert the focused prompt box when no text is selected if that saved setting is enabled.
 
 Useful for GUI-heavy AI workflows in ChatGPT, Claude, Gemini, Cursor web tools, and similar browser-based apps.
 

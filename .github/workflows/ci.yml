@@ -30,6 +30,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Typecheck browser extension
+        run: npm run typecheck:browser
+
       - name: Build
         run: npm run build
 

@@ -115,11 +115,11 @@ Then load `extensions/browser` as an unpacked extension from `chrome://extension
 Workflow:
 
 1. Write Arabic text inside a web AI prompt box.
-2. Select the Arabic text.
-3. Use right click -> **Convert selected Arabic prompt**, the extension popup, or `Command+Shift+Y` on macOS.
-4. PromptBridge replaces the selected text with the structured English prompt.
+2. Select the Arabic text, or leave the prompt box focused if focused-field fallback is enabled.
+3. Use right click -> **Convert Arabic prompt with saved settings**, the extension popup, or `Command+Shift+Y` on macOS.
+4. PromptBridge replaces the selected text or focused prompt box with the structured English prompt.
 
-The extension uses the local deterministic core and does not call external AI services. Redaction is available from the context menu or popup, but is not applied unless selected.
+The extension uses the local deterministic core and does not call external AI services. The popup saves browser-local defaults for mode, bilingual output, redaction, and focused-field fallback. Redaction is only applied when selected or saved as a default.
 
 ### Raycast helper
 
@@ -276,6 +276,9 @@ tests/
   guiIntegrations.test.ts
 extensions/
   browser/
+    src/
+      settings.ts
+      siteAdapters.ts
   raycast/
 scripts/
   build-browser-extension.mjs
@@ -300,6 +303,7 @@ The core flow is:
 npm install
 npm test
 npm run typecheck
+npm run typecheck:browser
 npm run build
 npm run build:browser
 ```
@@ -307,7 +311,7 @@ npm run build:browser
 ## Project health
 
 - Tests: Vitest coverage for translation modes, glossary matching, config loading, token preservation, and redaction.
-- CI: GitHub Actions runs install, tests, typecheck, CLI build, and browser extension build on every push and pull request.
+- CI: GitHub Actions runs install, tests, Node typecheck, browser extension typecheck, CLI build, and browser extension build on every push and pull request.
 - Security: optional redaction is local-only and does not send prompts to external services.
 - Maintenance: see [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CHANGELOG.md](CHANGELOG.md).
 
@@ -325,14 +329,14 @@ npm run build:browser
 - Translation is deterministic and template-based, so it does not deeply translate every Arabic sentence yet.
 - The glossary is intentionally small in the early MVP.
 - Replacing selected text is currently macOS-only.
-- The browser extension currently works through selected text in editable fields.
+- The browser extension currently works through selected text or the focused editable prompt field.
 - Automatic replacement while typing without selecting text needs a future OS-level input method or deeper app-specific integration.
 
 ## Roadmap
 
 Near-term improvements:
 
-- Add a packaged browser extension release with settings persistence.
+- Add a packaged browser extension release and deeper app-specific adapters.
 - Add a native input-method or keyboard workflow for near-zero-step conversion.
 - Add first-class wrappers for more CLI agents and GUI launchers.
 - Add more Arabic dialect examples.

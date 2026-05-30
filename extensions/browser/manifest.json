@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "PromptBridge Arabic",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Convert selected Arabic developer prompts into structured English prompts inside web AI tools.",
-  "permissions": ["activeTab", "contextMenus"],
+  "permissions": ["activeTab", "contextMenus", "storage"],
   "background": {
     "service_worker": "dist/background.js"
   },

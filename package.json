@@ -1,6 +1,6 @@
 {
   "name": "promptbridge-arabic",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Arabic-first prompt translator and optimizer for AI coding agents.",
   "type": "module",
   "repository": {
@@ -26,6 +26,9 @@
     "extensions",
     "examples",
     "scripts/build-browser-extension.mjs",
+    "src",
+    "tsconfig.browser.json",
+    "tsconfig.json",
     "AGENTS.md",
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
@@ -41,6 +44,7 @@
     "dev": "tsx src/cli.ts",
     "prepack": "npm run build && npm run build:browser",
     "test": "vitest run",
+    "typecheck:browser": "tsc -p tsconfig.browser.json",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [

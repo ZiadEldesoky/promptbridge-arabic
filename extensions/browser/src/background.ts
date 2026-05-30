@@ -1,16 +1,11 @@
-import type { PromptMode } from "../../../src/translator/modes.js";
+import { loadBrowserSettings } from "./settings.js";
+import type {
+  BrowserPromptBridgeOptions,
+  PromptBridgeMessage
+} from "./types.js";
 
 const MENU_CONVERT = "promptbridge-convert-selection";
 const MENU_CONVERT_REDACT = "promptbridge-convert-selection-redact";
-
-interface PromptBridgeMessage {
-  type: "PROMPTBRIDGE_REPLACE_SELECTION";
-  options?: {
-    mode?: PromptMode;
-    bilingual?: boolean;
-    redact?: boolean;
-  };
-}
 
 declare const chrome: {
   commands?: {
@@ -54,7 +49,7 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({
       id: MENU_CONVERT,
-      title: "Convert selected Arabic prompt",
+      title: "Convert Arabic prompt with saved settings",
       contexts: ["editable", "selection"]
     });
 
@@ -68,11 +63,11 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === MENU_CONVERT && tab?.id) {
-    sendReplaceMessage(tab.id, { redact: false });
+    void sendReplaceMessage(tab.id);
   }
 
   if (info.menuItemId === MENU_CONVERT_REDACT && tab?.id) {
-    sendReplaceMessage(tab.id, { redact: true });
+    void sendReplaceMessage(tab.id, { redact: true });
   }
 });
 
@@ -81,10 +76,12 @@ chrome.commands?.onCommand.addListener((command) => {
     return;
   }
 
-  sendToActiveTab({ redact: false });
+  void sendToActiveTab();
 });
 
-function sendToActiveTab(options: NonNullable<PromptBridgeMessage["options"]>) {
+async function sendToActiveTab(options: BrowserPromptBridgeOptions = {}) {
+  const settings = await loadBrowserSettings();
+
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tabId = tabs[0]?.id;
 
@@ -92,14 +89,22 @@ function sendToActiveTab(options: NonNullable<PromptBridgeMessage["options"]>) {
       return;
     }
 
-    sendReplaceMessage(tabId, options);
+    void sendRawReplaceMessage(tabId, { ...settings, ...options });
   });
 }
 
-function sendReplaceMessage(
+async function sendReplaceMessage(
   tabId: number,
-  options: NonNullable<PromptBridgeMessage["options"]>
-) {
+  overrides: BrowserPromptBridgeOptions = {}
+): Promise<void> {
+  const settings = await loadBrowserSettings();
+  sendRawReplaceMessage(tabId, { ...settings, ...overrides });
+}
+
+function sendRawReplaceMessage(
+  tabId: number,
+  options: BrowserPromptBridgeOptions
+): void {
   chrome.tabs.sendMessage(
     tabId,
     {

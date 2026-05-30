@@ -1,6 +1,6 @@
 # PromptBridge Arabic Browser Extension
 
-This extension lets GUI users convert selected Arabic or Egyptian Arabic prompt text directly inside web AI tools such as ChatGPT, Claude, Gemini, Cursor web tools, and other pages with editable prompt boxes.
+This extension lets GUI users convert Arabic or Egyptian Arabic prompt text directly inside web AI tools such as ChatGPT, Claude, Gemini, Cursor web tools, and other pages with editable prompt boxes.
 
 It uses the same local deterministic PromptBridge core engine. It does not call an external AI service.
 
@@ -24,13 +24,34 @@ Then load the extension:
 
 1. Open a web AI app.
 2. Write Arabic text in the prompt box.
-3. Select the Arabic text.
-4. Use right click -> **Convert selected Arabic prompt**, click the extension popup, or press `Command+Shift+Y` on macOS.
+3. Select the Arabic text, or leave the prompt box focused if focused-field fallback is enabled.
+4. Use right click -> **Convert Arabic prompt with saved settings**, click the extension popup, or press `Command+Shift+Y` on macOS.
 
 Use **Convert selected Arabic prompt and redact secrets** when you want common secret patterns redacted before the prompt is generated.
 
+## Saved settings
+
+The popup saves these browser-local defaults:
+
+- Prompt mode.
+- Redact common secrets.
+- Include Arabic summary.
+- Convert the focused prompt box when nothing is selected.
+
+The context menu and keyboard shortcut use the same saved defaults.
+
+## Site adapters
+
+The extension includes prompt-box selectors for:
+
+- ChatGPT.
+- Claude.
+- Gemini.
+- Cursor web tools.
+- Generic textareas, inputs, contenteditable fields, Lexical editors, and ProseMirror editors.
+
 ## Current limits
 
-- The extension replaces selected text inside editable fields. It does not translate every keystroke while typing.
+- The extension replaces selected text or the focused editable prompt field. It does not translate every keystroke while typing.
 - Some heavily customized editors may block synthetic input events.
 - Redaction is only applied when the redaction option is chosen.

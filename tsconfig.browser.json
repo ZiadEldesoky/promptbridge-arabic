@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": [
+    "extensions/browser/src/**/*.ts",
+    "src/formatting/**/*.ts",
+    "src/redaction/**/*.ts",
+    "src/translator/**/*.ts"
+  ],
+  "exclude": ["dist", "node_modules"]
+}

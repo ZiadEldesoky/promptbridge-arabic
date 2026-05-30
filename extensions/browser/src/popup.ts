@@ -1,13 +1,9 @@
-import type { PromptMode } from "../../../src/translator/modes.js";
-
-interface PromptBridgeMessage {
-  type: "PROMPTBRIDGE_REPLACE_SELECTION";
-  options?: {
-    mode?: PromptMode;
-    bilingual?: boolean;
-    redact?: boolean;
-  };
-}
+import {
+  loadBrowserSettings,
+  saveBrowserSettings,
+  type BrowserSettings
+} from "./settings.js";
+import type { PromptBridgeMessage } from "./types.js";
 
 declare const chrome: {
   runtime: {
@@ -35,18 +31,23 @@ const statusElement = document.querySelector<HTMLElement>("#status");
 const modeSelect = document.querySelector<HTMLSelectElement>("#mode");
 const redactInput = document.querySelector<HTMLInputElement>("#redact");
 const bilingualInput = document.querySelector<HTMLInputElement>("#bilingual");
+const fallbackInput =
+  document.querySelector<HTMLInputElement>("#fallback-to-field");
 
-form?.addEventListener("submit", (event) => {
-  event.preventDefault();
+void loadSettingsIntoForm();
 
-  const selectedMode = modeSelect?.value;
-  const mode = selectedMode ? (selectedMode as PromptMode) : undefined;
-
-  sendToActiveTab({
-    mode,
-    redact: Boolean(redactInput?.checked),
-    bilingual: Boolean(bilingualInput?.checked)
+for (const input of [modeSelect, redactInput, bilingualInput, fallbackInput]) {
+  input?.addEventListener("change", () => {
+    void saveBrowserSettings(readSettingsFromForm());
   });
+}
+
+form?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const settings = readSettingsFromForm();
+
+  await saveBrowserSettings(settings);
+  sendToActiveTab(settings);
 });
 
 function sendToActiveTab(options: NonNullable<PromptBridgeMessage["options"]>) {
@@ -83,6 +84,37 @@ function sendToActiveTab(options: NonNullable<PromptBridgeMessage["options"]>) {
       }
     );
   });
+}
+
+async function loadSettingsIntoForm(): Promise<void> {
+  const settings = await loadBrowserSettings();
+
+  if (modeSelect) {
+    modeSelect.value = settings.mode ?? "";
+  }
+
+  if (redactInput) {
+    redactInput.checked = settings.redact;
+  }
+
+  if (bilingualInput) {
+    bilingualInput.checked = settings.bilingual;
+  }
+
+  if (fallbackInput) {
+    fallbackInput.checked = settings.fallbackToFocusedField;
+  }
+}
+
+function readSettingsFromForm(): BrowserSettings {
+  const selectedMode = modeSelect?.value;
+
+  return {
+    mode: selectedMode ? (selectedMode as BrowserSettings["mode"]) : undefined,
+    redact: Boolean(redactInput?.checked),
+    bilingual: Boolean(bilingualInput?.checked),
+    fallbackToFocusedField: Boolean(fallbackInput?.checked)
+  };
 }
 
 function setStatus(message: string): void {
