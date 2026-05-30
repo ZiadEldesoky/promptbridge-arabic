@@ -109,7 +109,7 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.2.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.3.vsix
 ```
 
 Available commands / الأوامر المتاحة:
@@ -299,7 +299,7 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.2.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.3.vsix
 ```
 
 The extension adds commands for converting selected Arabic text, replacing selected text in focused macOS IDE inputs, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It also adds `Cmd+Shift+Y` on macOS / `Ctrl+Shift+Y` on Windows and Linux for selected editor text, plus an editor right-click menu item. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.

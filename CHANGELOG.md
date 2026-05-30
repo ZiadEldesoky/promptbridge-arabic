@@ -2,6 +2,11 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.9.3
+
+- Fixed VS Code-compatible extension activation for focused input replacement by removing the bundled Node clipboard package from the extension runtime.
+- Kept focused IDE chat input replacement on macOS using VS Code clipboard APIs plus system copy/paste.
+
 ## v0.9.2
 
 - Added a VS Code-compatible editor shortcut for converting selected Arabic text.

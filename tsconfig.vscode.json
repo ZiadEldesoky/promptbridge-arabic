@@ -7,7 +7,6 @@
   },
   "include": [
     "extensions/vscode/src/**/*.ts",
-    "src/clipboard/**/*.ts",
     "src/formatting/**/*.ts",
     "src/redaction/**/*.ts",
     "src/translator/**/*.ts"

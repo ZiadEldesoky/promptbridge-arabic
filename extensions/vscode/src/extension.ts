@@ -1,14 +1,21 @@
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import * as vscode from "vscode";
-import { replaceSelectedText } from "../../../src/clipboard/replaceSelection.js";
 import { translatePrompt } from "../../../src/translator/translatePrompt.js";
 import { isPromptMode, type PromptMode } from "../../../src/translator/modes.js";
 
 const ARABIC_TEXT_PATTERN = /[\u0600-\u06FF]/;
+const execFileAsync = promisify(execFile);
 
 interface ExtensionSettings {
   mode?: PromptMode;
   bilingual: boolean;
   redact: boolean;
+}
+
+interface ExtensionClipboard {
+  readText(): PromiseLike<string>;
+  writeText(value: string): PromiseLike<void>;
 }
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -124,28 +131,49 @@ async function convertInputToEditor(): Promise<void> {
 }
 
 async function replaceFocusedSelection(): Promise<void> {
-  const event = await replaceSelectedText({
-    translateOptions: readSettings()
-  });
-
-  if (event.converted) {
-    vscode.window.showInformationMessage(
-      "PromptBridge replaced the selected Arabic text."
-    );
-    return;
-  }
-
-  if (event.reason === "unsupported_platform") {
+  if (process.platform !== "darwin") {
     vscode.window.showWarningMessage(
       "System selection replacement is currently macOS-only."
     );
     return;
   }
 
-  vscode.window.showWarningMessage(
-    event.reason === "no_arabic_text"
-      ? "The selected text does not contain Arabic."
-      : "Select Arabic prompt text first."
+  const settings = readSettings();
+  const clipboard = vscode.env.clipboard as unknown as ExtensionClipboard;
+  const originalClipboard = await clipboard.readText().then(
+    (text: string) => text,
+    () => ""
+  );
+
+  try {
+    await sendMacShortcut("copy");
+    await sleep(120);
+
+    const selectedText = await clipboard.readText();
+    const convertedText = convertText(selectedText, settings);
+
+    if (!convertedText) {
+      await clipboard.writeText(originalClipboard);
+      vscode.window.showWarningMessage(
+        selectedText.trim()
+          ? "The selected text does not contain Arabic."
+          : "Select Arabic prompt text first."
+      );
+      return;
+    }
+
+    await clipboard.writeText(convertedText);
+    await sleep(120);
+    await sendMacShortcut("paste");
+  } catch {
+    vscode.window.showWarningMessage(
+      "PromptBridge could not control macOS copy/paste. Allow the editor in System Settings > Privacy & Security > Accessibility."
+    );
+    return;
+  }
+
+  vscode.window.showInformationMessage(
+    "PromptBridge replaced the selected Arabic text."
   );
 }
 
@@ -179,4 +207,19 @@ function readSettings(): ExtensionSettings {
     bilingual: config.get<boolean>("bilingual", false),
     redact: config.get<boolean>("redact", false)
   };
+}
+
+async function sendMacShortcut(shortcut: "copy" | "paste"): Promise<void> {
+  const key = shortcut === "copy" ? "c" : "v";
+
+  await execFileAsync("osascript", [
+    "-e",
+    `tell application "System Events" to keystroke "${key}" using command down`
+  ]);
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }

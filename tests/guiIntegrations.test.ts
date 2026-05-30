@@ -120,6 +120,17 @@ describe("GUI integration metadata", () => {
     expect(script).toContain("promptbridge replace-selection --redact --quiet");
   });
 
+  it("keeps the VS Code extension independent from the Node clipboard package", async () => {
+    const source = await readFile(
+      new URL("../extensions/vscode/src/extension.ts", import.meta.url),
+      "utf8"
+    );
+
+    expect(source).toContain("vscode.env.clipboard");
+    expect(source).not.toContain("clipboardy");
+    expect(source).not.toContain("replaceSelection.js");
+  });
+
   it("normalizes browser extension settings safely", () => {
     expect(
       normalizeBrowserSettings({

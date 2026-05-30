@@ -29,7 +29,7 @@ Use this checklist before sharing PromptBridge Arabic publicly.
 
 ## GitHub
 
-- [x] Version tags are pushed through `v0.9.2`.
+- [x] Version tags are pushed through `v0.9.3`.
 - [ ] GitHub Release is created from the latest tag.
 - [ ] Chrome Web Store item is submitted.
 - [x] VS Code Marketplace item is submitted.
