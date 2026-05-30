@@ -38,6 +38,12 @@ jobs:
       - name: Typecheck VS Code extension
         run: npm run typecheck:vscode
 
+      - name: Build CLI
+        run: npm run build
+
+      - name: Smoke test CLI
+        run: npm run smoke:cli
+
       - name: Build browser extension
         run: npm run build:browser
 

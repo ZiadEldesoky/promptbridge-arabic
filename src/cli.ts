@@ -12,6 +12,7 @@ import type { LoadedPromptBridgeConfig } from "./config/types.js";
 import { runAgentCommand } from "./agents/runAgent.js";
 import { promptModes, type PromptMode } from "./translator/modes.js";
 import { translatePrompt } from "./translator/translatePrompt.js";
+import { getPackageVersion } from "./version.js";
 
 interface CliOptions {
   mode?: PromptMode;
@@ -80,7 +81,7 @@ program
   .description(
     "Convert Arabic or Egyptian Arabic developer prompts into structured English prompts for AI coding agents."
   )
-  .version("0.9.0");
+  .version(getPackageVersion());
 
 addPromptOptions(
   program

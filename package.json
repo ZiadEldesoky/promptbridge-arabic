@@ -54,6 +54,7 @@
     "prepack": "npm run build && npm run build:browser && npm run build:vscode && npm run assets:icons",
     "release:browser": "npm run build:browser && npm run assets:icons && npm run package:browser",
     "release:vscode": "npm run build:vscode && npm run assets:icons && npm run package:vscode",
+    "smoke:cli": "node dist/cli.js --version",
     "test": "vitest run",
     "typecheck:browser": "tsc -p tsconfig.browser.json",
     "typecheck:vscode": "tsc -p tsconfig.vscode.json",
