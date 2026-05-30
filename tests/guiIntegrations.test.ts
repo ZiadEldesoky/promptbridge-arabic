@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 import { normalizeBrowserSettings } from "../extensions/browser/src/settings.js";
 import {
@@ -26,6 +26,18 @@ describe("GUI integration metadata", () => {
     expect(manifest.permissions).toContain("contextMenus");
     expect(manifest.permissions).toContain("storage");
     expect(manifest.content_scripts[0]?.js).toContain("dist/content.js");
+  });
+
+  it("keeps the load-unpacked browser extension bundle committed", async () => {
+    await expect(
+      access(new URL("../extensions/browser/dist/content.js", import.meta.url))
+    ).resolves.toBeUndefined();
+    await expect(
+      access(new URL("../extensions/browser/dist/background.js", import.meta.url))
+    ).resolves.toBeUndefined();
+    await expect(
+      access(new URL("../extensions/browser/dist/popup.js", import.meta.url))
+    ).resolves.toBeUndefined();
   });
 
   it("keeps the Raycast helper wired to selected-text replacement", async () => {

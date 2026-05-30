@@ -80,7 +80,7 @@ program
   .description(
     "Convert Arabic or Egyptian Arabic developer prompts into structured English prompts for AI coding agents."
   )
-  .version("0.7.0");
+  .version("0.8.0");
 
 addPromptOptions(
   program

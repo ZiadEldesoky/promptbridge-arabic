@@ -38,3 +38,9 @@ jobs:
 
       - name: Build browser extension
         run: npm run build:browser
+
+      - name: Check committed browser extension bundle
+        run: git diff --exit-code -- extensions/browser/dist
+
+      - name: Package browser extension
+        run: npm run package:browser

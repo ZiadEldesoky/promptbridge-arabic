@@ -106,11 +106,27 @@ PromptBridge now includes early GUI helpers for people who write prompts inside 
 
 The browser extension converts selected Arabic prompt text in editable web fields, including common AI chat prompt boxes.
 
+For normal users, no build is required.
+
+Download the browser extension zip from GitHub Releases, unzip it, then load the unzipped folder from `chrome://extensions` with Developer mode enabled.
+
+If you cloned the repository, you can also load this folder directly:
+
+```text
+extensions/browser
+```
+
+For maintainers who want to rebuild the extension:
+
 ```bash
 npm run build:browser
 ```
 
-Then load `extensions/browser` as an unpacked extension from `chrome://extensions`.
+To create a release-ready zip:
+
+```bash
+npm run release:browser
+```
 
 Workflow:
 
@@ -306,6 +322,7 @@ npm run typecheck
 npm run typecheck:browser
 npm run build
 npm run build:browser
+npm run package:browser
 ```
 
 ## Project health

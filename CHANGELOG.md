@@ -2,6 +2,14 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.8.0
+
+- Committed the built browser extension bundle so users can load `extensions/browser` directly without running a build.
+- Added `npm run package:browser` and `npm run release:browser` to create a ready-to-download browser extension zip.
+- Added a tag-based GitHub Actions workflow that packages the browser extension and uploads the zip to the GitHub Release.
+- Added CI checks to ensure the committed browser extension bundle stays in sync with source changes.
+- Added tests that verify the load-unpacked extension bundle exists.
+
 ## v0.7.0
 
 - Added persistent browser extension settings through local browser storage.

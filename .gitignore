@@ -1,5 +1,8 @@
 node_modules/
 dist/
+!extensions/browser/dist/
+!extensions/browser/dist/**
+artifacts/
 .DS_Store
 *.log
 .env

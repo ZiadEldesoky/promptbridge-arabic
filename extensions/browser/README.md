@@ -4,6 +4,26 @@ This extension lets GUI users convert Arabic or Egyptian Arabic prompt text dire
 
 It uses the same local deterministic PromptBridge core engine. It does not call an external AI service.
 
+## Use without building
+
+For normal users, no build is required.
+
+### From GitHub Releases
+
+1. Download `promptbridge-arabic-browser-extension-v*.zip`.
+2. Unzip it.
+3. Open `chrome://extensions`.
+4. Enable Developer mode.
+5. Choose **Load unpacked** and select the unzipped folder.
+
+### From the repository
+
+If you cloned or downloaded the repository, load this folder directly from `chrome://extensions`:
+
+```text
+extensions/browser
+```
+
 ## Local development
 
 From the repository root:
@@ -13,7 +33,13 @@ npm install
 npm run build:browser
 ```
 
-Then load the extension:
+To create a release-ready zip:
+
+```bash
+npm run release:browser
+```
+
+To load the local extension:
 
 1. Open `chrome://extensions`.
 2. Enable Developer mode.

@@ -18,12 +18,14 @@ Use this checklist before sharing PromptBridge Arabic publicly.
 - [x] `npm pack --dry-run` succeeds.
 - [x] Browser extension TypeScript is checked by CI.
 - [x] Browser extension build is covered by CI.
+- [x] Browser extension zip is generated for tagged releases.
+- [x] Browser extension can be loaded from the repository without a local build.
 - [ ] Package is published to npm.
 - [ ] npm package page is checked after publish.
 
 ## GitHub
 
-- [x] Version tags are pushed through `v0.7.0`.
+- [x] Version tags are pushed through `v0.8.0`.
 - [ ] GitHub Release is created from the latest tag.
 - [ ] Repository topics are added.
 - [ ] Good-first issues are opened.
