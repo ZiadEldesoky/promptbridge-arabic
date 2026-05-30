@@ -70,3 +70,29 @@ jobs:
           else
             gh release create "$GITHUB_REF_NAME" artifacts/* --title "$GITHUB_REF_NAME" --notes-file "$notes_file"
           fi
+
+  package-macos-menubar:
+    name: Package macOS menu bar helper
+    runs-on: macos-latest
+    needs: package-browser-extension
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build macOS menu bar helper
+        run: npm run release:macos
+
+      - name: Upload macOS release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" artifacts/PromptBridgeArabicMenuBar-v*-macos.zip --clobber

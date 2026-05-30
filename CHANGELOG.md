@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.10.0
+
+- Added an experimental native macOS menu bar helper for selected Arabic prompt replacement.
+- Added auto-replace mode that can convert the currently selected Arabic text while the helper is enabled.
+- Added macOS release packaging for the menu bar helper app.
+
 ## v0.9.4
 
 - Made focused IDE input replacement more reliable on macOS by reading and writing the native pasteboard directly.

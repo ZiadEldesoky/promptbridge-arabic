@@ -132,6 +132,38 @@ describe("GUI integration metadata", () => {
     expect(source).not.toContain("replaceSelection.js");
   });
 
+  it("keeps the macOS menu bar helper wired to the bundled converter", async () => {
+    const packageManifest = await readFile(
+      new URL("../extensions/macos/Package.swift", import.meta.url),
+      "utf8"
+    );
+    const source = await readFile(
+      new URL(
+        "../extensions/macos/Sources/PromptBridgeMenuBar/main.swift",
+        import.meta.url
+      ),
+      "utf8"
+    );
+    const buildScript = await readFile(
+      new URL("../scripts/build-macos-menubar.mjs", import.meta.url),
+      "utf8"
+    );
+    const converter = await readFile(
+      new URL("../extensions/macos/src/convertPromptForMenuBar.ts", import.meta.url),
+      "utf8"
+    );
+
+    expect(packageManifest).toContain('name: "PromptBridgeMenuBar"');
+    expect(source).toContain("NSStatusBar.system.statusItem");
+    expect(source).toContain("AXIsProcessTrustedWithOptions");
+    expect(source).toContain("Auto Replace Selected Arabic");
+    expect(source).toContain("originalChangeCount");
+    expect(source).toContain("promptbridge-convert.mjs");
+    expect(converter).toContain("translatePrompt");
+    expect(buildScript).toContain("PromptBridgeArabicMenuBar");
+    expect(buildScript).toContain("promptbridge-convert.mjs");
+  });
+
   it("normalizes browser extension settings safely", () => {
     expect(
       normalizeBrowserSettings({

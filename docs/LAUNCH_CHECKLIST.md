@@ -21,6 +21,8 @@ Use this checklist before sharing PromptBridge Arabic publicly.
 - [x] Browser extension zip is generated for tagged releases.
 - [x] Browser extension can be loaded from the repository without a local build.
 - [x] VS Code-compatible extension packages as VSIX.
+- [x] Experimental macOS menu bar helper packages locally.
+- [x] macOS menu bar helper zip is generated for tagged releases.
 - [x] Browser and IDE extension icons are included.
 - [x] Store listing copy is prepared.
 - [x] Privacy policy is prepared.
@@ -29,7 +31,7 @@ Use this checklist before sharing PromptBridge Arabic publicly.
 
 ## GitHub
 
-- [x] Version tags are pushed through `v0.9.4`.
+- [x] Version tags are pushed through `v0.10.0`.
 - [ ] GitHub Release is created from the latest tag.
 - [ ] Chrome Web Store item is submitted.
 - [x] VS Code Marketplace item is submitted.

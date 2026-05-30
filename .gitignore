@@ -3,6 +3,8 @@ dist/
 !extensions/browser/dist/
 !extensions/browser/dist/**
 artifacts/
+extensions/macos/.build/
+*.tgz
 .DS_Store
 *.log
 .env

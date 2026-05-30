@@ -78,7 +78,25 @@ Current limits:
 - Focused input replacement is currently macOS-only because it uses system copy/paste shortcuts.
 - The extension converts explicit selections or prompt input; it does not intercept every keystroke while typing.
 
-## Level 7: Direct app integrations and input methods
+## Level 7: macOS menu bar helper
+
+```bash
+npm run release:macos
+```
+
+PromptBridge includes an experimental native macOS menu bar helper. The user opens the helper, enables **Auto Replace Selected Arabic**, selects Arabic text in a prompt box, and PromptBridge tries to replace only that selected text with the generated English prompt.
+
+Useful for GUI-heavy workflows where even a keyboard shortcut feels too slow.
+
+Current limits:
+
+- macOS-only.
+- Requires Accessibility permission.
+- Requires Node.js to be available in the user's login shell.
+- Some apps do not expose selected text through Accessibility, so the helper falls back to copy/paste.
+- Auto replacement is off by default because it can affect any selected Arabic text while enabled.
+
+## Level 8: Direct app integrations and input methods
 
 For true conversion while typing inside GUI apps, PromptBridge needs app-specific or OS-level integrations:
 

@@ -1,6 +1,6 @@
 # PromptBridge Arabic Privacy Policy
 
-Last updated: May 30, 2026
+Last updated: May 31, 2026
 
 PromptBridge Arabic is local-first developer tooling for converting Arabic or Egyptian Arabic coding prompts into structured English prompts.
 
@@ -8,7 +8,7 @@ PromptBridge Arabic is local-first developer tooling for converting Arabic or Eg
 
 PromptBridge Arabic does not collect, sell, share, or transmit user data.
 
-The CLI, browser extension, Raycast helper, and VS Code-compatible extension run deterministic prompt conversion locally on the user's device. They do not call external AI services, analytics services, or remote translation APIs.
+The CLI, browser extension, Raycast helper, VS Code-compatible extension, and experimental macOS menu bar helper run deterministic prompt conversion locally on the user's device. They do not call external AI services, analytics services, or remote translation APIs.
 
 ## Browser extension behavior
 
@@ -21,6 +21,12 @@ The browser extension stores only local preferences, such as the selected prompt
 ## IDE extension behavior
 
 The VS Code-compatible extension reads selected text or user-entered prompt text only when the user runs a PromptBridge command. Conversion happens locally inside the extension host.
+
+## macOS menu bar helper behavior
+
+The experimental macOS menu bar helper can read the currently selected text only while the user enables **Auto Replace Selected Arabic** or manually chooses **Convert Current Selection Now**.
+
+The helper uses macOS Accessibility and local clipboard APIs to read and replace selected text. Conversion happens locally through a bundled deterministic converter built from the PromptBridge TypeScript core. Selected text is not transmitted to PromptBridge maintainers or any third party.
 
 ## Secret redaction
 
