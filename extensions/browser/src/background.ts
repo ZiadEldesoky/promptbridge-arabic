@@ -32,6 +32,15 @@ declare const chrome: {
       addListener: (listener: () => void) => void;
     };
   };
+  scripting: {
+    executeScript: (
+      injection: {
+        target: { tabId: number };
+        files: string[];
+      },
+      callback?: () => void
+    ) => void;
+  };
   tabs: {
     query: (
       queryInfo: { active: boolean; currentWindow: boolean },
@@ -105,14 +114,32 @@ function sendRawReplaceMessage(
   tabId: number,
   options: BrowserPromptBridgeOptions
 ): void {
-  chrome.tabs.sendMessage(
-    tabId,
+  executeContentScript(tabId, () => {
+    chrome.tabs.sendMessage(
+      tabId,
+      {
+        type: "PROMPTBRIDGE_REPLACE_SELECTION",
+        options
+      },
+      () => {
+        void chrome.runtime.lastError;
+      }
+    );
+  });
+}
+
+function executeContentScript(tabId: number, callback: () => void): void {
+  chrome.scripting.executeScript(
     {
-      type: "PROMPTBRIDGE_REPLACE_SELECTION",
-      options
+      target: { tabId },
+      files: ["dist/content.js"]
     },
     () => {
-      void chrome.runtime.lastError;
+      if (chrome.runtime.lastError) {
+        return;
+      }
+
+      callback();
     }
   );
 }

@@ -3,13 +3,25 @@
   "name": "PromptBridge Arabic",
   "version": "0.9.0",
   "description": "Convert selected Arabic developer prompts into structured English prompts inside web AI tools.",
-  "permissions": ["activeTab", "contextMenus", "storage"],
+  "permissions": ["activeTab", "contextMenus", "scripting", "storage"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "background": {
     "service_worker": "dist/background.js"
   },
   "action": {
     "default_title": "PromptBridge Arabic",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "commands": {
     "replace-selection": {
@@ -20,11 +32,5 @@
       "description": "Convert selected Arabic prompt text"
     }
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["dist/content.js"],
-      "run_at": "document_idle"
-    }
-  ]
+  "minimum_chrome_version": "114"
 }

@@ -97,14 +97,30 @@
     sendRawReplaceMessage(tabId, { ...settings, ...overrides });
   }
   function sendRawReplaceMessage(tabId, options) {
-    chrome.tabs.sendMessage(
-      tabId,
+    executeContentScript(tabId, () => {
+      chrome.tabs.sendMessage(
+        tabId,
+        {
+          type: "PROMPTBRIDGE_REPLACE_SELECTION",
+          options
+        },
+        () => {
+          void chrome.runtime.lastError;
+        }
+      );
+    });
+  }
+  function executeContentScript(tabId, callback) {
+    chrome.scripting.executeScript(
       {
-        type: "PROMPTBRIDGE_REPLACE_SELECTION",
-        options
+        target: { tabId },
+        files: ["dist/content.js"]
       },
       () => {
-        void chrome.runtime.lastError;
+        if (chrome.runtime.lastError) {
+          return;
+        }
+        callback();
       }
     );
   }

@@ -2,6 +2,13 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## Unreleased
+
+- Added marketplace-ready PNG icons for the browser and VS Code-compatible extensions.
+- Updated the browser extension to inject its conversion script only after user action.
+- Added a public privacy policy for extension marketplace submissions.
+- Expanded Chrome Web Store, VS Code Marketplace, and Open VSX listing documentation.
+
 ## v0.9.0
 
 - Added a VS Code-compatible extension for converting Arabic prompt text inside editors.

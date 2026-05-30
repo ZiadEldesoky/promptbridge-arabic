@@ -19,13 +19,15 @@ describe("GUI integration metadata", () => {
     ) as {
       version: string;
       permissions: string[];
-      content_scripts: Array<{ js: string[] }>;
+      icons: Record<string, string>;
     };
 
     expect(manifest.version).toBe(packageJson.version);
+    expect(manifest.permissions).toContain("activeTab");
     expect(manifest.permissions).toContain("contextMenus");
+    expect(manifest.permissions).toContain("scripting");
     expect(manifest.permissions).toContain("storage");
-    expect(manifest.content_scripts[0]?.js).toContain("dist/content.js");
+    expect(manifest.icons["128"]).toBe("icons/icon128.png");
   });
 
   it("keeps the VS Code extension manifest aligned with the package version", async () => {
@@ -61,6 +63,9 @@ describe("GUI integration metadata", () => {
     ).resolves.toBeUndefined();
     await expect(
       access(new URL("../extensions/browser/dist/popup.js", import.meta.url))
+    ).resolves.toBeUndefined();
+    await expect(
+      access(new URL("../extensions/browser/icons/icon128.png", import.meta.url))
     ).resolves.toBeUndefined();
   });
 

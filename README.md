@@ -260,6 +260,8 @@ Workflow:
 
 The extension uses the local deterministic core and does not call external AI services. The popup saves browser-local defaults for mode, bilingual output, redaction, and focused-field fallback. Redaction is only applied when selected or saved as a default.
 
+Publishing notes for maintainers are in [Chrome Web Store](docs/publishing/CHROME_WEB_STORE.md), [IDE Extensions](docs/publishing/IDE_EXTENSIONS.md), and [Privacy](docs/PRIVACY.md).
+
 ### Raycast helper
 
 For macOS GUI apps, use the Raycast script command in `extensions/raycast`.
@@ -489,6 +491,7 @@ npm run release:vscode
 - Tests: Vitest coverage for translation modes, glossary matching, config loading, token preservation, and redaction.
 - CI: GitHub Actions runs install, tests, Node typecheck, browser extension typecheck, VS Code extension typecheck, CLI build, browser extension build, and extension packaging on every push and pull request.
 - Security: optional redaction is local-only and does not send prompts to external services.
+- Privacy: see [docs/PRIVACY.md](docs/PRIVACY.md) for the browser and IDE extension privacy policy.
 - Maintenance: see [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CHANGELOG.md](CHANGELOG.md).
 
 ## Current modes
@@ -512,9 +515,9 @@ npm run release:vscode
 
 Near-term improvements:
 
-- Add a packaged browser extension release and deeper app-specific adapters.
 - Publish the browser extension to the Chrome Web Store.
 - Publish the IDE extension to VS Code Marketplace and Open VSX.
+- Add deeper app-specific adapters.
 - Add a native input-method or keyboard workflow for near-zero-step conversion.
 - Add first-class wrappers for more CLI agents and GUI launchers.
 - Add more Arabic dialect examples.

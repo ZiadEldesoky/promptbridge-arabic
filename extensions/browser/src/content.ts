@@ -25,6 +25,11 @@ type EditableTarget =
       element: HTMLElement;
     };
 
+const readyKey = "__promptbridgeArabicContentReady";
+const browserWindow = window as Window & {
+  __promptbridgeArabicContentReady?: boolean;
+};
+
 declare const chrome:
   | {
       runtime?: {
@@ -41,14 +46,18 @@ declare const chrome:
     }
   | undefined;
 
-chrome?.runtime?.onMessage?.addListener((message, _sender, sendResponse) => {
-  if (message.type !== "PROMPTBRIDGE_REPLACE_SELECTION") {
-    return false;
-  }
+if (!browserWindow[readyKey]) {
+  browserWindow[readyKey] = true;
 
-  sendResponse(replaceActiveSelection(message.options ?? {}));
-  return false;
-});
+  chrome?.runtime?.onMessage?.addListener((message, _sender, sendResponse) => {
+    if (message.type !== "PROMPTBRIDGE_REPLACE_SELECTION") {
+      return false;
+    }
+
+    sendResponse(replaceActiveSelection(message.options ?? {}));
+    return false;
+  });
+}
 
 function replaceActiveSelection(
   options: NonNullable<PromptBridgeMessage["options"]>

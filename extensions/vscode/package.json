@@ -13,6 +13,7 @@
   "bugs": {
     "url": "https://github.com/ZiadEldesoky/promptbridge-arabic/issues"
   },
+  "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.88.0"
   },
@@ -27,6 +28,7 @@
   "main": "./dist/extension.js",
   "files": [
     "dist",
+    "assets",
     "README.md",
     "LICENSE",
     "package.json"

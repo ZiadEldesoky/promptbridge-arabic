@@ -4,6 +4,8 @@ This extension lets GUI users convert Arabic or Egyptian Arabic prompt text dire
 
 It uses the same local deterministic PromptBridge core engine. It does not call an external AI service.
 
+The conversion script is injected into the active tab only after a user action, such as the popup, context menu, or keyboard shortcut.
+
 ## Use without building
 
 For normal users, no build is required.

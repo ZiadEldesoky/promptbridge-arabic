@@ -809,13 +809,18 @@
 
   // extensions/browser/src/content.ts
   var ARABIC_TEXT_PATTERN = /[\u0600-\u06FF]/;
-  chrome?.runtime?.onMessage?.addListener((message, _sender, sendResponse) => {
-    if (message.type !== "PROMPTBRIDGE_REPLACE_SELECTION") {
+  var readyKey = "__promptbridgeArabicContentReady";
+  var browserWindow = window;
+  if (!browserWindow[readyKey]) {
+    browserWindow[readyKey] = true;
+    chrome?.runtime?.onMessage?.addListener((message, _sender, sendResponse) => {
+      if (message.type !== "PROMPTBRIDGE_REPLACE_SELECTION") {
+        return false;
+      }
+      sendResponse(replaceActiveSelection(message.options ?? {}));
       return false;
-    }
-    sendResponse(replaceActiveSelection(message.options ?? {}));
-    return false;
-  });
+    });
+  }
   function replaceActiveSelection(options) {
     const normalizedOptions = normalizeOptions(options);
     const activeElement = document.activeElement;

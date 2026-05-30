@@ -89,26 +89,43 @@
         setStatus("No active tab found.");
         return;
       }
-      chrome.tabs.sendMessage(
-        tabId,
-        {
-          type: "PROMPTBRIDGE_REPLACE_SELECTION",
-          options
-        },
-        (response) => {
-          const error = chrome.runtime.lastError;
-          if (error?.message) {
-            setStatus("This page is not ready for PromptBridge yet.");
-            return;
+      executeContentScript(tabId, () => {
+        chrome.tabs.sendMessage(
+          tabId,
+          {
+            type: "PROMPTBRIDGE_REPLACE_SELECTION",
+            options
+          },
+          (response) => {
+            const error = chrome.runtime.lastError;
+            if (error?.message) {
+              setStatus("This page is not ready for PromptBridge yet.");
+              return;
+            }
+            if (response?.converted) {
+              setStatus("Converted and replaced selected text.");
+              return;
+            }
+            setStatus(reasonToMessage(response?.reason));
           }
-          if (response?.converted) {
-            setStatus("Converted and replaced selected text.");
-            return;
-          }
-          setStatus(reasonToMessage(response?.reason));
-        }
-      );
+        );
+      });
     });
+  }
+  function executeContentScript(tabId, callback) {
+    chrome.scripting.executeScript(
+      {
+        target: { tabId },
+        files: ["dist/content.js"]
+      },
+      () => {
+        if (chrome.runtime.lastError) {
+          setStatus("This page does not allow extension editing.");
+          return;
+        }
+        callback();
+      }
+    );
   }
   async function loadSettingsIntoForm() {
     const settings = await loadBrowserSettings();
