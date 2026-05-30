@@ -147,6 +147,24 @@ promptbridge replace-selection --redact
 
 Raycast runs the same command behind a shortcut, so the workflow is: select Arabic text -> trigger Raycast command -> paste-ready English prompt replaces the selection.
 
+### IDE extension
+
+PromptBridge includes a VS Code-compatible extension under `extensions/vscode`.
+
+Build and package a local VSIX:
+
+```bash
+npm run release:vscode
+```
+
+Install in VS Code:
+
+```bash
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.0.vsix
+```
+
+The extension adds commands for converting selected Arabic text, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
+
 ## CLI agent wrappers
 
 For CLI coding agents, you can set up shell wrappers once and then write Arabic directly in the normal agent command:
@@ -323,12 +341,15 @@ npm run typecheck:browser
 npm run build
 npm run build:browser
 npm run package:browser
+npm run typecheck:vscode
+npm run build:vscode
+npm run package:vscode
 ```
 
 ## Project health
 
 - Tests: Vitest coverage for translation modes, glossary matching, config loading, token preservation, and redaction.
-- CI: GitHub Actions runs install, tests, Node typecheck, browser extension typecheck, CLI build, and browser extension build on every push and pull request.
+- CI: GitHub Actions runs install, tests, Node typecheck, browser extension typecheck, VS Code extension typecheck, CLI build, browser extension build, and extension packaging on every push and pull request.
 - Security: optional redaction is local-only and does not send prompts to external services.
 - Maintenance: see [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), and [CHANGELOG.md](CHANGELOG.md).
 
@@ -354,6 +375,8 @@ npm run package:browser
 Near-term improvements:
 
 - Add a packaged browser extension release and deeper app-specific adapters.
+- Publish the browser extension to the Chrome Web Store.
+- Publish the IDE extension to VS Code Marketplace and Open VSX.
 - Add a native input-method or keyboard workflow for near-zero-step conversion.
 - Add first-class wrappers for more CLI agents and GUI launchers.
 - Add more Arabic dialect examples.

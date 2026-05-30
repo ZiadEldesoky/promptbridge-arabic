@@ -1,0 +1,84 @@
+{
+  "name": "promptbridge-arabic",
+  "displayName": "PromptBridge Arabic",
+  "description": "Convert Arabic or Egyptian Arabic coding prompts into structured English prompts inside VS Code-compatible editors.",
+  "version": "0.9.0",
+  "publisher": "ziadeldesoky",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZiadEldesoky/promptbridge-arabic"
+  },
+  "homepage": "https://github.com/ZiadEldesoky/promptbridge-arabic#readme",
+  "bugs": {
+    "url": "https://github.com/ZiadEldesoky/promptbridge-arabic/issues"
+  },
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "categories": ["Other"],
+  "keywords": [
+    "arabic",
+    "egyptian-arabic",
+    "prompt",
+    "coding-agent",
+    "ai"
+  ],
+  "main": "./dist/extension.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "activationEvents": [
+    "onCommand:promptbridge.convertSelection",
+    "onCommand:promptbridge.convertInputToClipboard",
+    "onCommand:promptbridge.convertInputToEditor"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "promptbridge.convertSelection",
+        "title": "PromptBridge: Convert Arabic Selection"
+      },
+      {
+        "command": "promptbridge.convertInputToClipboard",
+        "title": "PromptBridge: Convert Arabic Prompt to Clipboard"
+      },
+      {
+        "command": "promptbridge.convertInputToEditor",
+        "title": "PromptBridge: Insert Converted Arabic Prompt"
+      }
+    ],
+    "configuration": {
+      "title": "PromptBridge Arabic",
+      "properties": {
+        "promptbridge.mode": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "fix",
+            "refactor",
+            "review",
+            "tests",
+            "explain",
+            "security"
+          ],
+          "description": "Default prompt mode for converted Arabic prompts."
+        },
+        "promptbridge.redact": {
+          "type": "boolean",
+          "default": false,
+          "description": "Redact common secrets before generating the English prompt."
+        },
+        "promptbridge.bilingual": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include an Arabic summary after the English prompt."
+        }
+      }
+    }
+  }
+}

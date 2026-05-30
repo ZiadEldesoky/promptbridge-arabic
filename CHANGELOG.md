@@ -2,6 +2,15 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.9.0
+
+- Added a VS Code-compatible extension for converting Arabic prompt text inside editors.
+- Added IDE commands for converting selected text, copying converted input, and inserting converted input.
+- Added IDE settings for mode, bilingual output, and secret redaction.
+- Added VS Code extension build and VSIX packaging scripts.
+- Added CI coverage for VS Code extension typecheck, build, and packaging.
+- Added publishing documentation for Chrome Web Store, VS Code Marketplace, and Open VSX.
+
 ## v0.8.0
 
 - Committed the built browser extension bundle so users can load `extensions/browser` directly without running a build.

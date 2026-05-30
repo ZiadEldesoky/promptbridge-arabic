@@ -60,12 +60,28 @@ Current limits:
 - Redaction is only applied when the user chooses the redaction action.
 - Some custom web editors may need adapter-specific handling later.
 
-## Level 6: Direct app integrations and input methods
+## Level 6: IDE extension
+
+```bash
+npm run release:vscode
+```
+
+PromptBridge includes a VS Code-compatible extension that can convert selected Arabic text inside an editor, copy converted prompt input to the clipboard, or insert converted prompt input into the active editor.
+
+Useful for VS Code and editors that support compatible VSIX extensions.
+
+Current limits:
+
+- Cursor and other VS Code-compatible editors need manual VSIX testing.
+- Antigravity compatibility should be verified manually because public docs do not clearly document VSIX support.
+- The extension converts explicit selections or prompt input; it does not intercept every IDE chat box yet.
+
+## Level 7: Direct app integrations and input methods
 
 For true conversion while typing inside GUI apps, PromptBridge needs app-specific or OS-level integrations:
 
 - macOS input method.
-- VS Code/Cursor extension.
+- Deeper IDE chat integrations where the editor exposes stable APIs.
 - Native app integration.
 
 This is the only route to conversion with no copy, paste, selection, or shortcut.

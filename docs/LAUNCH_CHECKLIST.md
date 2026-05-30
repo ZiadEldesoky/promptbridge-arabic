@@ -20,13 +20,17 @@ Use this checklist before sharing PromptBridge Arabic publicly.
 - [x] Browser extension build is covered by CI.
 - [x] Browser extension zip is generated for tagged releases.
 - [x] Browser extension can be loaded from the repository without a local build.
+- [x] VS Code-compatible extension packages as VSIX.
 - [ ] Package is published to npm.
 - [ ] npm package page is checked after publish.
 
 ## GitHub
 
-- [x] Version tags are pushed through `v0.8.0`.
+- [x] Version tags are pushed through `v0.9.0`.
 - [ ] GitHub Release is created from the latest tag.
+- [ ] Chrome Web Store item is submitted.
+- [ ] VS Code Marketplace item is submitted.
+- [ ] Open VSX item is submitted.
 - [ ] Repository topics are added.
 - [ ] Good-first issues are opened.
 

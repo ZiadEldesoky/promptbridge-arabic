@@ -1,6 +1,6 @@
 {
   "name": "promptbridge-arabic",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Arabic-first prompt translator and optimizer for AI coding agents.",
   "type": "module",
   "repository": {
@@ -26,8 +26,12 @@
     "extensions",
     "examples",
     "scripts/build-browser-extension.mjs",
+    "scripts/package-browser-extension.mjs",
+    "scripts/build-vscode-extension.mjs",
+    "scripts/package-vscode-extension.mjs",
     "src",
     "tsconfig.browser.json",
+    "tsconfig.vscode.json",
     "tsconfig.json",
     "AGENTS.md",
     "CHANGELOG.md",
@@ -41,12 +45,16 @@
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "build": "tsc -p tsconfig.json",
     "build:browser": "node scripts/build-browser-extension.mjs",
+    "build:vscode": "node scripts/build-vscode-extension.mjs",
     "dev": "tsx src/cli.ts",
     "package:browser": "node scripts/package-browser-extension.mjs",
-    "prepack": "npm run build && npm run build:browser",
+    "package:vscode": "node scripts/package-vscode-extension.mjs",
+    "prepack": "npm run build && npm run build:browser && npm run build:vscode",
     "release:browser": "npm run build:browser && npm run package:browser",
+    "release:vscode": "npm run build:vscode && npm run package:vscode",
     "test": "vitest run",
     "typecheck:browser": "tsc -p tsconfig.browser.json",
+    "typecheck:vscode": "tsc -p tsconfig.vscode.json",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [
@@ -74,6 +82,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
+    "@vscode/vsce": "^3.9.1",
     "esbuild": "^0.21.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",

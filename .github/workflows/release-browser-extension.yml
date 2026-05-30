@@ -1,4 +1,4 @@
-name: Browser Extension Release
+name: Extension Release Assets
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   package-browser-extension:
-    name: Package browser extension
+    name: Package extension assets
     runs-on: ubuntu-latest
 
     steps:
@@ -35,11 +35,20 @@ jobs:
       - name: Typecheck browser extension
         run: npm run typecheck:browser
 
+      - name: Typecheck VS Code extension
+        run: npm run typecheck:vscode
+
       - name: Build browser extension
         run: npm run build:browser
 
       - name: Package browser extension
         run: npm run package:browser
+
+      - name: Build VS Code extension
+        run: npm run build:vscode
+
+      - name: Package VS Code extension
+        run: npm run package:vscode
 
       - name: Publish release asset
         env:
@@ -51,7 +60,7 @@ jobs:
           fi
 
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" artifacts/*.zip --clobber
+            gh release upload "$GITHUB_REF_NAME" artifacts/* --clobber
           else
-            gh release create "$GITHUB_REF_NAME" artifacts/*.zip --title "$GITHUB_REF_NAME" --notes-file "$notes_file"
+            gh release create "$GITHUB_REF_NAME" artifacts/* --title "$GITHUB_REF_NAME" --notes-file "$notes_file"
           fi

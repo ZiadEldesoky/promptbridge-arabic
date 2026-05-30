@@ -28,6 +28,30 @@ describe("GUI integration metadata", () => {
     expect(manifest.content_scripts[0]?.js).toContain("dist/content.js");
   });
 
+  it("keeps the VS Code extension manifest aligned with the package version", async () => {
+    const packageJson = JSON.parse(
+      await readFile(new URL("../package.json", import.meta.url), "utf8")
+    ) as { version: string };
+    const manifest = JSON.parse(
+      await readFile(
+        new URL("../extensions/vscode/package.json", import.meta.url),
+        "utf8"
+      )
+    ) as {
+      version: string;
+      main: string;
+      contributes: { commands: Array<{ command: string }> };
+    };
+
+    expect(manifest.version).toBe(packageJson.version);
+    expect(manifest.main).toBe("./dist/extension.js");
+    expect(manifest.contributes.commands).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.convertSelection"
+      })
+    );
+  });
+
   it("keeps the load-unpacked browser extension bundle committed", async () => {
     await expect(
       access(new URL("../extensions/browser/dist/content.js", import.meta.url))
