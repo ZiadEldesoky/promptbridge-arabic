@@ -6,9 +6,9 @@
 
 Arabic-first prompt translator and optimizer for AI coding agents.
 
-PromptBridge Arabic lets Arabic-speaking developers write coding prompts in Arabic or Egyptian Arabic, then converts them into structured English prompts that work well with Codex, Claude Code, Cursor, Gemini CLI, and other AI developer tools.
+PromptBridge Arabic lets Arabic-speaking developers write coding prompts in Arabic or Egyptian Arabic, then converts them into structured English prompts that work well with ChatGPT, Codex, Claude Code, Cursor, Gemini CLI, and other AI developer tools.
 
-![PromptBridge Arabic CLI demo](docs/assets/demo.svg)
+![PromptBridge Arabic workflow overview](docs/assets/screenshots/workflow-overview.svg)
 
 The current MVP is intentionally local and deterministic:
 
@@ -20,6 +20,24 @@ The current MVP is intentionally local and deterministic:
 ## Why this exists
 
 Arabic-speaking developers often describe bugs, UI constraints, and product behavior more naturally in Arabic or Egyptian Arabic. Most coding agents respond better to precise structured English. PromptBridge Arabic bridges that gap while preserving technical tokens such as code, paths, commands, package names, stack traces, URLs, and environment variables.
+
+## Screenshots / لقطات الاستخدام
+
+These screenshots show PromptBridge workflows in neutral terminal, browser, and editor environments.
+
+الصور دي بتوضح طريقة الاستخدام في terminal وbrowser وeditor بشكل محايد، من غير ربط الأداة بواجهة AI واحدة.
+
+### Browser extension / إضافة المتصفح
+
+![PromptBridge Arabic browser extension screenshot](docs/assets/screenshots/browser-extension.svg)
+
+### IDE extension / إضافة محرر الأكواد
+
+![PromptBridge Arabic VS Code-compatible extension screenshot](docs/assets/screenshots/vscode-extension.svg)
+
+### CLI / التيرمنال
+
+![PromptBridge Arabic terminal screenshot](docs/assets/screenshots/terminal-demo.svg)
 
 ## Quick Start / التشغيل السريع
 
@@ -413,6 +431,13 @@ tests/
   runAgent.test.ts
   watchClipboard.test.ts
   guiIntegrations.test.ts
+docs/
+  assets/
+    screenshots/
+      browser-extension.svg
+      terminal-demo.svg
+      vscode-extension.svg
+      workflow-overview.svg
 extensions/
   browser/
     src/

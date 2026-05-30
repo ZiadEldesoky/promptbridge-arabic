@@ -1,0 +1,38 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PromptBridge Arabic workflow overview</title>
+  <desc id="desc">A product overview showing Arabic developer prompts converted into structured English prompts for AI coding tools.</desc>
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+  <text x="80" y="98" fill="#101828" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="800">PromptBridge Arabic</text>
+  <text x="80" y="138" fill="#475467" font-family="Inter, Arial, sans-serif" font-size="20">Arabic developer intent -> structured English prompts for AI coding agents</text>
+
+  <rect x="80" y="196" width="320" height="330" rx="22" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <text x="112" y="246" fill="#101828" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800">1. Write naturally</text>
+  <text x="112" y="294" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="18">ظبطلي الكود دا وخليه responsive</text>
+  <text x="112" y="326" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="18">من غير ما تغير الديزاين</text>
+  <rect x="112" y="384" width="220" height="38" rx="19" fill="#EEF4FF"/>
+  <text x="136" y="409" fill="#155EEF" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Arabic / Egyptian Arabic</text>
+
+  <path d="M430 360H500" stroke="#98A2B3" stroke-width="4" stroke-linecap="round"/>
+  <path d="M500 360L482 346M500 360L482 374" stroke="#98A2B3" stroke-width="4" stroke-linecap="round"/>
+
+  <rect x="530" y="196" width="320" height="330" rx="22" fill="#101828"/>
+  <text x="562" y="246" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800">2. Convert locally</text>
+  <text x="562" y="294" fill="#D0D5DD" font-family="Inter, Arial, sans-serif" font-size="17">Preserve code, paths, commands,</text>
+  <text x="562" y="326" fill="#D0D5DD" font-family="Inter, Arial, sans-serif" font-size="17">URLs, packages, stack traces,</text>
+  <text x="562" y="358" fill="#D0D5DD" font-family="Inter, Arial, sans-serif" font-size="17">and environment variables.</text>
+  <rect x="562" y="414" width="160" height="38" rx="19" fill="#053321"/>
+  <text x="586" y="439" fill="#75E0A7" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">No API key</text>
+
+  <path d="M880 360H950" stroke="#98A2B3" stroke-width="4" stroke-linecap="round"/>
+  <path d="M950 360L932 346M950 360L932 374" stroke="#98A2B3" stroke-width="4" stroke-linecap="round"/>
+
+  <rect x="980" y="196" width="220" height="330" rx="22" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <text x="1012" y="246" fill="#101828" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800">3. Use anywhere</text>
+  <text x="1012" y="300" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="17">CLI</text>
+  <text x="1012" y="336" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="17">Browser extension</text>
+  <text x="1012" y="372" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="17">VS Code extension</text>
+  <text x="1012" y="408" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="17">Raycast shortcut</text>
+
+  <rect x="80" y="586" width="1120" height="64" rx="32" fill="#EEF4FF"/>
+  <text x="122" y="626" fill="#1849A9" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700">Built for Arabic-speaking developers who use ChatGPT, Claude, Cursor, Gemini, Codex, and other AI coding tools.</text>
+</svg>

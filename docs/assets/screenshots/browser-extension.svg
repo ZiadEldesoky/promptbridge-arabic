@@ -1,0 +1,48 @@
+<svg width="1280" height="760" viewBox="0 0 1280 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PromptBridge Arabic browser extension workflow</title>
+  <desc id="desc">A browser screenshot-style mockup showing Arabic prompt text converted into a structured English prompt using the PromptBridge Arabic extension.</desc>
+  <rect width="1280" height="760" fill="#F4F6F8"/>
+  <rect x="52" y="44" width="1176" height="672" rx="18" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <rect x="52" y="44" width="1176" height="64" rx="18" fill="#EEF2F6"/>
+  <circle cx="82" cy="76" r="8" fill="#EF4444"/>
+  <circle cx="108" cy="76" r="8" fill="#F59E0B"/>
+  <circle cx="134" cy="76" r="8" fill="#22C55E"/>
+  <rect x="178" y="62" width="620" height="30" rx="15" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <text x="202" y="82" fill="#667085" font-family="Inter, Arial, sans-serif" font-size="14">https://chat.example.local</text>
+  <rect x="1042" y="60" width="132" height="34" rx="17" fill="#111827"/>
+  <text x="1066" y="82" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="600">PromptBridge</text>
+
+  <rect x="96" y="144" width="760" height="520" rx="18" fill="#101828"/>
+  <text x="128" y="188" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700">AI coding assistant</text>
+  <text x="128" y="220" fill="#98A2B3" font-family="Inter, Arial, sans-serif" font-size="15">Write naturally in Arabic, then convert before sending.</text>
+
+  <rect x="128" y="270" width="632" height="98" rx="14" fill="#1D2939" stroke="#344054"/>
+  <text x="152" y="304" fill="#F2F4F7" font-family="Inter, Arial, sans-serif" font-size="17">ظبطلي الكود دا وخليه responsive من غير ما تغير الديزاين</text>
+  <rect x="152" y="324" width="368" height="26" rx="6" fill="#155EEF" opacity="0.32"/>
+  <text x="152" y="344" fill="#D1E0FF" font-family="Inter, Arial, sans-serif" font-size="13">Selected Arabic prompt text</text>
+
+  <rect x="128" y="404" width="632" height="178" rx="14" fill="#FFFFFF"/>
+  <text x="152" y="438" fill="#101828" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Refactor this code to make it responsive.</text>
+  <text x="152" y="476" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="15">Requirements:</text>
+  <text x="172" y="506" fill="#475467" font-family="Inter, Arial, sans-serif" font-size="14">- Make the affected UI responsive across common screen sizes.</text>
+  <text x="172" y="532" fill="#475467" font-family="Inter, Arial, sans-serif" font-size="14">- Preserve the existing visual design.</text>
+  <text x="172" y="558" fill="#475467" font-family="Inter, Arial, sans-serif" font-size="14">- Make the smallest safe changes.</text>
+  <rect x="604" y="604" width="156" height="42" rx="21" fill="#155EEF"/>
+  <text x="646" y="631" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600">Send</text>
+
+  <rect x="884" y="168" width="276" height="288" rx="18" fill="#FFFFFF" stroke="#D0D5DD"/>
+  <text x="908" y="208" fill="#101828" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700">PromptBridge Arabic</text>
+  <text x="908" y="234" fill="#667085" font-family="Inter, Arial, sans-serif" font-size="13">Saved local settings</text>
+  <rect x="908" y="266" width="228" height="38" rx="8" fill="#F9FAFB" stroke="#D0D5DD"/>
+  <text x="924" y="290" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="14">Mode: Auto detect</text>
+  <rect x="908" y="324" width="16" height="16" rx="4" fill="#155EEF"/>
+  <text x="936" y="338" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="14">Focused prompt fallback</text>
+  <rect x="908" y="358" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#98A2B3"/>
+  <text x="936" y="372" fill="#344054" font-family="Inter, Arial, sans-serif" font-size="14">Redact common secrets</text>
+  <rect x="908" y="398" width="228" height="40" rx="20" fill="#155EEF"/>
+  <text x="946" y="424" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Convert Selection</text>
+
+  <rect x="882" y="490" width="280" height="110" rx="18" fill="#ECFDF3" stroke="#ABEFC6"/>
+  <text x="908" y="526" fill="#067647" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">Local-first conversion</text>
+  <text x="908" y="556" fill="#067647" font-family="Inter, Arial, sans-serif" font-size="14">No API key. No external AI call.</text>
+</svg>

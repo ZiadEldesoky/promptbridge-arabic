@@ -1,0 +1,29 @@
+<svg width="1280" height="760" viewBox="0 0 1280 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PromptBridge Arabic terminal demo</title>
+  <desc id="desc">A terminal screenshot-style demo showing an Arabic prompt converted into a structured English coding-agent prompt.</desc>
+  <rect width="1280" height="760" fill="#0A0D12"/>
+  <rect x="74" y="58" width="1132" height="644" rx="18" fill="#101828" stroke="#344054"/>
+  <rect x="74" y="58" width="1132" height="58" rx="18" fill="#1D2939"/>
+  <circle cx="106" cy="88" r="8" fill="#F97066"/>
+  <circle cx="132" cy="88" r="8" fill="#FDB022"/>
+  <circle cx="158" cy="88" r="8" fill="#32D583"/>
+  <text x="190" y="94" fill="#D0D5DD" font-family="Inter, Arial, sans-serif" font-size="15">ziad@laptop ~/Projects/promptbridge-arabic</text>
+  <text x="112" y="164" fill="#12B76A" font-family="SFMono-Regular, Consolas, monospace" font-size="18">$</text>
+  <text x="142" y="164" fill="#E4E7EC" font-family="SFMono-Regular, Consolas, monospace" font-size="18">promptbridge</text>
+  <text x="292" y="164" fill="#E4E7EC" font-family="SFMono-Regular, Consolas, monospace" font-size="18">"[Arabic prompt]"</text>
+
+  <text x="112" y="226" fill="#FFFFFF" font-family="SFMono-Regular, Consolas, monospace" font-size="20">Refactor this code to make it responsive.</text>
+  <text x="112" y="286" fill="#F2F4F7" font-family="SFMono-Regular, Consolas, monospace" font-size="18">Context:</text>
+  <text x="142" y="322" fill="#D0D5DD" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- fix, improve, or refactor depending on context</text>
+  <text x="142" y="354" fill="#D0D5DD" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- without changing the design</text>
+  <text x="142" y="386" fill="#D0D5DD" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- make it responsive</text>
+
+  <text x="112" y="452" fill="#F2F4F7" font-family="SFMono-Regular, Consolas, monospace" font-size="18">Requirements:</text>
+  <text x="142" y="488" fill="#D0D5DD" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- Make the affected UI responsive across common screen sizes.</text>
+  <text x="142" y="520" fill="#D0D5DD" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- Preserve the existing visual design.</text>
+  <text x="142" y="552" fill="#D0D5DD" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- Make the smallest safe changes.</text>
+  <text x="142" y="584" fill="#D0D5DD" font-family="SFMono-Regular, Consolas, monospace" font-size="17">- Explain what was changed and why.</text>
+
+  <rect x="112" y="626" width="358" height="36" rx="18" fill="#053321"/>
+  <text x="134" y="649" fill="#75E0A7" font-family="Inter, Arial, sans-serif" font-size="15">No API key. No external AI service.</text>
+</svg>
