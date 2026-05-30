@@ -2,7 +2,7 @@
   "name": "promptbridge-arabic",
   "displayName": "PromptBridge Arabic",
   "description": "Convert Arabic or Egyptian Arabic coding prompts into structured English prompts inside VS Code-compatible editors.",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "publisher": "ziadeldesoky",
   "license": "MIT",
   "repository": {
@@ -36,7 +36,8 @@
   "activationEvents": [
     "onCommand:promptbridge.convertSelection",
     "onCommand:promptbridge.convertInputToClipboard",
-    "onCommand:promptbridge.convertInputToEditor"
+    "onCommand:promptbridge.convertInputToEditor",
+    "onCommand:promptbridge.replaceFocusedSelection"
   ],
   "contributes": {
     "commands": [
@@ -51,8 +52,40 @@
       {
         "command": "promptbridge.convertInputToEditor",
         "title": "PromptBridge: Insert Converted Arabic Prompt"
+      },
+      {
+        "command": "promptbridge.replaceFocusedSelection",
+        "title": "PromptBridge: Replace Selected Text in Focused Input"
       }
     ],
+    "keybindings": [
+      {
+        "command": "promptbridge.convertSelection",
+        "key": "ctrl+shift+y",
+        "mac": "cmd+shift+y",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "promptbridge.convertInputToClipboard",
+        "key": "ctrl+alt+y",
+        "mac": "cmd+alt+y"
+      },
+      {
+        "command": "promptbridge.replaceFocusedSelection",
+        "key": "ctrl+shift+y",
+        "mac": "cmd+shift+y",
+        "when": "!editorTextFocus"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "promptbridge.convertSelection",
+          "when": "editorHasSelection",
+          "group": "1_modification@9"
+        }
+      ]
+    },
     "configuration": {
       "title": "PromptBridge Arabic",
       "properties": {

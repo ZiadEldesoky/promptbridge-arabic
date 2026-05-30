@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { replaceSelectedText } from "../../../src/clipboard/replaceSelection.js";
 import { translatePrompt } from "../../../src/translator/translatePrompt.js";
 import { isPromptMode, type PromptMode } from "../../../src/translator/modes.js";
 
@@ -23,6 +24,10 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand(
       "promptbridge.convertInputToEditor",
       convertInputToEditor
+    ),
+    vscode.commands.registerCommand(
+      "promptbridge.replaceFocusedSelection",
+      replaceFocusedSelection
     )
   );
 }
@@ -116,6 +121,32 @@ async function convertInputToEditor(): Promise<void> {
       editBuilder.replace(selection, convertedText);
     }
   });
+}
+
+async function replaceFocusedSelection(): Promise<void> {
+  const event = await replaceSelectedText({
+    translateOptions: readSettings()
+  });
+
+  if (event.converted) {
+    vscode.window.showInformationMessage(
+      "PromptBridge replaced the selected Arabic text."
+    );
+    return;
+  }
+
+  if (event.reason === "unsupported_platform") {
+    vscode.window.showWarningMessage(
+      "System selection replacement is currently macOS-only."
+    );
+    return;
+  }
+
+  vscode.window.showWarningMessage(
+    event.reason === "no_arabic_text"
+      ? "The selected text does not contain Arabic."
+      : "Select Arabic prompt text first."
+  );
 }
 
 async function askForArabicPrompt(): Promise<string | undefined> {

@@ -2,6 +2,13 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.9.2
+
+- Added a VS Code-compatible editor shortcut for converting selected Arabic text.
+- Added an editor right-click menu item for selected text conversion.
+- Added a macOS-focused selection replacement command for IDE chat inputs and other focused text boxes.
+- Documented IDE chat input behavior and clipboard fallback.
+
 ## v0.9.1
 
 - Added marketplace-ready PNG icons for the browser and VS Code-compatible extensions.

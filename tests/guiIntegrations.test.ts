@@ -42,12 +42,50 @@ describe("GUI integration metadata", () => {
     ) as {
       version: string;
       main: string;
-      contributes: { commands: Array<{ command: string }> };
+      activationEvents: string[];
+      contributes: {
+        commands: Array<{ command: string; title: string }>;
+        keybindings: Array<{
+          command: string;
+          key: string;
+          mac?: string;
+          when?: string;
+        }>;
+        menus: { "editor/context": Array<{ command: string }> };
+      };
     };
 
     expect(manifest.version).toBe(packageJson.version);
     expect(manifest.main).toBe("./dist/extension.js");
+    expect(manifest.activationEvents).toContain(
+      "onCommand:promptbridge.replaceFocusedSelection"
+    );
     expect(manifest.contributes.commands).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.convertSelection"
+      })
+    );
+    expect(manifest.contributes.commands).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.replaceFocusedSelection",
+        title: "PromptBridge: Replace Selected Text in Focused Input"
+      })
+    );
+    expect(manifest.contributes.keybindings).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.convertSelection",
+        mac: "cmd+shift+y",
+        when: "editorTextFocus && editorHasSelection"
+      })
+    );
+    expect(manifest.contributes.keybindings).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.replaceFocusedSelection",
+        mac: "cmd+shift+y",
+        when: "!editorTextFocus"
+      })
+    );
+    expect(manifest.contributes.menus["editor/context"]).toContainEqual(
       expect.objectContaining({
         command: "promptbridge.convertSelection"
       })

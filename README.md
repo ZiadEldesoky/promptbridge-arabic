@@ -109,14 +109,28 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.1.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.2.vsix
 ```
 
 Available commands / الأوامر المتاحة:
 
 - `PromptBridge: Convert Arabic Selection`
+- `PromptBridge: Replace Selected Text in Focused Input`
 - `PromptBridge: Convert Arabic Prompt to Clipboard`
 - `PromptBridge: Insert Converted Arabic Prompt`
+
+Quick selection workflow / أسرع workflow للتحديد:
+
+1. Select Arabic text inside a real editor document.
+2. Press `Cmd+Shift+Y` on macOS or `Ctrl+Shift+Y` on Windows/Linux, or right-click and choose **PromptBridge: Convert Arabic Selection**.
+
+For IDE chat inputs such as Antigravity's prompt box, select the Arabic text and press `Cmd+Shift+Y` on macOS. PromptBridge will copy the selected text, convert it, and paste the English prompt back over the same selection.
+
+لو بتكتب في chat input جوه Antigravity أو Cursor، حدد النص العربي واضغط `Cmd+Shift+Y`. الأداة هتعمل copy للنص المحدد، تحوله، وتعمل paste للإنجليزي مكان نفس التحديد.
+
+If the editor was already open during installation, run **Developer: Reload Window** once.
+
+لو الـ editor كان مفتوح أثناء التثبيت، اعمل **Developer: Reload Window** مرة واحدة.
 
 Cursor and other VS Code-compatible editors may support installing the generated `.vsix` manually.
 
@@ -285,10 +299,10 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.1.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.2.vsix
 ```
 
-The extension adds commands for converting selected Arabic text, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
+The extension adds commands for converting selected Arabic text, replacing selected text in focused macOS IDE inputs, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It also adds `Cmd+Shift+Y` on macOS / `Ctrl+Shift+Y` on Windows and Linux for selected editor text, plus an editor right-click menu item. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
 
 ## CLI agent wrappers
 
@@ -509,6 +523,7 @@ npm run release:vscode
 - The glossary is intentionally small in the early MVP.
 - Replacing selected text is currently macOS-only.
 - The browser extension currently works through selected text or the focused editable prompt field.
+- The IDE extension can replace selected text inside real editor documents. On macOS, it can also replace selected text inside focused IDE chat inputs using system copy/paste. Other platforms may require clipboard mode for custom chat inputs.
 - Automatic replacement while typing without selecting text needs a future OS-level input method or deeper app-specific integration.
 
 ## Roadmap
