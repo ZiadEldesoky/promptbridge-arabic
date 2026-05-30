@@ -30,7 +30,7 @@ This extension uses the same deterministic local core engine as the PromptBridge
 ## Local install from VSIX
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.3.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.9.4.vsix
 ```
 
 Cursor and other VS Code-compatible editors may also support installing a `.vsix` file manually. Support varies by editor and version.

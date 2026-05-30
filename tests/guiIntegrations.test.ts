@@ -126,7 +126,8 @@ describe("GUI integration metadata", () => {
       "utf8"
     );
 
-    expect(source).toContain("vscode.env.clipboard");
+    expect(source).toContain("pbpaste");
+    expect(source).toContain("pbcopy");
     expect(source).not.toContain("clipboardy");
     expect(source).not.toContain("replaceSelection.js");
   });

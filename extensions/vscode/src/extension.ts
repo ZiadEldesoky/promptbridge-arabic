@@ -1,21 +1,19 @@
-import { execFile } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import * as vscode from "vscode";
 import { translatePrompt } from "../../../src/translator/translatePrompt.js";
 import { isPromptMode, type PromptMode } from "../../../src/translator/modes.js";
 
 const ARABIC_TEXT_PATTERN = /[\u0600-\u06FF]/;
+const COPY_TIMEOUT_MS = 1000;
+const CLIPBOARD_POLL_MS = 50;
+const PASTE_DELAY_MS = 150;
 const execFileAsync = promisify(execFile);
 
 interface ExtensionSettings {
   mode?: PromptMode;
   bilingual: boolean;
   redact: boolean;
-}
-
-interface ExtensionClipboard {
-  readText(): PromiseLike<string>;
-  writeText(value: string): PromiseLike<void>;
 }
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -139,31 +137,25 @@ async function replaceFocusedSelection(): Promise<void> {
   }
 
   const settings = readSettings();
-  const clipboard = vscode.env.clipboard as unknown as ExtensionClipboard;
-  const originalClipboard = await clipboard.readText().then(
-    (text: string) => text,
-    () => ""
-  );
+  const originalClipboard = await readMacClipboard().catch(() => "");
 
   try {
     await sendMacShortcut("copy");
-    await sleep(120);
-
-    const selectedText = await clipboard.readText();
+    const selectedText = await waitForCopiedText(originalClipboard);
     const convertedText = convertText(selectedText, settings);
 
     if (!convertedText) {
-      await clipboard.writeText(originalClipboard);
+      await writeMacClipboard(originalClipboard);
       vscode.window.showWarningMessage(
         selectedText.trim()
-          ? "The selected text does not contain Arabic."
-          : "Select Arabic prompt text first."
+          ? "PromptBridge could not read Arabic from the focused selection."
+          : "Select Arabic prompt text first, then press Cmd+Shift+Y."
       );
       return;
     }
 
-    await clipboard.writeText(convertedText);
-    await sleep(120);
+    await writeMacClipboard(convertedText);
+    await sleep(PASTE_DELAY_MS);
     await sendMacShortcut("paste");
   } catch {
     vscode.window.showWarningMessage(
@@ -216,6 +208,51 @@ async function sendMacShortcut(shortcut: "copy" | "paste"): Promise<void> {
     "-e",
     `tell application "System Events" to keystroke "${key}" using command down`
   ]);
+}
+
+async function waitForCopiedText(originalClipboard: string): Promise<string> {
+  const startedAt = Date.now();
+  let latestText = originalClipboard;
+
+  while (Date.now() - startedAt < COPY_TIMEOUT_MS) {
+    await sleep(CLIPBOARD_POLL_MS);
+    latestText = await readMacClipboard().catch(() => latestText);
+
+    if (
+      latestText.trim() &&
+      (latestText !== originalClipboard || ARABIC_TEXT_PATTERN.test(latestText))
+    ) {
+      return latestText;
+    }
+  }
+
+  return latestText;
+}
+
+async function readMacClipboard(): Promise<string> {
+  const { stdout } = await execFileAsync("pbpaste", ["-Prefer", "txt"], {
+    maxBuffer: 1024 * 1024
+  });
+
+  return stdout;
+}
+
+function writeMacClipboard(text: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const child = spawn("pbcopy");
+
+    child.once("error", reject);
+    child.once("close", (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+
+      reject(new Error(`pbcopy exited with code ${code ?? "unknown"}.`));
+    });
+
+    child.stdin.end(text);
+  });
 }
 
 function sleep(ms: number): Promise<void> {

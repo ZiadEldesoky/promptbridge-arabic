@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.9.4
+
+- Made focused IDE input replacement more reliable on macOS by reading and writing the native pasteboard directly.
+- Added clipboard polling after copy so custom chat inputs have time to publish the selected text.
+- Improved the focused selection warning when the selected Arabic text cannot be read from the active input.
+
 ## v0.9.3
 
 - Fixed VS Code-compatible extension activation for focused input replacement by removing the bundled Node clipboard package from the extension runtime.
