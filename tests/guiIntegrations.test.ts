@@ -130,14 +130,53 @@ describe("GUI integration metadata", () => {
     expect(script).toContain("promptbridge replace-selection --redact --quiet");
   });
 
+  it("keeps Windows and Linux shortcut helpers wired to selected-text replacement", async () => {
+    const windowsScript = await readFile(
+      new URL(
+        "../extensions/windows/promptbridge-replace-selection.ps1",
+        import.meta.url
+      ),
+      "utf8"
+    );
+    const autoHotkeyScript = await readFile(
+      new URL(
+        "../extensions/windows/promptbridge-replace-selection.ahk",
+        import.meta.url
+      ),
+      "utf8"
+    );
+    const linuxScript = await readFile(
+      new URL(
+        "../extensions/linux/promptbridge-replace-selection.sh",
+        import.meta.url
+      ),
+      "utf8"
+    );
+
+    expect(windowsScript).toContain(
+      "promptbridge replace-selection --redact --quiet"
+    );
+    expect(autoHotkeyScript).toContain("AutoHotkey v2.0");
+    expect(autoHotkeyScript).toContain(
+      "promptbridge replace-selection --redact --quiet"
+    );
+    expect(linuxScript).toContain(
+      "promptbridge replace-selection --redact --quiet"
+    );
+  });
+
   it("keeps the VS Code extension independent from the Node clipboard package", async () => {
     const source = await readFile(
       new URL("../extensions/vscode/src/extension.ts", import.meta.url),
       "utf8"
     );
 
-    expect(source).toContain("pbpaste");
-    expect(source).toContain("pbcopy");
+    expect(source).toContain("vscode.env.clipboard.readText");
+    expect(source).toContain("powershell.exe");
+    expect(source).toContain("xdotool");
+    expect(source).toContain("wtype");
+    expect(source).not.toContain("pbpaste");
+    expect(source).not.toContain("pbcopy");
     expect(source).not.toContain("clipboardy");
     expect(source).not.toContain("replaceSelection.js");
   });

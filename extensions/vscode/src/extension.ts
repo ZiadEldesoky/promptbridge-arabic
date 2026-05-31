@@ -1,4 +1,4 @@
-import { execFile, spawn } from "node:child_process";
+import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import * as vscode from "vscode";
 import { translatePrompt } from "../../../src/translator/translatePrompt.js";
@@ -129,37 +129,37 @@ async function convertInputToEditor(): Promise<void> {
 }
 
 async function replaceFocusedSelection(): Promise<void> {
-  if (process.platform !== "darwin") {
+  if (!isSupportedFocusedInputPlatform(process.platform)) {
     vscode.window.showWarningMessage(
-      "System selection replacement is currently macOS-only."
+      "System selection replacement currently supports macOS, Windows, and Linux."
     );
     return;
   }
 
   const settings = readSettings();
-  const originalClipboard = await readMacClipboard().catch(() => "");
+  const originalClipboard = await readSystemClipboard().catch(() => "");
 
   try {
-    await sendMacShortcut("copy");
+    await sendSystemShortcut("copy");
     const selectedText = await waitForCopiedText(originalClipboard);
     const convertedText = convertText(selectedText, settings);
 
     if (!convertedText) {
-      await writeMacClipboard(originalClipboard);
+      await writeSystemClipboard(originalClipboard);
       vscode.window.showWarningMessage(
         selectedText.trim()
           ? "PromptBridge could not read Arabic from the focused selection."
-          : "Select Arabic prompt text first, then press Cmd+Shift+Y."
+          : "Select Arabic prompt text first, then run the PromptBridge focused input command."
       );
       return;
     }
 
-    await writeMacClipboard(convertedText);
+    await writeSystemClipboard(convertedText);
     await sleep(PASTE_DELAY_MS);
-    await sendMacShortcut("paste");
+    await sendSystemShortcut("paste");
   } catch {
     vscode.window.showWarningMessage(
-      "PromptBridge could not control macOS copy/paste. Allow the editor in System Settings > Privacy & Security > Accessibility."
+      focusedInputPermissionMessage(process.platform)
     );
     return;
   }
@@ -201,6 +201,24 @@ function readSettings(): ExtensionSettings {
   };
 }
 
+function isSupportedFocusedInputPlatform(platform: NodeJS.Platform): boolean {
+  return platform === "darwin" || platform === "win32" || platform === "linux";
+}
+
+async function sendSystemShortcut(shortcut: "copy" | "paste"): Promise<void> {
+  if (process.platform === "darwin") {
+    await sendMacShortcut(shortcut);
+    return;
+  }
+
+  if (process.platform === "win32") {
+    await sendWindowsShortcut(shortcut);
+    return;
+  }
+
+  await sendLinuxShortcut(shortcut);
+}
+
 async function sendMacShortcut(shortcut: "copy" | "paste"): Promise<void> {
   const key = shortcut === "copy" ? "c" : "v";
 
@@ -210,13 +228,38 @@ async function sendMacShortcut(shortcut: "copy" | "paste"): Promise<void> {
   ]);
 }
 
+async function sendWindowsShortcut(shortcut: "copy" | "paste"): Promise<void> {
+  const key = shortcut === "copy" ? "c" : "v";
+
+  await execFileAsync("powershell.exe", [
+    "-NoProfile",
+    "-NonInteractive",
+    "-Command",
+    [
+      "Add-Type -AssemblyName System.Windows.Forms;",
+      `[System.Windows.Forms.SendKeys]::SendWait('^${key}')`
+    ].join(" ")
+  ]);
+}
+
+async function sendLinuxShortcut(shortcut: "copy" | "paste"): Promise<void> {
+  const key = shortcut === "copy" ? "c" : "v";
+
+  try {
+    await execFileAsync("xdotool", ["key", "--clearmodifiers", `ctrl+${key}`]);
+    return;
+  } catch {
+    await execFileAsync("wtype", ["-M", "ctrl", "-k", key, "-m", "ctrl"]);
+  }
+}
+
 async function waitForCopiedText(originalClipboard: string): Promise<string> {
   const startedAt = Date.now();
   let latestText = originalClipboard;
 
   while (Date.now() - startedAt < COPY_TIMEOUT_MS) {
     await sleep(CLIPBOARD_POLL_MS);
-    latestText = await readMacClipboard().catch(() => latestText);
+    latestText = await readSystemClipboard().catch(() => latestText);
 
     if (
       latestText.trim() &&
@@ -229,30 +272,24 @@ async function waitForCopiedText(originalClipboard: string): Promise<string> {
   return latestText;
 }
 
-async function readMacClipboard(): Promise<string> {
-  const { stdout } = await execFileAsync("pbpaste", ["-Prefer", "txt"], {
-    maxBuffer: 1024 * 1024
-  });
-
-  return stdout;
+function readSystemClipboard(): Promise<string> {
+  return Promise.resolve(vscode.env.clipboard.readText());
 }
 
-function writeMacClipboard(text: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const child = spawn("pbcopy");
+function writeSystemClipboard(text: string): Promise<void> {
+  return Promise.resolve(vscode.env.clipboard.writeText(text));
+}
 
-    child.once("error", reject);
-    child.once("close", (code) => {
-      if (code === 0) {
-        resolve();
-        return;
-      }
+function focusedInputPermissionMessage(platform: NodeJS.Platform): string {
+  if (platform === "darwin") {
+    return "PromptBridge could not control macOS copy/paste. Allow the editor in System Settings > Privacy & Security > Accessibility.";
+  }
 
-      reject(new Error(`pbcopy exited with code ${code ?? "unknown"}.`));
-    });
+  if (platform === "win32") {
+    return "PromptBridge could not control Windows copy/paste. Make sure PowerShell input automation is allowed and the focused field is still active.";
+  }
 
-    child.stdin.end(text);
-  });
+  return "PromptBridge could not control Linux copy/paste. Install xdotool on X11 or wtype on Wayland, then try again.";
 }
 
 function sleep(ms: number): Promise<void> {

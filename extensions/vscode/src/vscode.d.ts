@@ -42,6 +42,7 @@ declare module "vscode" {
 
   export namespace env {
     export const clipboard: {
+      readText(): Thenable<string>;
       writeText(value: string): Thenable<void>;
     };
   }

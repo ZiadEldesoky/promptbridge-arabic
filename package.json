@@ -1,6 +1,6 @@
 {
   "name": "promptbridge-arabic",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "description": "Arabic-first prompt translator and optimizer for AI coding agents.",
   "type": "module",
   "repository": {
@@ -24,11 +24,13 @@
     "dist",
     "docs",
     "extensions/browser",
+    "extensions/linux",
     "extensions/macos/Package.swift",
     "extensions/macos/README.md",
     "extensions/macos/Sources",
     "extensions/macos/src",
     "extensions/raycast",
+    "extensions/windows",
     "extensions/vscode",
     "examples",
     "scripts/build-browser-extension.mjs",

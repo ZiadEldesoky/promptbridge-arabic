@@ -2,6 +2,14 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.0
+
+- Added experimental Windows and Linux support for `promptbridge replace-selection` using platform copy/paste automation.
+- Extended the VS Code-compatible focused input replacement command beyond macOS, with Windows PowerShell automation and Linux `xdotool` / `wtype` support.
+- Added Windows AutoHotkey and PowerShell helper scripts for global shortcut workflows.
+- Added a Linux shortcut helper script and platform requirements documentation.
+- Updated platform support docs to clarify what is cross-platform today and what still needs native tray helpers.
+
 ## v0.10.2
 
 - Added a `general` prompt mode for friendly Arabic text and business/product requests that should not be forced into code-only templates.

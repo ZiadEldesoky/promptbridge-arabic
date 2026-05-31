@@ -161,7 +161,7 @@ addPromptOptions(
   program
     .command("replace-selection")
     .description(
-      "Convert selected Arabic text and paste the English prompt back into the active app. macOS only."
+      "Convert selected Arabic text and paste the English prompt back into the active app. Supports macOS, Windows, and Linux with platform input automation."
     )
     .option("--copy-delay <ms>", "Delay after copying selected text", "120")
     .option("--paste-delay <ms>", "Delay before and after pasting output", "120")
@@ -185,7 +185,9 @@ addPromptOptions(
   });
 
   if (!event.converted && event.reason === "unsupported_platform") {
-    program.error("replace-selection is currently macOS-only.");
+    program.error(
+      "replace-selection currently supports macOS, Windows, and Linux."
+    );
   }
 
   if (!options.quiet) {

@@ -12,8 +12,8 @@ This extension uses the same deterministic local core engine as the PromptBridge
   You can also right-click selected text in the editor and choose **PromptBridge: Convert Arabic Selection**.
 
 - **PromptBridge: Replace Selected Text in Focused Input**
-  For macOS IDE chat inputs and other focused text boxes that are not real editor documents, copies the selected Arabic text, converts it, and pastes the English prompt back over the selection.
-  Shortcut: `Cmd+Shift+Y` on macOS when focus is outside an editor document.
+  For IDE chat inputs and other focused text boxes that are not real editor documents, copies the selected Arabic text, converts it, and pastes the English prompt back over the selection.
+  Shortcut: `Cmd+Shift+Y` on macOS or `Ctrl+Shift+Y` on Windows/Linux when focus is outside an editor document.
 
 - **PromptBridge: Convert Arabic Prompt to Clipboard**
   Opens an input box, converts the Arabic prompt, and copies the English prompt to the clipboard.
@@ -30,7 +30,7 @@ This extension uses the same deterministic local core engine as the PromptBridge
 ## Local install from VSIX
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.2.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.11.0.vsix
 ```
 
 Cursor and other VS Code-compatible editors may also support installing a `.vsix` file manually. Support varies by editor and version.
@@ -39,4 +39,10 @@ If the editor was already open during installation, run **Developer: Reload Wind
 
 ## Current limits
 
-The normal selection command works inside real editor documents. Some AI chat input boxes in VS Code-compatible editors are custom workbench UI, not normal editor documents. On macOS, use **PromptBridge: Replace Selected Text in Focused Input** for those inputs. On other platforms, use **PromptBridge: Convert Arabic Prompt to Clipboard**.
+The normal selection command works inside real editor documents. Some AI chat input boxes in VS Code-compatible editors are custom workbench UI, not normal editor documents. Use **PromptBridge: Replace Selected Text in Focused Input** for those inputs.
+
+Focused input replacement is stable on macOS and experimental on Windows/Linux because it depends on platform input automation:
+
+- macOS requires Accessibility permission for the editor.
+- Windows uses PowerShell input automation.
+- Linux requires `xdotool` on X11 or `wtype` on Wayland.
