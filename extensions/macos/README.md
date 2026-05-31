@@ -30,6 +30,9 @@ npm run release:macos
 ```
 
 The packaged app zip is written to `artifacts/PromptBridgeArabicMenuBar-v<version>-macos.zip`.
+The built app bundle is written to `artifacts/PromptBridgeArabicMenuBar.app`.
+
+For the most stable Accessibility permission, copy the built app to `/Applications/PromptBridgeArabicMenuBar.app` and keep that same app name between releases.
 
 ## Current Limits
 

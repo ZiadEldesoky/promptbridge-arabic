@@ -21,6 +21,27 @@ The current MVP is intentionally local and deterministic:
 
 Arabic-speaking developers often describe bugs, UI constraints, and product behavior more naturally in Arabic or Egyptian Arabic. Most coding agents respond better to precise structured English. PromptBridge Arabic bridges that gap while preserving technical tokens such as code, paths, commands, package names, stack traces, URLs, and environment variables.
 
+## Platform Support / دعم الأنظمة
+
+PromptBridge is useful beyond macOS, but each workflow has different OS limits.
+
+PromptBridge مش معمول للماك بس، لكن كل workflow ليه حدود حسب النظام:
+
+| Workflow | macOS | Windows | Linux |
+| --- | --- | --- | --- |
+| CLI | Supported | Supported | Supported |
+| Clipboard watch | Supported | Supported | Supported |
+| Browser extension | Supported in Chrome-based browsers | Supported in Chrome-based browsers | Supported in Chrome-based browsers |
+| VS Code-compatible editor selection | Supported | Supported | Supported |
+| VS Code-compatible focused chat input replacement | Supported on macOS | Planned | Planned |
+| Native menu bar / tray helper | Experimental macOS menu bar app | Planned native tray helper | Planned native tray helper |
+
+The macOS menu bar helper is macOS-only because it uses Apple's AppKit and Accessibility APIs. To offer the same low-friction selected-text replacement on Windows and Linux, PromptBridge needs separate native tray helpers using each platform's accessibility/input APIs.
+
+أداة الـ menu bar الحالية macOS-only لأنها مبنية على AppKit وAccessibility بتوع Apple. عشان نفس التجربة تشتغل على Windows وLinux، محتاجين native tray helpers لكل نظام.
+
+See [Platform Support](docs/PLATFORM_SUPPORT.md) for the full breakdown.
+
 ## Screenshots / لقطات الاستخدام
 
 These screenshots show PromptBridge workflows in neutral terminal, browser, and editor environments.
@@ -115,7 +136,7 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.1.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.2.vsix
 ```
 
 Available commands / الأوامر المتاحة:
@@ -150,7 +171,7 @@ Use this if you want a top-bar helper that can replace selected Arabic text whil
 
 ```bash
 npm run release:macos
-open artifacts/PromptBridgeArabicMenuBar-v0.10.1.app
+open artifacts/PromptBridgeArabicMenuBar.app
 ```
 
 Before using it, make sure Node.js is available and build the project locally:
@@ -172,6 +193,10 @@ Workflow / طريقة الاستخدام:
 This helper is experimental because macOS apps expose selected text differently. It tries Accessibility first, then falls back to local copy/paste.
 
 الأداة دي experimental لأن كل تطبيق على macOS بيتعامل مع selected text بطريقة مختلفة. هي بتحاول Accessibility الأول، وبعدها fallback بـ copy/paste محلي.
+
+For the most stable Accessibility permission, copy the app to `/Applications/PromptBridgeArabicMenuBar.app` and keep that same app name between releases.
+
+عشان صلاحية Accessibility تفضل ثابتة، انقل التطبيق إلى `/Applications/PromptBridgeArabicMenuBar.app` وخلي نفس اسم التطبيق مع كل إصدار.
 
 ### macOS shortcut users / مستخدمي اختصارات macOS
 
@@ -231,6 +256,14 @@ promptbridge "راجع الكود وشوف فيه مشاكل security" --mode se
 
 ```bash
 promptbridge "اشرحلي الكود دا ببساطة" --mode explain --bilingual
+```
+
+```bash
+promptbridge "هاي"
+```
+
+```bash
+promptbridge "عايز أزود تقرير مبيعات للعميل" --mode general
 ```
 
 ```bash
@@ -336,7 +369,7 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.1.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.2.vsix
 ```
 
 The extension adds commands for converting selected Arabic text, replacing selected text in focused macOS IDE inputs, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It also adds `Cmd+Shift+Y` on macOS / `Ctrl+Shift+Y` on Windows and Linux for selected editor text, plus an editor right-click menu item. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
@@ -347,7 +380,7 @@ PromptBridge includes an experimental native macOS helper under `extensions/maco
 
 ```bash
 npm run release:macos
-open artifacts/PromptBridgeArabicMenuBar-v0.10.1.app
+open artifacts/PromptBridgeArabicMenuBar.app
 ```
 
 The helper adds a PromptBridge text-bubble icon to the macOS menu bar. When **Auto Replace Selected Arabic** is enabled, it watches selection changes, converts the selected Arabic text through a bundled deterministic converter, and replaces only that selected text. It requires Accessibility permission and Node.js in the user's login shell.
@@ -376,7 +409,7 @@ This is intentionally app-agnostic. Direct conversion while typing with no selec
 ## Options
 
 ```text
---mode <mode>   Choose one of: fix, refactor, review, tests, explain, security
+--mode <mode>   Choose one of: general, fix, refactor, review, tests, explain, security
 --config <path> Load a custom PromptBridge config file
 --copy          Copy the generated prompt to the clipboard
 --bilingual     Include an Arabic summary after the English prompt
@@ -558,6 +591,7 @@ npm run release:vscode
 
 ## Current modes
 
+- `general`
 - `fix`
 - `refactor`
 - `review`
@@ -567,9 +601,9 @@ npm run release:vscode
 
 ## Current limitations
 
-- Translation is deterministic and template-based, so it does not deeply translate every Arabic sentence yet.
-- The glossary is intentionally small in the early MVP.
-- Replacing selected text is currently macOS-only.
+- Translation is deterministic and template-based, so it prioritizes developer, business, product, and friendly prompt wording over full free-form translation.
+- The glossary is intentionally small, but now includes common friendly phrases and business/product terms.
+- Replacing selected text inside browser prompt boxes and normal editor documents is cross-platform; replacing selected text in arbitrary desktop apps is currently macOS-only.
 - The browser extension currently works through selected text or the focused editable prompt field.
 - The IDE extension can replace selected text inside real editor documents. On macOS, it can also replace selected text inside focused IDE chat inputs using system copy/paste. Other platforms may require clipboard mode for custom chat inputs.
 - The macOS menu bar helper is experimental and can only auto-replace text that the focused app exposes through Accessibility or normal copy/paste.

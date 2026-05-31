@@ -2,6 +2,7 @@
 (() => {
   // src/translator/modes.ts
   var promptModes = [
+    "general",
     "fix",
     "refactor",
     "review",

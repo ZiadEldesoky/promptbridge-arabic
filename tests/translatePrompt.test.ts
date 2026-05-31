@@ -19,6 +19,55 @@ describe("translatePrompt", () => {
     expect(result.englishPrompt).toContain("Make the smallest safe changes.");
   });
 
+  it("keeps natural friendly messages natural instead of forcing a coding template", () => {
+    expect(translatePrompt("هاي").output).toBe("Hi.");
+    expect(translatePrompt("مرحبا").output).toBe("Hello.");
+  });
+
+  it("uses a general fallback for Arabic that is not specifically a coding task", () => {
+    const result = translatePrompt("عايز رسالة ترحيب بسيطة للعميل");
+
+    expect(result.mode).toBe("general");
+    expect(result.englishPrompt).toContain(
+      "Turn this Arabic business or product request into a clear English implementation prompt."
+    );
+    expect(result.englishPrompt).toContain(
+      "Natural English interpretation: I want a simple welcome message for the customer"
+    );
+    expect(result.englishPrompt).toContain("I want");
+    expect(result.englishPrompt).toContain("customer");
+  });
+
+  it("preserves business context inside coding prompts", () => {
+    const result = translatePrompt(
+      "ظبطلي صفحة الطلبات عشان العميل يعرف حالة الشحن والدفع"
+    );
+
+    expect(result.mode).toBe("refactor");
+    expect(result.englishPrompt).toContain(
+      "Natural English interpretation: fix or improve this for me orders page so that the customer can see shipping status and payment"
+    );
+    expect(result.englishPrompt).toContain("orders page");
+    expect(result.englishPrompt).toContain("customer");
+    expect(result.englishPrompt).toContain("shipping");
+    expect(result.englishPrompt).toContain("payment");
+    expect(result.englishPrompt).toContain(
+      "Preserve any business entities, workflows, and product constraints mentioned by the user."
+    );
+  });
+
+  it("detects common Egyptian variants for preserving the current design", () => {
+    const result = translatePrompt(
+      "خلي الكود كله responsive بدون ما تغير في الديزاين"
+    );
+
+    expect(result.mode).toBe("refactor");
+    expect(result.englishPrompt).toContain(
+      "Preserve the existing visual design."
+    );
+    expect(result.englishPrompt).toContain("Do not redesign the UI.");
+  });
+
   it("uses an explicit fix mode", () => {
     const result = translatePrompt("شوف المشكلة دي وصلحها", { mode: "fix" });
 

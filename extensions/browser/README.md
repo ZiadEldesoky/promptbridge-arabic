@@ -61,7 +61,7 @@ Use **Convert selected Arabic prompt and redact secrets** when you want common s
 
 The popup saves these browser-local defaults:
 
-- Prompt mode.
+- Prompt mode, including the `general` fallback for friendly or business/product text.
 - Redact common secrets.
 - Include Arabic summary.
 - Convert the focused prompt box when nothing is selected.

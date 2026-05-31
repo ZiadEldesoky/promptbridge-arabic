@@ -6,6 +6,106 @@ export interface GlossaryEntry {
 
 export const egyptianDeveloperGlossary: GlossaryEntry[] = [
   {
+    arabic: "السلام عليكم",
+    english: "Hello",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "مرحبا",
+    english: "Hello",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "أهلا",
+    english: "Hello",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "اهلا",
+    english: "Hello",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "هاي",
+    english: "Hi",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "هاى",
+    english: "Hi",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "صباح الخير",
+    english: "Good morning",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "مساء الخير",
+    english: "Good evening",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "شكرا",
+    english: "Thank you",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "لو سمحت",
+    english: "please",
+    tags: ["general"]
+  },
+  {
+    arabic: "عايز",
+    english: "I want",
+    tags: ["general"]
+  },
+  {
+    arabic: "أزود",
+    english: "add",
+    tags: ["general"]
+  },
+  {
+    arabic: "ازود",
+    english: "add",
+    tags: ["general"]
+  },
+  {
+    arabic: "أضيف",
+    english: "add",
+    tags: ["general"]
+  },
+  {
+    arabic: "محتاج",
+    english: "I need",
+    tags: ["general"]
+  },
+  {
+    arabic: "اعمل",
+    english: "create or implement",
+    tags: ["general"]
+  },
+  {
+    arabic: "ضيف",
+    english: "add",
+    tags: ["general"]
+  },
+  {
+    arabic: "زود",
+    english: "add or increase",
+    tags: ["general"]
+  },
+  {
+    arabic: "عشان",
+    english: "so that",
+    tags: ["general"]
+  },
+  {
+    arabic: "يعرف",
+    english: "can see",
+    tags: ["general"]
+  },
+  {
     arabic: "ظبط",
     english: "fix, improve, or refactor depending on context",
     tags: ["fix", "refactor"]
@@ -31,6 +131,26 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["design"]
   },
   {
+    arabic: "بدون ما تغير في الديزاين",
+    english: "without changing the design",
+    tags: ["design"]
+  },
+  {
+    arabic: "بدون ما تغير الديزاين",
+    english: "without changing the design",
+    tags: ["design"]
+  },
+  {
+    arabic: "بدون تغيير الديزاين",
+    english: "without changing the design",
+    tags: ["design"]
+  },
+  {
+    arabic: "نفس الديزاين",
+    english: "keep the same design",
+    tags: ["design"]
+  },
+  {
     arabic: "من غير ما تغير الديزاين",
     english: "without changing the design",
     tags: ["design"]
@@ -38,6 +158,11 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
   {
     arabic: "خليها responsive",
     english: "make it responsive",
+    tags: ["responsive"]
+  },
+  {
+    arabic: "خلي الكود كله responsive",
+    english: "make all affected UI responsive",
     tags: ["responsive"]
   },
   {
@@ -89,6 +214,126 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     arabic: "اشرحلي",
     english: "explain to me",
     tags: ["explain"]
+  },
+  {
+    arabic: "رسالة ترحيب بسيطة",
+    english: "a simple welcome message",
+    tags: ["friendly", "business"]
+  },
+  {
+    arabic: "رسالة ترحيب",
+    english: "welcome message",
+    tags: ["friendly", "business"]
+  },
+  {
+    arabic: "بسيطة",
+    english: "simple",
+    tags: ["general"]
+  },
+  {
+    arabic: "بزنس",
+    english: "business",
+    tags: ["business"]
+  },
+  {
+    arabic: "بيزنس",
+    english: "business",
+    tags: ["business"]
+  },
+  {
+    arabic: "منتج",
+    english: "product",
+    tags: ["business"]
+  },
+  {
+    arabic: "مشروع",
+    english: "project",
+    tags: ["business"]
+  },
+  {
+    arabic: "عميل",
+    english: "customer",
+    tags: ["business"]
+  },
+  {
+    arabic: "العميل",
+    english: "the customer",
+    tags: ["business"]
+  },
+  {
+    arabic: "للعميل",
+    english: "for the customer",
+    tags: ["business"]
+  },
+  {
+    arabic: "للعملاء",
+    english: "for customers",
+    tags: ["business"]
+  },
+  {
+    arabic: "عملاء",
+    english: "customers",
+    tags: ["business"]
+  },
+  {
+    arabic: "العملاء",
+    english: "the customers",
+    tags: ["business"]
+  },
+  {
+    arabic: "صفحة الطلبات",
+    english: "orders page",
+    tags: ["business"]
+  },
+  {
+    arabic: "طلبات",
+    english: "orders",
+    tags: ["business"]
+  },
+  {
+    arabic: "مبيعات",
+    english: "sales",
+    tags: ["business"]
+  },
+  {
+    arabic: "مخزون",
+    english: "inventory",
+    tags: ["business"]
+  },
+  {
+    arabic: "شحن",
+    english: "shipping",
+    tags: ["business"]
+  },
+  {
+    arabic: "حالة الشحن",
+    english: "shipping status",
+    tags: ["business"]
+  },
+  {
+    arabic: "دفع",
+    english: "payment",
+    tags: ["business"]
+  },
+  {
+    arabic: "والدفع",
+    english: "and payment",
+    tags: ["business"]
+  },
+  {
+    arabic: "حالة الدفع",
+    english: "payment status",
+    tags: ["business"]
+  },
+  {
+    arabic: "فاتورة",
+    english: "invoice",
+    tags: ["business"]
+  },
+  {
+    arabic: "لوحة تحكم",
+    english: "dashboard",
+    tags: ["business"]
   }
 ];
 

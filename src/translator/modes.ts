@@ -1,4 +1,5 @@
 export const promptModes = [
+  "general",
   "fix",
   "refactor",
   "review",
@@ -18,6 +19,16 @@ export interface ModeTemplate {
 }
 
 export const modeTemplates: Record<PromptMode, ModeTemplate> = {
+  general: {
+    task: "Translate and clarify this request in natural English.",
+    requirements: [
+      "Preserve the user's intent, tone, and useful details.",
+      "Keep the English natural, concise, and actionable.",
+      "If the request is business or product related, express it as practical implementation guidance.",
+      "Do not invent technical details that were not provided."
+    ],
+    expectedOutput: ["A natural English version of the user's request."]
+  },
   fix: {
     task: "Investigate and fix the reported issue.",
     requirements: [

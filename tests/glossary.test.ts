@@ -30,6 +30,17 @@ describe("glossary", () => {
     expect(new Set(hints).size).toBe(hints.length);
   });
 
+  it("normalizes friendly and business phrases", () => {
+    const hints = normalizeDeveloperPhrases(
+      "هاي، عايز أظبط صفحة الطلبات للعميل"
+    );
+
+    expect(hints).toContain("Hi");
+    expect(hints).toContain("I want");
+    expect(hints).toContain("orders page");
+    expect(hints).toContain("customer");
+  });
+
   it("lets custom glossary entries participate before built-in entries", () => {
     const glossary = mergeGlossaries([
       {

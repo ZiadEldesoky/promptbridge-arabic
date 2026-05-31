@@ -133,6 +133,106 @@
   // src/translator/glossary.ts
   var egyptianDeveloperGlossary = [
     {
+      arabic: "\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064A\u0643\u0645",
+      english: "Hello",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0645\u0631\u062D\u0628\u0627",
+      english: "Hello",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0623\u0647\u0644\u0627",
+      english: "Hello",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0627\u0647\u0644\u0627",
+      english: "Hello",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0647\u0627\u064A",
+      english: "Hi",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0647\u0627\u0649",
+      english: "Hi",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631",
+      english: "Good morning",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0645\u0633\u0627\u0621 \u0627\u0644\u062E\u064A\u0631",
+      english: "Good evening",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0634\u0643\u0631\u0627",
+      english: "Thank you",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0644\u0648 \u0633\u0645\u062D\u062A",
+      english: "please",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0639\u0627\u064A\u0632",
+      english: "I want",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0623\u0632\u0648\u062F",
+      english: "add",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0627\u0632\u0648\u062F",
+      english: "add",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0623\u0636\u064A\u0641",
+      english: "add",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0645\u062D\u062A\u0627\u062C",
+      english: "I need",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0627\u0639\u0645\u0644",
+      english: "create or implement",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0636\u064A\u0641",
+      english: "add",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0632\u0648\u062F",
+      english: "add or increase",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0639\u0634\u0627\u0646",
+      english: "so that",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u064A\u0639\u0631\u0641",
+      english: "can see",
+      tags: ["general"]
+    },
+    {
       arabic: "\u0638\u0628\u0637",
       english: "fix, improve, or refactor depending on context",
       tags: ["fix", "refactor"]
@@ -158,6 +258,26 @@
       tags: ["design"]
     },
     {
+      arabic: "\u0628\u062F\u0648\u0646 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0641\u064A \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+      english: "without changing the design",
+      tags: ["design"]
+    },
+    {
+      arabic: "\u0628\u062F\u0648\u0646 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+      english: "without changing the design",
+      tags: ["design"]
+    },
+    {
+      arabic: "\u0628\u062F\u0648\u0646 \u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+      english: "without changing the design",
+      tags: ["design"]
+    },
+    {
+      arabic: "\u0646\u0641\u0633 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+      english: "keep the same design",
+      tags: ["design"]
+    },
+    {
       arabic: "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
       english: "without changing the design",
       tags: ["design"]
@@ -165,6 +285,11 @@
     {
       arabic: "\u062E\u0644\u064A\u0647\u0627 responsive",
       english: "make it responsive",
+      tags: ["responsive"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0643\u0644\u0647 responsive",
+      english: "make all affected UI responsive",
       tags: ["responsive"]
     },
     {
@@ -216,6 +341,126 @@
       arabic: "\u0627\u0634\u0631\u062D\u0644\u064A",
       english: "explain to me",
       tags: ["explain"]
+    },
+    {
+      arabic: "\u0631\u0633\u0627\u0644\u0629 \u062A\u0631\u062D\u064A\u0628 \u0628\u0633\u064A\u0637\u0629",
+      english: "a simple welcome message",
+      tags: ["friendly", "business"]
+    },
+    {
+      arabic: "\u0631\u0633\u0627\u0644\u0629 \u062A\u0631\u062D\u064A\u0628",
+      english: "welcome message",
+      tags: ["friendly", "business"]
+    },
+    {
+      arabic: "\u0628\u0633\u064A\u0637\u0629",
+      english: "simple",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0628\u0632\u0646\u0633",
+      english: "business",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0628\u064A\u0632\u0646\u0633",
+      english: "business",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0645\u0646\u062A\u062C",
+      english: "product",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0645\u0634\u0631\u0648\u0639",
+      english: "project",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0639\u0645\u064A\u0644",
+      english: "customer",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0627\u0644\u0639\u0645\u064A\u0644",
+      english: "the customer",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0644\u0644\u0639\u0645\u064A\u0644",
+      english: "for the customer",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0644\u0644\u0639\u0645\u0644\u0627\u0621",
+      english: "for customers",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0639\u0645\u0644\u0627\u0621",
+      english: "customers",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0627\u0644\u0639\u0645\u0644\u0627\u0621",
+      english: "the customers",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0635\u0641\u062D\u0629 \u0627\u0644\u0637\u0644\u0628\u0627\u062A",
+      english: "orders page",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0637\u0644\u0628\u0627\u062A",
+      english: "orders",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0645\u0628\u064A\u0639\u0627\u062A",
+      english: "sales",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0645\u062E\u0632\u0648\u0646",
+      english: "inventory",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0634\u062D\u0646",
+      english: "shipping",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u062D\u0627\u0644\u0629 \u0627\u0644\u0634\u062D\u0646",
+      english: "shipping status",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u062F\u0641\u0639",
+      english: "payment",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0648\u0627\u0644\u062F\u0641\u0639",
+      english: "and payment",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u062D\u0627\u0644\u0629 \u0627\u0644\u062F\u0641\u0639",
+      english: "payment status",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0641\u0627\u062A\u0648\u0631\u0629",
+      english: "invoice",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0644\u0648\u062D\u0629 \u062A\u062D\u0643\u0645",
+      english: "dashboard",
+      tags: ["business"]
     }
   ];
   function mergeGlossaries(customGlossary = []) {
@@ -240,6 +485,16 @@
 
   // src/translator/modes.ts
   var modeTemplates = {
+    general: {
+      task: "Translate and clarify this request in natural English.",
+      requirements: [
+        "Preserve the user's intent, tone, and useful details.",
+        "Keep the English natural, concise, and actionable.",
+        "If the request is business or product related, express it as practical implementation guidance.",
+        "Do not invent technical details that were not provided."
+      ],
+      expectedOutput: ["A natural English version of the user's request."]
+    },
     fix: {
       task: "Investigate and fix the reported issue.",
       requirements: [
@@ -457,9 +712,16 @@
     if (signals.responsive || signals.preserveDesign || signals.preserveLogic || tags.has("refactor")) {
       return "refactor";
     }
+    if (signals.friendlyOnly || signals.business || signals.generalRequest || tags.has("friendly") || tags.has("business") || tags.has("general") || signals.hasArabic) {
+      return "general";
+    }
     return "fix";
   }
   function buildStructuredPrompt(mode, signals, text, tokens, glossary) {
+    const friendlyTranslation = translateFriendlyOnlyMessage(text);
+    if (mode === "general" && signals.friendlyOnly && friendlyTranslation) {
+      return { task: friendlyTranslation };
+    }
     const template = modeTemplates[mode];
     const prompt = {
       task: buildTask(mode, signals, template),
@@ -491,8 +753,9 @@
     return prompt;
   }
   function contextFromInput(text, signals, glossary) {
+    const approximateRequest = approximateEnglishRequest(text, glossary);
     const phraseContext = normalizeDeveloperPhrases(text, glossary);
-    const context = [...phraseContext];
+    const context = approximateRequest ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext] : [...phraseContext];
     if (signals.buildError) {
       context.push("The user is likely reporting a build failure.");
     }
@@ -502,9 +765,21 @@
     if (signals.crash) {
       context.push("The user is reporting a crash or hang.");
     }
+    if (signals.business) {
+      context.push("The request includes business or product workflow context.");
+    }
+    if (signals.friendly && !signals.friendlyOnly) {
+      context.push("The user included a friendly greeting or casual tone.");
+    }
     return unique(context);
   }
   function buildTask(mode, signals, template) {
+    if (mode === "general") {
+      if (signals.business) {
+        return "Turn this Arabic business or product request into a clear English implementation prompt.";
+      }
+      return "Translate and clarify this Arabic request in natural English.";
+    }
     if (mode === "fix") {
       if (signals.buildError) {
         return "Investigate and fix the build error in this project.";
@@ -565,6 +840,11 @@
     if (signals.urgent) {
       requirements.push("Prioritize the main blocking issue first.");
     }
+    if (signals.business) {
+      requirements.push(
+        "Preserve any business entities, workflows, and product constraints mentioned by the user."
+      );
+    }
     return requirements;
   }
   function signalConstraints(mode, signals) {
@@ -578,6 +858,12 @@
     return constraints;
   }
   function expectedOutputForMode(mode) {
+    if (mode === "general") {
+      return [
+        "A natural English version of the request.",
+        "A concise actionable prompt when the request is product or implementation related."
+      ];
+    }
     if (mode === "review" || mode === "security") {
       return [
         "List findings ordered by severity.",
@@ -597,6 +883,69 @@
   function detectSignals(text) {
     const normalized = text.toLowerCase();
     return {
+      hasArabic: hasArabicText(normalized),
+      friendly: containsAny(normalized, [
+        "\u0647\u0627\u064A",
+        "\u0647\u0627\u0649",
+        "\u0645\u0631\u062D\u0628\u0627",
+        "\u0623\u0647\u0644\u0627",
+        "\u0627\u0647\u0644\u0627",
+        "\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064A\u0643\u0645",
+        "\u0627\u0632\u064A\u0643",
+        "\u0625\u0632\u064A\u0643",
+        "\u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
+        "\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631",
+        "\u0645\u0633\u0627\u0621 \u0627\u0644\u062E\u064A\u0631",
+        "\u0634\u0643\u0631\u0627"
+      ]),
+      friendlyOnly: isFriendlyOnlyMessage(normalized),
+      business: containsAny(normalized, [
+        "business",
+        "product",
+        "\u0628\u0632\u0646\u0633",
+        "\u0628\u064A\u0632\u0646\u0633",
+        "\u0645\u0646\u062A\u062C",
+        "\u0645\u0634\u0631\u0648\u0639",
+        "\u0639\u0645\u064A\u0644",
+        "\u0639\u0645\u0644\u0627\u0621",
+        "\u0637\u0644\u0628\u0627\u062A",
+        "\u0627\u0648\u0631\u062F\u0631",
+        "\u0623\u0648\u0631\u062F\u0631",
+        "order",
+        "orders",
+        "\u0645\u0628\u064A\u0639\u0627\u062A",
+        "sales",
+        "\u0645\u062E\u0632\u0648\u0646",
+        "inventory",
+        "\u0641\u0627\u062A\u0648\u0631\u0629",
+        "invoice",
+        "checkout",
+        "\u062F\u0641\u0639",
+        "payment",
+        "\u0634\u062D\u0646",
+        "shipping",
+        "store",
+        "\u0645\u062A\u062C\u0631",
+        "\u0644\u0648\u062D\u0629 \u062A\u062D\u0643\u0645",
+        "dashboard"
+      ]),
+      generalRequest: containsAny(normalized, [
+        "\u0639\u0627\u064A\u0632",
+        "\u0645\u062D\u062A\u0627\u062C",
+        "\u0644\u0648 \u0633\u0645\u062D\u062A",
+        "\u0627\u0639\u0645\u0644",
+        "\u0623\u0632\u0648\u062F",
+        "\u0627\u0632\u0648\u062F",
+        "\u0623\u0636\u064A\u0641",
+        "\u0636\u064A\u0641",
+        "\u0632\u0648\u062F",
+        "\u062E\u0644\u064A",
+        "\u0627\u0643\u062A\u0628",
+        "\u062D\u0648\u0651\u0644",
+        "\u062D\u0648\u0644",
+        "translate",
+        "convert"
+      ]),
       responsive: containsAny(normalized, [
         "responsive",
         "\u0631\u064A\u0633\u0628\u0648\u0646\u0633\u064A\u0641",
@@ -606,12 +955,20 @@
         "mobile"
       ]),
       preserveDesign: containsAny(normalized, [
+        "\u0628\u062F\u0648\u0646 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0641\u064A \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+        "\u0628\u062F\u0648\u0646 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+        "\u0628\u062F\u0648\u0646 \u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+        "\u0628\u062F\u0648\u0646 \u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u062A\u0635\u0645\u064A\u0645",
         "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
         "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644\u062A\u0635\u0645\u064A\u0645",
+        "\u0645\u0646 \u063A\u064A\u0631 \u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+        "\u0645\u0646 \u063A\u064A\u0631 \u062A\u063A\u064A\u064A\u0631 \u0627\u0644\u062A\u0635\u0645\u064A\u0645",
         "\u0645\u062A\u063A\u064A\u0631\u0634 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
         "\u0645\u062A\u063A\u064A\u0631\u0634 \u0634\u0643\u0644",
         "\u0645\u062A\u0628\u0648\u0638\u0634 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
         "\u0645\u062A\u0628\u0648\u0638\u0634 \u0627\u0644\u062A\u0635\u0645\u064A\u0645",
+        "\u0646\u0641\u0633 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+        "\u0646\u0641\u0633 \u0627\u0644\u062A\u0635\u0645\u064A\u0645",
         "preserve design",
         "without changing the design"
       ]),
@@ -700,6 +1057,7 @@
   }
   function buildArabicSummary(mode, signals, redactionCount) {
     const summaries = {
+      general: "\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u062A\u062D\u0648\u064A\u0644 \u0627\u0644\u0643\u0644\u0627\u0645 \u0627\u0644\u0639\u0631\u0628\u064A \u0625\u0644\u0649 \u0625\u0646\u062C\u0644\u064A\u0632\u064A \u0637\u0628\u064A\u0639\u064A \u0648\u0648\u0627\u0636\u062D \u0645\u0639 \u0627\u0644\u062D\u0641\u0627\u0638 \u0639\u0644\u0649 \u0627\u0644\u0645\u0639\u0646\u0649 \u0648\u0627\u0644\u0646\u0628\u0631\u0629 \u0648\u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644 \u0627\u0644\u0645\u0647\u0645\u0629.",
       fix: "\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0641\u062D\u0635 \u0627\u0644\u0645\u0634\u0643\u0644\u0629\u060C \u062A\u062D\u062F\u064A\u062F \u0627\u0644\u0633\u0628\u0628 \u0627\u0644\u0623\u0633\u0627\u0633\u064A\u060C \u0625\u0635\u0644\u0627\u062D\u0647\u0627 \u0628\u0623\u0642\u0644 \u062A\u0639\u062F\u064A\u0644 \u0622\u0645\u0646\u060C \u0648\u062A\u0634\u063A\u064A\u0644 \u0627\u0644\u0627\u062E\u062A\u0628\u0627\u0631 \u0623\u0648 build \u0627\u0644\u0645\u0646\u0627\u0633\u0628 \u0628\u0639\u062F \u0627\u0644\u0625\u0635\u0644\u0627\u062D.",
       refactor: "\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u062A\u062D\u0633\u064A\u0646 \u0627\u0644\u0643\u0648\u062F \u0648\u062A\u0646\u0638\u064A\u0645\u0647 \u0645\u0639 \u0627\u0644\u062D\u0641\u0627\u0638 \u0639\u0644\u0649 \u0627\u0644\u0633\u0644\u0648\u0643 \u0627\u0644\u062D\u0627\u0644\u064A \u0648\u062A\u062C\u0646\u0628 \u0623\u064A \u062A\u063A\u064A\u064A\u0631\u0627\u062A \u063A\u064A\u0631 \u0636\u0631\u0648\u0631\u064A\u0629.",
       review: "\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0631\u0627\u062C\u0639\u0629 \u0627\u0644\u0643\u0648\u062F \u0648\u0625\u062E\u0631\u0627\u062C \u0645\u0644\u0627\u062D\u0638\u0627\u062A \u0639\u0645\u0644\u064A\u0629 \u0645\u0631\u062A\u0628\u0629 \u062D\u0633\u0628 \u0627\u0644\u062E\u0637\u0648\u0631\u0629 \u0628\u062F\u0648\u0646 \u062A\u0639\u062F\u064A\u0644 \u0627\u0644\u0643\u0648\u062F \u0645\u0628\u0627\u0634\u0631\u0629.",
@@ -736,6 +1094,67 @@
   }
   function containsAny(input, values) {
     return values.some((value) => input.includes(value.toLowerCase()));
+  }
+  function hasArabicText(input) {
+    return /[\u0600-\u06ff]/.test(input);
+  }
+  function isFriendlyOnlyMessage(input) {
+    const normalized = normalizeFriendlyText(input);
+    const friendlyPhrases = [
+      "\u0647\u0627\u064A",
+      "\u0647\u0627\u0649",
+      "\u0645\u0631\u062D\u0628\u0627",
+      "\u0623\u0647\u0644\u0627",
+      "\u0627\u0647\u0644\u0627",
+      "\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064A\u0643\u0645",
+      "\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631",
+      "\u0645\u0633\u0627\u0621 \u0627\u0644\u062E\u064A\u0631",
+      "\u0634\u0643\u0631\u0627"
+    ];
+    return friendlyPhrases.includes(normalized);
+  }
+  function translateFriendlyOnlyMessage(input) {
+    switch (normalizeFriendlyText(input)) {
+      case "\u0647\u0627\u064A":
+      case "\u0647\u0627\u0649":
+        return "Hi.";
+      case "\u0645\u0631\u062D\u0628\u0627":
+      case "\u0623\u0647\u0644\u0627":
+      case "\u0627\u0647\u0644\u0627":
+      case "\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064A\u0643\u0645":
+        return "Hello.";
+      case "\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631":
+        return "Good morning.";
+      case "\u0645\u0633\u0627\u0621 \u0627\u0644\u062E\u064A\u0631":
+        return "Good evening.";
+      case "\u0634\u0643\u0631\u0627":
+        return "Thank you.";
+      default:
+        return void 0;
+    }
+  }
+  function normalizeFriendlyText(input) {
+    return input.trim().replace(/[؟?!.,،؛:]+/g, "").replace(/\s+/g, " ").toLowerCase();
+  }
+  function approximateEnglishRequest(text, glossary) {
+    if (!hasArabicText(text)) {
+      return void 0;
+    }
+    const matches = findGlossaryMatches(text, glossary).sort(
+      (left, right) => right.arabic.length - left.arabic.length
+    );
+    if (!matches.length) {
+      return void 0;
+    }
+    let translated = text.trim();
+    for (const entry of matches) {
+      translated = replaceAllLiteral(translated, entry.arabic, entry.english);
+    }
+    translated = translated.replace(/[،؛]/g, ",").replace(/\s+/g, " ").trim();
+    return translated === text.trim() ? void 0 : translated;
+  }
+  function replaceAllLiteral(input, search, replacement) {
+    return input.split(search).join(replacement);
   }
   function unique(values) {
     return values.filter((value, index, array) => array.indexOf(value) === index);

@@ -2,7 +2,7 @@
   "name": "promptbridge-arabic",
   "displayName": "PromptBridge Arabic",
   "description": "Convert Arabic or Egyptian Arabic coding prompts into structured English prompts inside VS Code-compatible editors.",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "publisher": "ziadeldesoky",
   "license": "MIT",
   "repository": {
@@ -94,6 +94,7 @@
           "default": "auto",
           "enum": [
             "auto",
+            "general",
             "fix",
             "refactor",
             "review",

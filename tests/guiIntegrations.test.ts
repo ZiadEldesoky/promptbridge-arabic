@@ -52,6 +52,13 @@ describe("GUI integration metadata", () => {
           when?: string;
         }>;
         menus: { "editor/context": Array<{ command: string }> };
+        configuration: {
+          properties: {
+            "promptbridge.mode": {
+              enum: string[];
+            };
+          };
+        };
       };
     };
 
@@ -71,6 +78,9 @@ describe("GUI integration metadata", () => {
         title: "PromptBridge: Replace Selected Text in Focused Input"
       })
     );
+    expect(
+      manifest.contributes.configuration.properties["promptbridge.mode"].enum
+    ).toContain("general");
     expect(manifest.contributes.keybindings).toContainEqual(
       expect.objectContaining({
         command: "promptbridge.convertSelection",
@@ -159,24 +169,30 @@ describe("GUI integration metadata", () => {
     expect(source).toContain("text.bubble");
     expect(source).toContain("PromptBridgeMenuBarLauncher");
     expect(source).toContain("AXIsProcessTrustedWithOptions");
+    expect(source).toContain('"general"');
+    expect(source).toContain("disableAutomaticTermination");
+    expect(source).toContain("applicationShouldTerminate");
+    expect(source).toContain("unicodeScalars.contains");
+    expect(source).not.toContain("NSRegularExpression");
     expect(source).toContain("Auto Replace Selected Arabic");
     expect(source).toContain("originalChangeCount");
     expect(source).toContain("promptbridge-convert.mjs");
     expect(converter).toContain("translatePrompt");
-    expect(buildScript).toContain("PromptBridgeArabicMenuBar");
+    expect(buildScript).toContain("PromptBridgeArabicMenuBar.app");
+    expect(buildScript).toContain("NSSupportsAutomaticTermination");
     expect(buildScript).toContain("promptbridge-convert.mjs");
   });
 
   it("normalizes browser extension settings safely", () => {
     expect(
       normalizeBrowserSettings({
-        mode: "security",
+        mode: "general",
         bilingual: true,
         redact: true,
         fallbackToFocusedField: false
       })
     ).toEqual({
-      mode: "security",
+      mode: "general",
       bilingual: true,
       redact: true,
       fallbackToFocusedField: false

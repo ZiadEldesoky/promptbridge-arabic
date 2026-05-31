@@ -1,10 +1,9 @@
 import AppKit
 import ApplicationServices
 
-private let arabicPattern = try! NSRegularExpression(pattern: "[\\u{0600}-\\u{06FF}]")
 private let copyTimeout: TimeInterval = 1.0
 private let clipboardPoll: TimeInterval = 0.05
-private let pasteDelay: TimeInterval = 0.15
+private let pasteDelay: TimeInterval = 0.3
 private let processingCooldown: TimeInterval = 1.2
 
 final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
@@ -18,8 +17,20 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   private var lastProcessedAt = Date.distantPast
   private var isProcessing = false
   private var eventMonitor: Any?
+  private var allowTermination = false
+  private var activity: NSObjectProtocol?
+  private var keepAliveTimer: Timer?
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    ProcessInfo.processInfo.disableAutomaticTermination("PromptBridge runs as a persistent menu bar helper.")
+    ProcessInfo.processInfo.disableSuddenTermination()
+    activity = ProcessInfo.processInfo.beginActivity(
+      options: [.userInitiated],
+      reason: "PromptBridge menu bar helper is active."
+    )
+    keepAliveTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in }
+    writeDebugLog("launch trusted=\(isAccessibilityTrusted(prompt: false)) path=\(Bundle.main.bundlePath)")
+
     NSApp.setActivationPolicy(.accessory)
     setupStatusItem()
     installSelectionMonitor()
@@ -29,6 +40,22 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
     if let eventMonitor {
       NSEvent.removeMonitor(eventMonitor)
     }
+
+    keepAliveTimer?.invalidate()
+
+    if let activity {
+      ProcessInfo.processInfo.endActivity(activity)
+    }
+  }
+
+  func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+    if allowTermination {
+      writeDebugLog("applicationShouldTerminate allowed")
+      return .terminateNow
+    }
+
+    writeDebugLog("applicationShouldTerminate cancelled")
+    return .terminateCancel
   }
 
   private func setupStatusItem() {
@@ -93,7 +120,7 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
     menu.addItem(preserve)
 
     let modeMenu = NSMenu()
-    for promptMode in ["auto", "fix", "refactor", "review", "tests", "explain", "security"] {
+    for promptMode in ["auto", "general", "fix", "refactor", "review", "tests", "explain", "security"] {
       let item = NSMenuItem(
         title: promptMode,
         action: #selector(setMode(_:)),
@@ -184,32 +211,54 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   }
 
   private func scheduleAutoReplacement() {
-    guard autoReplaceEnabled, isAccessibilityTrusted(prompt: false) else {
+    guard autoReplaceEnabled else {
       return
     }
 
+    guard isAccessibilityTrusted(prompt: false) else {
+      updateStatus("Accessibility permission needed")
+      writeDebugLog("schedule skipped reason=not-trusted")
+      return
+    }
+
+    writeDebugLog("scheduleAutoReplacement")
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) { [weak self] in
       self?.processCurrentSelection(trigger: "auto")
     }
   }
 
   @objc private func toggleAutoReplace() {
-    if !autoReplaceEnabled && !isAccessibilityTrusted(prompt: true) {
+    let trusted = isAccessibilityTrusted(prompt: true)
+    writeDebugLog("toggleAutoReplace current=\(autoReplaceEnabled) trusted=\(trusted)")
+
+    if !autoReplaceEnabled && !trusted {
       updateStatus("Waiting for Accessibility permission")
       return
     }
 
     autoReplaceEnabled.toggle()
     updateStatus(autoReplaceEnabled ? "Auto replace enabled" : "Auto replace disabled")
+
+    if autoReplaceEnabled {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+        self?.processCurrentSelection(trigger: "auto-enable")
+      }
+    }
   }
 
   @objc private func convertCurrentSelectionNow() {
-    if !isAccessibilityTrusted(prompt: true) {
+    let trusted = isAccessibilityTrusted(prompt: true)
+    writeDebugLog("convertCurrentSelectionNow trusted=\(trusted)")
+
+    if !trusted {
       updateStatus("Waiting for Accessibility permission")
       return
     }
 
-    processCurrentSelection(trigger: "manual")
+    updateStatus("Converting current selection")
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) { [weak self] in
+      self?.processCurrentSelection(trigger: "manual")
+    }
   }
 
   @objc private func toggleRedaction() {
@@ -233,15 +282,18 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   }
 
   @objc private func quit() {
+    allowTermination = true
     NSApp.terminate(nil)
   }
 
   private func processCurrentSelection(trigger: String) {
     guard !isProcessing else {
+      writeDebugLog("process skipped trigger=\(trigger) reason=busy")
       return
     }
 
     isProcessing = true
+    writeDebugLog("process start trigger=\(trigger)")
 
     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
       guard let self else {
@@ -255,20 +307,25 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
       }
 
       let originalClipboard = readPasteboardText()
-      let selectedText = readSelectedTextUsingAccessibility()
-        ?? readSelectedTextUsingCopyFallback(originalClipboard: originalClipboard)
+      let selectedText = readSelectedTextUsingCopyFallback(originalClipboard: originalClipboard)
+        ?? readSelectedTextUsingAccessibility()
         ?? ""
       let normalizedSelection = selectedText.trimmingCharacters(in: .whitespacesAndNewlines)
 
       guard containsArabic(normalizedSelection) else {
-        if trigger == "manual" {
+        writeDebugLog("process no-arabic trigger=\(trigger) length=\(normalizedSelection.count)")
+
+        if trigger == "manual" || trigger == "auto-enable" {
           self.updateStatusOnMain("No Arabic selection found")
         }
 
         return
       }
 
-      if trigger == "auto" && self.shouldSkipDuplicate(normalizedSelection) {
+      writeDebugLog("process selected-arabic trigger=\(trigger) length=\(normalizedSelection.count)")
+
+      if trigger.hasPrefix("auto") && self.shouldSkipDuplicate(normalizedSelection) {
+        writeDebugLog("process skipped trigger=\(trigger) reason=duplicate")
         return
       }
 
@@ -295,8 +352,10 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
 
         self.rememberProcessed(normalizedSelection)
         self.updateStatusOnMain("Converted selected Arabic")
+        writeDebugLog("process converted trigger=\(trigger) outputLength=\(converted.count)")
       } catch {
         self.updateStatusOnMain("CLI error: \(error.localizedDescription)")
+        writeDebugLog("process error trigger=\(trigger) message=\(error.localizedDescription)")
       }
     }
   }
@@ -347,6 +406,7 @@ private func isAccessibilityTrusted(prompt: Bool) -> Bool {
 }
 
 private func readSelectedTextUsingAccessibility() -> String? {
+  writeDebugLog("read accessibility start")
   let systemWide = AXUIElementCreateSystemWide()
   var focusedRef: CFTypeRef?
   let focusedResult = AXUIElementCopyAttributeValue(
@@ -356,6 +416,7 @@ private func readSelectedTextUsingAccessibility() -> String? {
   )
 
   guard focusedResult == .success, let focusedElement = focusedRef else {
+    writeDebugLog("read accessibility no-focused result=\(focusedResult.rawValue)")
     return nil
   }
 
@@ -367,13 +428,17 @@ private func readSelectedTextUsingAccessibility() -> String? {
   )
 
   guard selectedResult == .success else {
+    writeDebugLog("read accessibility no-selected result=\(selectedResult.rawValue)")
     return nil
   }
 
-  return selectedRef as? String
+  let selected = selectedRef as? String
+  writeDebugLog("read accessibility selectedLength=\(selected?.count ?? 0)")
+  return selected
 }
 
 private func readSelectedTextUsingCopyFallback(originalClipboard: String) -> String? {
+  writeDebugLog("read copy start originalLength=\(originalClipboard.count)")
   let originalChangeCount = NSPasteboard.general.changeCount
   sendCommandKey(virtualKey: 8)
   let startedAt = Date()
@@ -388,10 +453,12 @@ private func readSelectedTextUsingCopyFallback(originalClipboard: String) -> Str
     let latestText = readPasteboardText()
 
     if !latestText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      writeDebugLog("read copy selectedLength=\(latestText.count)")
       return latestText
     }
   }
 
+  writeDebugLog("read copy timeout")
   return nil
 }
 
@@ -452,9 +519,43 @@ private func writePasteboardText(_ text: String) {
   NSPasteboard.general.setString(text, forType: .string)
 }
 
+private func writeDebugLog(_ message: String) {
+  let logURL = FileManager.default.homeDirectoryForCurrentUser
+    .appendingPathComponent("Library/Logs/PromptBridgeArabicMenuBar.log")
+  let timestamp = ISO8601DateFormatter().string(from: Date())
+  guard let data = "\(timestamp) \(message)\n".data(using: .utf8) else {
+    return
+  }
+
+  try? FileManager.default.createDirectory(
+    at: logURL.deletingLastPathComponent(),
+    withIntermediateDirectories: true
+  )
+
+  if FileManager.default.fileExists(atPath: logURL.path),
+     let handle = try? FileHandle(forWritingTo: logURL) {
+    handle.seekToEndOfFile()
+    handle.write(data)
+    try? handle.close()
+    return
+  }
+
+  try? data.write(to: logURL)
+}
+
 private func containsArabic(_ text: String) -> Bool {
-  let range = NSRange(text.startIndex..<text.endIndex, in: text)
-  return arabicPattern.firstMatch(in: text, range: range) != nil
+  text.unicodeScalars.contains { scalar in
+    switch scalar.value {
+    case 0x0600...0x06FF,
+         0x0750...0x077F,
+         0x08A0...0x08FF,
+         0xFB50...0xFDFF,
+         0xFE70...0xFEFF:
+      return true
+    default:
+      return false
+    }
+  }
 }
 
 private func sendCommandKey(virtualKey: CGKeyCode) {

@@ -23,14 +23,14 @@ This extension uses the same deterministic local core engine as the PromptBridge
 
 ## Settings
 
-- `promptbridge.mode`: `auto`, `fix`, `refactor`, `review`, `tests`, `explain`, or `security`.
+- `promptbridge.mode`: `auto`, `general`, `fix`, `refactor`, `review`, `tests`, `explain`, or `security`.
 - `promptbridge.redact`: redact common secrets before prompt generation.
 - `promptbridge.bilingual`: include an Arabic summary after the English prompt.
 
 ## Local install from VSIX
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.1.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.2.vsix
 ```
 
 Cursor and other VS Code-compatible editors may also support installing a `.vsix` file manually. Support varies by editor and version.

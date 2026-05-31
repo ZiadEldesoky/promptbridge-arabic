@@ -2,6 +2,16 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.10.2
+
+- Added a `general` prompt mode for friendly Arabic text and business/product requests that should not be forced into code-only templates.
+- Expanded the deterministic glossary with common friendly phrases and business workflow terms such as customers, orders, shipping, payment, invoices, inventory, and dashboards.
+- Improved design-preservation detection for Egyptian Arabic variants such as "بدون ما تغير في الديزاين".
+- Fixed a macOS helper crash caused by Swift regular-expression initialization during Arabic detection.
+- Installed the macOS helper as a stable app bundle name so Accessibility permissions do not change every release.
+- Made selected-text reading prefer copy/paste fallback before Accessibility for better compatibility with Notes and custom IDE prompt boxes.
+- Prevented macOS from automatically terminating the menu bar helper while it is running.
+
 ## v0.10.1
 
 - Fixed macOS menu bar helper visibility by switching from a text-only `PB` item to a template status icon.

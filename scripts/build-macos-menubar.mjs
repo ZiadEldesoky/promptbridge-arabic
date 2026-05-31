@@ -14,7 +14,7 @@ const binaryPath = resolve(
   packageDir,
   ".build/release/PromptBridgeMenuBar"
 );
-const appName = `PromptBridgeArabicMenuBar-v${packageJson.version}.app`;
+const appName = "PromptBridgeArabicMenuBar.app";
 const appDir = resolve(artifactsDir, appName);
 const macosDir = resolve(appDir, "Contents/MacOS");
 const resourcesDir = resolve(appDir, "Contents/Resources");
@@ -98,6 +98,10 @@ function infoPlist() {
   <string>13.0</string>
   <key>LSUIElement</key>
   <true/>
+  <key>NSSupportsAutomaticTermination</key>
+  <false/>
+  <key>NSSupportsSuddenTermination</key>
+  <false/>
   <key>NSAppleEventsUsageDescription</key>
   <string>PromptBridge sends local copy and paste events only to replace selected Arabic prompts.</string>
 </dict>

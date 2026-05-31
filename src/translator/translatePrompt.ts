@@ -37,6 +37,11 @@ export interface TranslatePromptResult {
 }
 
 interface PromptSignals {
+  hasArabic: boolean;
+  friendly: boolean;
+  friendlyOnly: boolean;
+  business: boolean;
+  generalRequest: boolean;
   responsive: boolean;
   preserveDesign: boolean;
   preserveLogic: boolean;
@@ -132,6 +137,18 @@ function inferMode(
     return "refactor";
   }
 
+  if (
+    signals.friendlyOnly ||
+    signals.business ||
+    signals.generalRequest ||
+    tags.has("friendly") ||
+    tags.has("business") ||
+    tags.has("general") ||
+    signals.hasArabic
+  ) {
+    return "general";
+  }
+
   return "fix";
 }
 
@@ -142,6 +159,12 @@ function buildStructuredPrompt(
   tokens: PreservedTechnicalToken[],
   glossary: GlossaryEntry[]
 ): StructuredPrompt {
+  const friendlyTranslation = translateFriendlyOnlyMessage(text);
+
+  if (mode === "general" && signals.friendlyOnly && friendlyTranslation) {
+    return { task: friendlyTranslation };
+  }
+
   const template = modeTemplates[mode];
   const prompt: StructuredPrompt = {
     task: buildTask(mode, signals, template),
@@ -183,8 +206,11 @@ function contextFromInput(
   signals: PromptSignals,
   glossary: GlossaryEntry[]
 ): string[] {
+  const approximateRequest = approximateEnglishRequest(text, glossary);
   const phraseContext = normalizeDeveloperPhrases(text, glossary);
-  const context = [...phraseContext];
+  const context = approximateRequest
+    ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext]
+    : [...phraseContext];
 
   if (signals.buildError) {
     context.push("The user is likely reporting a build failure.");
@@ -198,6 +224,14 @@ function contextFromInput(
     context.push("The user is reporting a crash or hang.");
   }
 
+  if (signals.business) {
+    context.push("The request includes business or product workflow context.");
+  }
+
+  if (signals.friendly && !signals.friendlyOnly) {
+    context.push("The user included a friendly greeting or casual tone.");
+  }
+
   return unique(context);
 }
 
@@ -206,6 +240,14 @@ function buildTask(
   signals: PromptSignals,
   template: ModeTemplate
 ): string {
+  if (mode === "general") {
+    if (signals.business) {
+      return "Turn this Arabic business or product request into a clear English implementation prompt.";
+    }
+
+    return "Translate and clarify this Arabic request in natural English.";
+  }
+
   if (mode === "fix") {
     if (signals.buildError) {
       return "Investigate and fix the build error in this project.";
@@ -291,6 +333,12 @@ function signalRequirements(
     requirements.push("Prioritize the main blocking issue first.");
   }
 
+  if (signals.business) {
+    requirements.push(
+      "Preserve any business entities, workflows, and product constraints mentioned by the user."
+    );
+  }
+
   return requirements;
 }
 
@@ -312,6 +360,13 @@ function signalConstraints(
 }
 
 function expectedOutputForMode(mode: PromptMode): string[] {
+  if (mode === "general") {
+    return [
+      "A natural English version of the request.",
+      "A concise actionable prompt when the request is product or implementation related."
+    ];
+  }
+
   if (mode === "review" || mode === "security") {
     return [
       "List findings ordered by severity.",
@@ -335,6 +390,69 @@ function detectSignals(text: string): PromptSignals {
   const normalized = text.toLowerCase();
 
   return {
+    hasArabic: hasArabicText(normalized),
+    friendly: containsAny(normalized, [
+      "هاي",
+      "هاى",
+      "مرحبا",
+      "أهلا",
+      "اهلا",
+      "السلام عليكم",
+      "ازيك",
+      "إزيك",
+      "عامل ايه",
+      "صباح الخير",
+      "مساء الخير",
+      "شكرا"
+    ]),
+    friendlyOnly: isFriendlyOnlyMessage(normalized),
+    business: containsAny(normalized, [
+      "business",
+      "product",
+      "بزنس",
+      "بيزنس",
+      "منتج",
+      "مشروع",
+      "عميل",
+      "عملاء",
+      "طلبات",
+      "اوردر",
+      "أوردر",
+      "order",
+      "orders",
+      "مبيعات",
+      "sales",
+      "مخزون",
+      "inventory",
+      "فاتورة",
+      "invoice",
+      "checkout",
+      "دفع",
+      "payment",
+      "شحن",
+      "shipping",
+      "store",
+      "متجر",
+      "لوحة تحكم",
+      "dashboard"
+    ]),
+    generalRequest: containsAny(normalized, [
+      "عايز",
+      "محتاج",
+      "لو سمحت",
+      "اعمل",
+      "أزود",
+      "ازود",
+      "أضيف",
+      "ضيف",
+      "زود",
+      "خلي",
+      "اكتب",
+      "حوّل",
+      "حول",
+      "translate",
+      "convert"
+    ]),
     responsive: containsAny(normalized, [
       "responsive",
       "ريسبونسيف",
@@ -344,12 +462,20 @@ function detectSignals(text: string): PromptSignals {
       "mobile"
     ]),
     preserveDesign: containsAny(normalized, [
+      "بدون ما تغير في الديزاين",
+      "بدون ما تغير الديزاين",
+      "بدون تغيير الديزاين",
+      "بدون تغيير التصميم",
       "من غير ما تغير الديزاين",
       "من غير ما تغير التصميم",
+      "من غير تغيير الديزاين",
+      "من غير تغيير التصميم",
       "متغيرش الديزاين",
       "متغيرش شكل",
       "متبوظش الديزاين",
       "متبوظش التصميم",
+      "نفس الديزاين",
+      "نفس التصميم",
       "preserve design",
       "without changing the design"
     ]),
@@ -443,6 +569,8 @@ function buildArabicSummary(
   redactionCount: number
 ): string {
   const summaries: Record<PromptMode, string> = {
+    general:
+      "المطلوب تحويل الكلام العربي إلى إنجليزي طبيعي وواضح مع الحفاظ على المعنى والنبرة والتفاصيل المهمة.",
     fix:
       "المطلوب فحص المشكلة، تحديد السبب الأساسي، إصلاحها بأقل تعديل آمن، وتشغيل الاختبار أو build المناسب بعد الإصلاح.",
     refactor:
@@ -496,6 +624,90 @@ function technicalContextFromTokens(tokens: PreservedTechnicalToken[]): string[]
 
 function containsAny(input: string, values: string[]): boolean {
   return values.some((value) => input.includes(value.toLowerCase()));
+}
+
+function hasArabicText(input: string): boolean {
+  return /[\u0600-\u06ff]/.test(input);
+}
+
+function isFriendlyOnlyMessage(input: string): boolean {
+  const normalized = normalizeFriendlyText(input);
+  const friendlyPhrases = [
+    "هاي",
+    "هاى",
+    "مرحبا",
+    "أهلا",
+    "اهلا",
+    "السلام عليكم",
+    "صباح الخير",
+    "مساء الخير",
+    "شكرا"
+  ];
+
+  return friendlyPhrases.includes(normalized);
+}
+
+function translateFriendlyOnlyMessage(input: string): string | undefined {
+  switch (normalizeFriendlyText(input)) {
+    case "هاي":
+    case "هاى":
+      return "Hi.";
+    case "مرحبا":
+    case "أهلا":
+    case "اهلا":
+    case "السلام عليكم":
+      return "Hello.";
+    case "صباح الخير":
+      return "Good morning.";
+    case "مساء الخير":
+      return "Good evening.";
+    case "شكرا":
+      return "Thank you.";
+    default:
+      return undefined;
+  }
+}
+
+function normalizeFriendlyText(input: string): string {
+  return input
+    .trim()
+    .replace(/[؟?!.,،؛:]+/g, "")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
+function approximateEnglishRequest(
+  text: string,
+  glossary: GlossaryEntry[]
+): string | undefined {
+  if (!hasArabicText(text)) {
+    return undefined;
+  }
+
+  const matches = findGlossaryMatches(text, glossary).sort(
+    (left, right) => right.arabic.length - left.arabic.length
+  );
+
+  if (!matches.length) {
+    return undefined;
+  }
+
+  let translated = text.trim();
+
+  for (const entry of matches) {
+    translated = replaceAllLiteral(translated, entry.arabic, entry.english);
+  }
+
+  translated = translated
+    .replace(/[،؛]/g, ",")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return translated === text.trim() ? undefined : translated;
+}
+
+function replaceAllLiteral(input: string, search: string, replacement: string) {
+  return input.split(search).join(replacement);
 }
 
 function unique(values: string[]): string[] {
