@@ -7,7 +7,6 @@ private let clipboardPoll: TimeInterval = 0.05
 private let pasteDelay: TimeInterval = 0.15
 private let processingCooldown: TimeInterval = 1.2
 
-@main
 final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   private var statusItem: NSStatusItem!
   private var autoReplaceEnabled = false
@@ -33,9 +32,17 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   }
 
   private func setupStatusItem() {
-    statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-    statusItem.button?.title = "PB"
+    statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    statusItem.isVisible = true
+
+    if let button = statusItem.button {
+      button.image = makeStatusIcon()
+      button.imagePosition = .imageOnly
+      button.toolTip = "PromptBridge Arabic"
+    }
+
     rebuildMenu()
+    showLaunchNotice()
   }
 
   private func rebuildMenu() {
@@ -116,7 +123,56 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
     menu.addItem(quit)
 
     statusItem.menu = menu
-    statusItem.button?.title = autoReplaceEnabled ? "PB On" : "PB"
+
+    if let button = statusItem.button {
+      button.image = makeStatusIcon(active: autoReplaceEnabled)
+      button.imagePosition = .imageOnly
+      button.toolTip = autoReplaceEnabled ? "PromptBridge Arabic: Auto replace on" : "PromptBridge Arabic"
+    }
+  }
+
+  private func makeStatusIcon(active: Bool = false) -> NSImage {
+    if let symbol = NSImage(
+      systemSymbolName: active ? "text.bubble.fill" : "text.bubble",
+      accessibilityDescription: "PromptBridge Arabic"
+    ) {
+      symbol.isTemplate = true
+      return symbol
+    }
+
+    let image = NSImage(size: NSSize(width: 18, height: 18))
+    image.lockFocus()
+    let bounds = NSRect(x: 0, y: 0, width: 18, height: 18)
+    NSColor.labelColor.setStroke()
+    NSBezierPath(roundedRect: bounds.insetBy(dx: 2, dy: 3), xRadius: 4, yRadius: 4).stroke()
+    NSString(string: "P").draw(
+      at: NSPoint(x: 5, y: 2),
+      withAttributes: [
+        .font: NSFont.boldSystemFont(ofSize: 12),
+        .foregroundColor: NSColor.labelColor
+      ]
+    )
+    image.unlockFocus()
+    image.isTemplate = true
+    return image
+  }
+
+  private func showLaunchNotice() {
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "dev"
+    let launchNoticeKey = "didShowLaunchNotice.\(appVersion)"
+    guard !UserDefaults.standard.bool(forKey: launchNoticeKey) else {
+      return
+    }
+
+    UserDefaults.standard.set(true, forKey: launchNoticeKey)
+
+    let alert = NSAlert()
+    alert.messageText = "PromptBridge Arabic is running"
+    alert.informativeText = "Look for the text bubble icon in the macOS menu bar. If a menu bar manager hides new icons, move PromptBridge to the visible section."
+    alert.addButton(withTitle: "OK")
+
+    NSApp.activate(ignoringOtherApps: true)
+    alert.runModal()
   }
 
   private func installSelectionMonitor() {
@@ -264,6 +320,21 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
     DispatchQueue.main.async {
       self.updateStatus(status)
     }
+  }
+}
+
+@main
+private enum PromptBridgeMenuBarLauncher {
+  private static var appDelegate: PromptBridgeMenuBarApp?
+
+  static func main() {
+    let app = NSApplication.shared
+    let delegate = PromptBridgeMenuBarApp()
+
+    appDelegate = delegate
+    app.setActivationPolicy(.accessory)
+    app.delegate = delegate
+    app.run()
   }
 }
 

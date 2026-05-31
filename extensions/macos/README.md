@@ -4,7 +4,7 @@ Experimental macOS menu bar helper for selected Arabic prompt replacement.
 
 ## What it does
 
-- Adds a `PB` item to the macOS menu bar.
+- Adds a PromptBridge text-bubble icon to the macOS menu bar.
 - Lets the user enable **Auto Replace Selected Arabic**.
 - Watches for selection changes from mouse or keyboard events.
 - Converts only the currently selected Arabic text.

@@ -155,6 +155,9 @@ describe("GUI integration metadata", () => {
 
     expect(packageManifest).toContain('name: "PromptBridgeMenuBar"');
     expect(source).toContain("NSStatusBar.system.statusItem");
+    expect(source).toContain("NSStatusItem.squareLength");
+    expect(source).toContain("text.bubble");
+    expect(source).toContain("PromptBridgeMenuBarLauncher");
     expect(source).toContain("AXIsProcessTrustedWithOptions");
     expect(source).toContain("Auto Replace Selected Arabic");
     expect(source).toContain("originalChangeCount");

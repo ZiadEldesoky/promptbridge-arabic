@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.10.1
+
+- Fixed macOS menu bar helper visibility by switching from a text-only `PB` item to a template status icon.
+- Added a first-run notice so users can find the menu bar icon after launch.
+- Switched the macOS helper to an explicit AppKit launcher to keep the app delegate alive reliably.
+
 ## v0.10.0
 
 - Added an experimental native macOS menu bar helper for selected Arabic prompt replacement.

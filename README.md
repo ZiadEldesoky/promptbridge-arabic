@@ -115,7 +115,7 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.0.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.1.vsix
 ```
 
 Available commands / الأوامر المتاحة:
@@ -150,7 +150,7 @@ Use this if you want a top-bar helper that can replace selected Arabic text whil
 
 ```bash
 npm run release:macos
-open artifacts/PromptBridgeArabicMenuBar-v0.10.0.app
+open artifacts/PromptBridgeArabicMenuBar-v0.10.1.app
 ```
 
 Before using it, make sure Node.js is available and build the project locally:
@@ -164,7 +164,7 @@ npm run build
 
 Workflow / طريقة الاستخدام:
 
-1. Open the app and click `PB` in the macOS menu bar.
+1. Open the app and click the PromptBridge text-bubble icon in the macOS menu bar.
 2. Enable **Auto Replace Selected Arabic**.
 3. Give the app Accessibility permission when macOS asks.
 4. Select Arabic text in an AI prompt box. PromptBridge converts only the selected part and pastes the English prompt back over it.
@@ -336,7 +336,7 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.0.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.10.1.vsix
 ```
 
 The extension adds commands for converting selected Arabic text, replacing selected text in focused macOS IDE inputs, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It also adds `Cmd+Shift+Y` on macOS / `Ctrl+Shift+Y` on Windows and Linux for selected editor text, plus an editor right-click menu item. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
@@ -347,10 +347,10 @@ PromptBridge includes an experimental native macOS helper under `extensions/maco
 
 ```bash
 npm run release:macos
-open artifacts/PromptBridgeArabicMenuBar-v0.10.0.app
+open artifacts/PromptBridgeArabicMenuBar-v0.10.1.app
 ```
 
-The helper adds a `PB` item to the macOS menu bar. When **Auto Replace Selected Arabic** is enabled, it watches selection changes, converts the selected Arabic text through a bundled deterministic converter, and replaces only that selected text. It requires Accessibility permission and Node.js in the user's login shell.
+The helper adds a PromptBridge text-bubble icon to the macOS menu bar. When **Auto Replace Selected Arabic** is enabled, it watches selection changes, converts the selected Arabic text through a bundled deterministic converter, and replaces only that selected text. It requires Accessibility permission and Node.js in the user's login shell.
 
 ## CLI agent wrappers
 
