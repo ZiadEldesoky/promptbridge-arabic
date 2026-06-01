@@ -83,12 +83,41 @@ describe("translatePrompt", () => {
     expect(direct.output).not.toMatch(/[\u0600-\u06ff]/);
     expect(structured.mode).toBe("refactor");
     expect(structured.englishPrompt).toContain(
-      "Organize and clean up this code while preserving its behavior."
+      "Organize this code and improve its maintainability while preserving behavior."
     );
     expect(structured.englishPrompt).toContain(
       "Natural English interpretation: make the code organized and maintainable"
     );
     expect(structured.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("handles organized and secure code requests without Arabic leftovers", () => {
+    const direct = translatePrompt("خلي الكود منظم وآمن", { mode: "general" });
+    const structured = translatePrompt("خلي الكود منظم وآمن");
+
+    expect(direct.output).toBe(
+      "Make the code organized, maintainable, and secure"
+    );
+    expect(direct.output).not.toMatch(/[\u0600-\u06ff]/);
+    expect(structured.mode).toBe("security");
+    expect(structured.englishPrompt).toContain(
+      "Improve this code to make it secure, organized, and maintainable."
+    );
+    expect(structured.englishPrompt).toContain(
+      "Natural English interpretation: make the code organized, maintainable, and secure"
+    );
+    expect(structured.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("normalizes decomposed Arabic characters before glossary matching", () => {
+    const result = translatePrompt("خلي الكود منظم وآمن", {
+      mode: "general"
+    });
+
+    expect(result.output).toBe(
+      "Make the code organized, maintainable, and secure"
+    );
+    expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
   });
 
   it("keeps organized-code fragments as fragment translations", () => {

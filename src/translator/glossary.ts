@@ -166,6 +166,26 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["general"]
   },
   {
+    arabic: "خلي الكود منظم وآمن",
+    english: "make the code organized, maintainable, and secure",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "خلي الكود منظم وامن",
+    english: "make the code organized, maintainable, and secure",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "خلي الكود مرتب وآمن",
+    english: "make the code organized, maintainable, and secure",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "خلي الكود مرتب وامن",
+    english: "make the code organized, maintainable, and secure",
+    tags: ["refactor", "security"]
+  },
+  {
     arabic: "خلي الكود آمن ونظيف",
     english: "make the code secure, clean, and maintainable",
     tags: ["security", "refactor"]
@@ -234,6 +254,26 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     arabic: "الكود",
     english: "the code",
     tags: ["general"]
+  },
+  {
+    arabic: "منظم وآمن",
+    english: "organized, maintainable, and secure",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "منظم وامن",
+    english: "organized, maintainable, and secure",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "مرتب وآمن",
+    english: "organized, maintainable, and secure",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "مرتب وامن",
+    english: "organized, maintainable, and secure",
+    tags: ["refactor", "security"]
   },
   {
     arabic: "آمن ونظيف",
@@ -857,9 +897,9 @@ export function findGlossaryMatches(
   input: string,
   glossary: GlossaryEntry[] = egyptianDeveloperGlossary
 ): GlossaryEntry[] {
-  const normalizedInput = input.toLowerCase();
+  const normalizedInput = normalizeForMatching(input);
   const matches = glossary.filter((entry) =>
-    matchesPhrase(normalizedInput, entry.arabic.toLowerCase())
+    matchesPhrase(normalizedInput, normalizeForMatching(entry.arabic))
   );
 
   return removeCoveredMatches(matches);
@@ -893,10 +933,10 @@ function matchesPhrase(input: string, phrase: string): boolean {
 
 function removeCoveredMatches(matches: GlossaryEntry[]): GlossaryEntry[] {
   return matches.filter((entry) => {
-    const entryArabic = entry.arabic.toLowerCase();
+    const entryArabic = normalizeForMatching(entry.arabic);
 
     return !matches.some((candidate) => {
-      const candidateArabic = candidate.arabic.toLowerCase();
+      const candidateArabic = normalizeForMatching(candidate.arabic);
 
       return (
         candidateArabic !== entryArabic &&
@@ -912,13 +952,15 @@ export function replaceGlossaryPhrase(
   phrase: string,
   replacement: string
 ): string {
-  return input.replace(phrasePattern(phrase), (_match, prefix) => {
-    return `${prefix}${replacement}`;
-  });
+  return input
+    .normalize("NFC")
+    .replace(phrasePattern(phrase), (_match, prefix) => {
+      return `${prefix}${replacement}`;
+    });
 }
 
 function phrasePattern(phrase: string): RegExp {
-  const escapedPhrase = escapeRegExp(phrase.trim());
+  const escapedPhrase = escapeRegExp(phrase.normalize("NFC").trim());
   const boundary = "[^\\p{L}\\p{N}_]";
   const arabicConjunction = "و?";
 
@@ -926,6 +968,10 @@ function phrasePattern(phrase: string): RegExp {
     `(^|${boundary})${arabicConjunction}${escapedPhrase}(?=$|${boundary})`,
     "giu"
   );
+}
+
+function normalizeForMatching(input: string): string {
+  return input.normalize("NFC").toLowerCase();
 }
 
 function escapeRegExp(input: string): string {

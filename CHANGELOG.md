@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.5
+
+- Added deterministic support for combined organized-and-secure prompts such as "خلي الكود منظم وآمن".
+- Normalized Arabic Unicode before matching glossary phrases, including decomposed forms such as "وآمن".
+- Updated organized/security prompt shaping so handled output does not leave Arabic fragments in context.
+
 ## v0.11.4
 
 - Added deterministic support for organized-code phrases such as "خلي الكود منظم".

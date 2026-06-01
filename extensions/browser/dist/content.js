@@ -293,6 +293,26 @@
       tags: ["general"]
     },
     {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0646\u0638\u0645 \u0648\u0622\u0645\u0646",
+      english: "make the code organized, maintainable, and secure",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0646\u0638\u0645 \u0648\u0627\u0645\u0646",
+      english: "make the code organized, maintainable, and secure",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0631\u062A\u0628 \u0648\u0622\u0645\u0646",
+      english: "make the code organized, maintainable, and secure",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0631\u062A\u0628 \u0648\u0627\u0645\u0646",
+      english: "make the code organized, maintainable, and secure",
+      tags: ["refactor", "security"]
+    },
+    {
       arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0622\u0645\u0646 \u0648\u0646\u0638\u064A\u0641",
       english: "make the code secure, clean, and maintainable",
       tags: ["security", "refactor"]
@@ -361,6 +381,26 @@
       arabic: "\u0627\u0644\u0643\u0648\u062F",
       english: "the code",
       tags: ["general"]
+    },
+    {
+      arabic: "\u0645\u0646\u0638\u0645 \u0648\u0622\u0645\u0646",
+      english: "organized, maintainable, and secure",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u0645\u0646\u0638\u0645 \u0648\u0627\u0645\u0646",
+      english: "organized, maintainable, and secure",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u0645\u0631\u062A\u0628 \u0648\u0622\u0645\u0646",
+      english: "organized, maintainable, and secure",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u0645\u0631\u062A\u0628 \u0648\u0627\u0645\u0646",
+      english: "organized, maintainable, and secure",
+      tags: ["refactor", "security"]
     },
     {
       arabic: "\u0622\u0645\u0646 \u0648\u0646\u0638\u064A\u0641",
@@ -977,9 +1017,9 @@
     return [...customGlossary, ...egyptianDeveloperGlossary];
   }
   function findGlossaryMatches(input, glossary = egyptianDeveloperGlossary) {
-    const normalizedInput = input.toLowerCase();
+    const normalizedInput = normalizeForMatching(input);
     const matches = glossary.filter(
-      (entry) => matchesPhrase(normalizedInput, entry.arabic.toLowerCase())
+      (entry) => matchesPhrase(normalizedInput, normalizeForMatching(entry.arabic))
     );
     return removeCoveredMatches(matches);
   }
@@ -1001,26 +1041,29 @@
   }
   function removeCoveredMatches(matches) {
     return matches.filter((entry) => {
-      const entryArabic = entry.arabic.toLowerCase();
+      const entryArabic = normalizeForMatching(entry.arabic);
       return !matches.some((candidate) => {
-        const candidateArabic = candidate.arabic.toLowerCase();
+        const candidateArabic = normalizeForMatching(candidate.arabic);
         return candidateArabic !== entryArabic && candidateArabic.length > entryArabic.length && candidateArabic.includes(entryArabic);
       });
     });
   }
   function replaceGlossaryPhrase(input, phrase, replacement) {
-    return input.replace(phrasePattern(phrase), (_match, prefix) => {
+    return input.normalize("NFC").replace(phrasePattern(phrase), (_match, prefix) => {
       return `${prefix}${replacement}`;
     });
   }
   function phrasePattern(phrase) {
-    const escapedPhrase = escapeRegExp(phrase.trim());
+    const escapedPhrase = escapeRegExp(phrase.normalize("NFC").trim());
     const boundary = "[^\\p{L}\\p{N}_]";
     const arabicConjunction = "\u0648?";
     return new RegExp(
       `(^|${boundary})${arabicConjunction}${escapedPhrase}(?=$|${boundary})`,
       "giu"
     );
+  }
+  function normalizeForMatching(input) {
+    return input.normalize("NFC").toLowerCase();
   }
   function escapeRegExp(input) {
     return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -1204,14 +1247,15 @@
   // src/translator/translatePrompt.ts
   function translatePrompt(input, options = {}) {
     const redaction = options.redact ? redactSecrets(input) : { text: input, redactionCount: 0, redactedPatternNames: [] };
-    const preserved = preserveTechnicalTokens(redaction.text);
+    const sourceText = redaction.text.normalize("NFC");
+    const preserved = preserveTechnicalTokens(sourceText);
     const glossary = mergeGlossaries(options.glossary);
-    const signals = detectSignals(redaction.text);
-    const mode = options.mode ?? inferMode(redaction.text, signals, glossary);
+    const signals = detectSignals(sourceText);
+    const mode = options.mode ?? inferMode(sourceText, signals, glossary);
     const structuredPrompt = buildStructuredPrompt(
       mode,
       signals,
-      redaction.text,
+      sourceText,
       preserved.tokens,
       glossary
     );
@@ -1255,7 +1299,7 @@
     if (signals.review || tags.has("review")) {
       return "review";
     }
-    if (signals.responsive || signals.cleanCode || signals.preserveDesign || signals.preserveLogic || tags.has("refactor")) {
+    if (signals.responsive || signals.cleanCode || signals.organizedCode || signals.preserveDesign || signals.preserveLogic || tags.has("refactor")) {
       return "refactor";
     }
     if (signals.friendlyOnly || signals.business || signals.generalRequest || tags.has("friendly") || tags.has("business") || tags.has("general") || signals.hasArabic) {
@@ -1355,11 +1399,17 @@
     if (mode === "refactor" && signals.cleanCode) {
       return "Organize and clean up this code while preserving its behavior.";
     }
+    if (mode === "refactor" && signals.organizedCode) {
+      return "Organize this code and improve its maintainability while preserving behavior.";
+    }
     if (mode === "explain" && signals.simpleExplanation) {
       return "Explain how this code works in simple language.";
     }
     if (mode === "security") {
       if (signals.securityHardening) {
+        if (signals.organizedCode) {
+          return "Improve this code to make it secure, organized, and maintainable.";
+        }
         if (signals.cleanCode) {
           return "Improve this code to make it secure, clean, and maintainable.";
         }
@@ -1399,6 +1449,16 @@
         "Explain what was cleaned up or reorganized."
       ];
     }
+    if (mode === "refactor" && signals.organizedCode) {
+      return [
+        "Improve the code organization and structure.",
+        "Preserve the existing behavior.",
+        "Avoid changing public APIs unless necessary.",
+        "Avoid broad rewrites or unrelated refactors.",
+        "Keep the smallest clear improvement that satisfies the request.",
+        "Explain what was reorganized and why."
+      ];
+    }
     if (mode === "security" && signals.securityHardening) {
       const requirements = [
         "Identify the security risks that are relevant to the provided code or request.",
@@ -1409,7 +1469,7 @@
         "Run the relevant build, test, or security check when available.",
         "Explain what was hardened and why."
       ];
-      if (signals.cleanCode) {
+      if (signals.cleanCode || signals.organizedCode) {
         requirements.splice(
           3,
           0,
@@ -1551,6 +1611,17 @@
       "\u0645\u062A\u0639\u062F\u0644\u0634",
       "\u0645\u0646 \u063A\u064A\u0631 \u062A\u0639\u062F\u064A\u0644"
     ]);
+    const organizedCode = containsAny(normalized, [
+      "organized",
+      "organization",
+      "structure",
+      "structured",
+      "\u0645\u0646\u0638\u0645",
+      "\u0645\u0646\u0638\u0645\u0629",
+      "\u0645\u0631\u062A\u0628",
+      "\u0645\u0631\u062A\u0628\u0629",
+      "\u0631\u062A\u0628"
+    ]);
     const cleanCode = containsAny(normalized, [
       "clean",
       "clean code",
@@ -1562,11 +1633,6 @@
       "\u0646\u0636\u064A\u0641\u0647",
       "\u0646\u0636\u0641",
       "\u0646\u0638\u0641",
-      "\u0631\u062A\u0628",
-      "\u0645\u0631\u062A\u0628",
-      "\u0645\u0631\u062A\u0628\u0629",
-      "\u0645\u0646\u0638\u0645",
-      "\u0645\u0646\u0638\u0645\u0629",
       "\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629"
     ]);
     const friendly = containsAny(normalized, [
@@ -1716,7 +1782,7 @@
       "add",
       "create"
     ]);
-    const codingIntent = business || responsive || performance || security || cleanCode || simpleExplanation || tests || review || buildError || error || crash || implementation || containsAny(normalized, [
+    const codingIntent = business || responsive || performance || security || cleanCode || organizedCode || simpleExplanation || tests || review || buildError || error || crash || implementation || containsAny(normalized, [
       "\u0627\u0644\u0643\u0648\u062F",
       "\u0643\u0648\u062F",
       "code",
@@ -1740,6 +1806,7 @@
       selectedFragment,
       codingIntent,
       cleanCode,
+      organizedCode,
       responsive,
       performance,
       implementation,

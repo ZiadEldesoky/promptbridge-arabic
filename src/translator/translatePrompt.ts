@@ -46,6 +46,7 @@ interface PromptSignals {
   selectedFragment: boolean;
   codingIntent: boolean;
   cleanCode: boolean;
+  organizedCode: boolean;
   responsive: boolean;
   performance: boolean;
   implementation: boolean;
@@ -72,14 +73,15 @@ export function translatePrompt(
   const redaction = options.redact
     ? redactSecrets(input)
     : { text: input, redactionCount: 0, redactedPatternNames: [] };
-  const preserved = preserveTechnicalTokens(redaction.text);
+  const sourceText = redaction.text.normalize("NFC");
+  const preserved = preserveTechnicalTokens(sourceText);
   const glossary = mergeGlossaries(options.glossary);
-  const signals = detectSignals(redaction.text);
-  const mode = options.mode ?? inferMode(redaction.text, signals, glossary);
+  const signals = detectSignals(sourceText);
+  const mode = options.mode ?? inferMode(sourceText, signals, glossary);
   const structuredPrompt = buildStructuredPrompt(
     mode,
     signals,
-    redaction.text,
+    sourceText,
     preserved.tokens,
     glossary
   );
@@ -142,6 +144,7 @@ function inferMode(
   if (
     signals.responsive ||
     signals.cleanCode ||
+    signals.organizedCode ||
     signals.preserveDesign ||
     signals.preserveLogic ||
     tags.has("refactor")
@@ -297,12 +300,20 @@ function buildTask(
     return "Organize and clean up this code while preserving its behavior.";
   }
 
+  if (mode === "refactor" && signals.organizedCode) {
+    return "Organize this code and improve its maintainability while preserving behavior.";
+  }
+
   if (mode === "explain" && signals.simpleExplanation) {
     return "Explain how this code works in simple language.";
   }
 
   if (mode === "security") {
     if (signals.securityHardening) {
+      if (signals.organizedCode) {
+        return "Improve this code to make it secure, organized, and maintainable.";
+      }
+
       if (signals.cleanCode) {
         return "Improve this code to make it secure, clean, and maintainable.";
       }
@@ -353,6 +364,17 @@ function modeRequirements(
     ];
   }
 
+  if (mode === "refactor" && signals.organizedCode) {
+    return [
+      "Improve the code organization and structure.",
+      "Preserve the existing behavior.",
+      "Avoid changing public APIs unless necessary.",
+      "Avoid broad rewrites or unrelated refactors.",
+      "Keep the smallest clear improvement that satisfies the request.",
+      "Explain what was reorganized and why."
+    ];
+  }
+
   if (mode === "security" && signals.securityHardening) {
     const requirements = [
       "Identify the security risks that are relevant to the provided code or request.",
@@ -364,7 +386,7 @@ function modeRequirements(
       "Explain what was hardened and why."
     ];
 
-    if (signals.cleanCode) {
+    if (signals.cleanCode || signals.organizedCode) {
       requirements.splice(
         3,
         0,
@@ -547,6 +569,17 @@ function detectSignals(text: string): PromptSignals {
       "متعدلش",
       "من غير تعديل"
     ]);
+  const organizedCode = containsAny(normalized, [
+    "organized",
+    "organization",
+    "structure",
+    "structured",
+    "منظم",
+    "منظمة",
+    "مرتب",
+    "مرتبة",
+    "رتب"
+  ]);
   const cleanCode = containsAny(normalized, [
     "clean",
     "clean code",
@@ -558,11 +591,6 @@ function detectSignals(text: string): PromptSignals {
     "نضيفه",
     "نضف",
     "نظف",
-    "رتب",
-    "مرتب",
-    "مرتبة",
-    "منظم",
-    "منظمة",
     "قابل للصيانة"
   ]);
   const friendly = containsAny(normalized, [
@@ -718,6 +746,7 @@ function detectSignals(text: string): PromptSignals {
     performance ||
     security ||
     cleanCode ||
+    organizedCode ||
     simpleExplanation ||
     tests ||
     review ||
@@ -760,6 +789,7 @@ function detectSignals(text: string): PromptSignals {
     selectedFragment,
     codingIntent,
     cleanCode,
+    organizedCode,
     responsive,
     performance,
     implementation,
