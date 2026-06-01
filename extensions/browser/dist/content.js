@@ -293,6 +293,26 @@
       tags: ["general"]
     },
     {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0622\u0645\u0646 \u0648\u0646\u0638\u064A\u0641",
+      english: "make the code secure, clean, and maintainable",
+      tags: ["security", "refactor"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0622\u0645\u0646 \u0648\u0646\u0636\u064A\u0641",
+      english: "make the code secure, clean, and maintainable",
+      tags: ["security", "refactor"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0627\u0645\u0646 \u0648\u0646\u0638\u064A\u0641",
+      english: "make the code secure, clean, and maintainable",
+      tags: ["security", "refactor"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0627\u0645\u0646 \u0648\u0646\u0636\u064A\u0641",
+      english: "make the code secure, clean, and maintainable",
+      tags: ["security", "refactor"]
+    },
+    {
       arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0622\u0645\u0646",
       english: "make the code secure",
       tags: ["security"]
@@ -341,6 +361,26 @@
       arabic: "\u0627\u0644\u0643\u0648\u062F",
       english: "the code",
       tags: ["general"]
+    },
+    {
+      arabic: "\u0622\u0645\u0646 \u0648\u0646\u0638\u064A\u0641",
+      english: "secure, clean, and maintainable",
+      tags: ["security", "refactor"]
+    },
+    {
+      arabic: "\u0622\u0645\u0646 \u0648\u0646\u0636\u064A\u0641",
+      english: "secure, clean, and maintainable",
+      tags: ["security", "refactor"]
+    },
+    {
+      arabic: "\u0627\u0645\u0646 \u0648\u0646\u0638\u064A\u0641",
+      english: "secure, clean, and maintainable",
+      tags: ["security", "refactor"]
+    },
+    {
+      arabic: "\u0627\u0645\u0646 \u0648\u0646\u0636\u064A\u0641",
+      english: "secure, clean, and maintainable",
+      tags: ["security", "refactor"]
     },
     {
       arabic: "\u0622\u0645\u0646",
@@ -578,13 +618,53 @@
       tags: ["refactor"]
     },
     {
+      arabic: "\u0646\u0638\u0641 \u0627\u0644\u0643\u0648\u062F",
+      english: "clean up the code",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0646\u0636\u064A\u0641",
+      english: "make the code clean and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0646\u0638\u064A\u0641",
+      english: "make the code clean and maintainable",
+      tags: ["refactor"]
+    },
+    {
       arabic: "\u0631\u062A\u0628 \u0627\u0644\u0643\u0648\u062F",
       english: "organize the code",
       tags: ["refactor"]
     },
     {
       arabic: "\u0627\u0644\u0643\u0648\u062F \u0646\u0636\u064A\u0641",
-      english: "clean code",
+      english: "clean and maintainable code",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0627\u0644\u0643\u0648\u062F \u0646\u0638\u064A\u0641",
+      english: "clean and maintainable code",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0646\u0636\u064A\u0641",
+      english: "clean and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0646\u0638\u064A\u0641",
+      english: "clean and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0646\u0638\u064A\u0641\u0629",
+      english: "clean and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0646\u0636\u064A\u0641\u0647",
+      english: "clean and maintainable",
       tags: ["refactor"]
     },
     {
@@ -1130,6 +1210,9 @@
   function inferMode(text, signals, glossary) {
     const glossaryMatches = findGlossaryMatches(text, glossary);
     const tags = new Set(glossaryMatches.flatMap((match) => match.tags));
+    if (signals.selectedFragment) {
+      return "general";
+    }
     if (signals.security || tags.has("security")) {
       return "security";
     }
@@ -1244,6 +1327,9 @@
     }
     if (mode === "security") {
       if (signals.securityHardening) {
+        if (signals.cleanCode) {
+          return "Improve this code to make it secure, clean, and maintainable.";
+        }
         return "Improve this code to make it more secure.";
       }
       return "Review this code for potential security issues.";
@@ -1271,7 +1357,7 @@
       ];
     }
     if (mode === "security" && signals.securityHardening) {
-      return [
+      const requirements = [
         "Identify the security risks that are relevant to the provided code or request.",
         "Make the smallest safe changes needed to improve security.",
         "Preserve existing behavior and public APIs unless a security fix requires otherwise.",
@@ -1280,6 +1366,14 @@
         "Run the relevant build, test, or security check when available.",
         "Explain what was hardened and why."
       ];
+      if (signals.cleanCode) {
+        requirements.splice(
+          3,
+          0,
+          "Improve readability, structure, and maintainability without changing behavior."
+        );
+      }
+      return requirements;
     }
     return template.requirements ?? [];
   }
@@ -1414,6 +1508,21 @@
       "\u0645\u062A\u0639\u062F\u0644\u0634",
       "\u0645\u0646 \u063A\u064A\u0631 \u062A\u0639\u062F\u064A\u0644"
     ]);
+    const cleanCode = containsAny(normalized, [
+      "clean",
+      "clean code",
+      "maintainable",
+      "maintainability",
+      "\u0646\u0636\u064A\u0641",
+      "\u0646\u0638\u064A\u0641",
+      "\u0646\u0638\u064A\u0641\u0629",
+      "\u0646\u0636\u064A\u0641\u0647",
+      "\u0646\u0636\u0641",
+      "\u0646\u0638\u0641",
+      "\u0631\u062A\u0628",
+      "\u0645\u0646\u0638\u0645",
+      "\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629"
+    ]);
     const friendly = containsAny(normalized, [
       "\u0647\u0627\u064A",
       "\u0647\u0627\u0649",
@@ -1475,6 +1584,9 @@
       "\u0623\u0636\u064A\u0641",
       "\u0636\u064A\u0641",
       "\u0632\u0648\u062F",
+      "\u0638\u0628\u0637",
+      "\u0638\u0628\u0637\u0644\u064A",
+      "\u0627\u0636\u0628\u0637",
       "\u062E\u0644\u064A",
       "\u0627\u0643\u062A\u0628",
       "\u062D\u0648\u0651\u0644",
@@ -1558,7 +1670,7 @@
       "add",
       "create"
     ]);
-    const codingIntent = business || responsive || performance || security || simpleExplanation || tests || review || buildError || error || crash || implementation || containsAny(normalized, [
+    const codingIntent = business || responsive || performance || security || cleanCode || simpleExplanation || tests || review || buildError || error || crash || implementation || containsAny(normalized, [
       "\u0627\u0644\u0643\u0648\u062F",
       "\u0643\u0648\u062F",
       "code",
@@ -1572,13 +1684,16 @@
       "ui",
       "ux"
     ]);
+    const selectedFragment = hasArabicText(normalized) && !generalRequest && !implementation && !review && !tests && !simpleExplanation && !buildError && !error && !crash && wordCount(normalized) <= 5;
     return {
       hasArabic: hasArabicText(normalized),
       friendly,
       friendlyOnly,
       business,
       generalRequest,
+      selectedFragment,
       codingIntent,
+      cleanCode,
       responsive,
       performance,
       implementation,
@@ -1688,6 +1803,9 @@
   }
   function hasArabicText(input) {
     return /[\u0600-\u06ff]/.test(input);
+  }
+  function wordCount(input) {
+    return input.trim().split(/\s+/).filter(Boolean).length;
   }
   function isFriendlyOnlyMessage(input) {
     const normalized = normalizeFriendlyText(input);

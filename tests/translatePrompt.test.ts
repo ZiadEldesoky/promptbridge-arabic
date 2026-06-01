@@ -40,6 +40,41 @@ describe("translatePrompt", () => {
     expect(result.output).not.toContain("Translate and clarify");
   });
 
+  it("translates compound code-quality phrases without leaving Arabic fragments", () => {
+    const result = translatePrompt("خلي الكود آمن ونظيف", { mode: "general" });
+
+    expect(result.mode).toBe("general");
+    expect(result.output).toBe(
+      "Make the code secure, clean, and maintainable"
+    );
+    expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("turns secure and clean code requests into practical hardening guidance", () => {
+    const result = translatePrompt("خلي الكود آمن ونظيف");
+
+    expect(result.mode).toBe("security");
+    expect(result.englishPrompt).toContain(
+      "Improve this code to make it secure, clean, and maintainable."
+    );
+    expect(result.englishPrompt).toContain(
+      "Natural English interpretation: make the code secure, clean, and maintainable"
+    );
+    expect(result.englishPrompt).toContain(
+      "Improve readability, structure, and maintainability without changing behavior."
+    );
+    expect(result.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("keeps short selected fragments as fragment translations", () => {
+    const result = translatePrompt("آمن ونظيف");
+
+    expect(result.mode).toBe("general");
+    expect(result.output).toBe("Secure, clean, and maintainable");
+    expect(result.output).not.toContain("Review this code");
+    expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
   it("preserves business context inside coding prompts", () => {
     const result = translatePrompt(
       "ظبطلي صفحة الطلبات عشان العميل يعرف حالة الشحن والدفع"

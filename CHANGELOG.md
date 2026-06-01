@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.3
+
+- Improved deterministic handling for compound code-quality phrases such as "خلي الكود آمن ونظيف".
+- Full selected prompts now produce practical secure, clean, and maintainable coding-agent guidance.
+- Short selected fragments such as "آمن ونظيف" now stay as fragment translations, so replacing part of a longer prompt does not expand into a full task.
+
 ## v0.11.2
 
 - Fixed local macOS menu bar helper builds to prefer an available Apple Development signing identity instead of ad-hoc-only signing.

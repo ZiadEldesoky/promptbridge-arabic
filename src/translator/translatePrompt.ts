@@ -43,7 +43,9 @@ interface PromptSignals {
   friendlyOnly: boolean;
   business: boolean;
   generalRequest: boolean;
+  selectedFragment: boolean;
   codingIntent: boolean;
+  cleanCode: boolean;
   responsive: boolean;
   performance: boolean;
   implementation: boolean;
@@ -116,6 +118,10 @@ function inferMode(
 ): PromptMode {
   const glossaryMatches = findGlossaryMatches(text, glossary);
   const tags = new Set(glossaryMatches.flatMap((match) => match.tags));
+
+  if (signals.selectedFragment) {
+    return "general";
+  }
 
   if (signals.security || tags.has("security")) {
     return "security";
@@ -292,6 +298,10 @@ function buildTask(
 
   if (mode === "security") {
     if (signals.securityHardening) {
+      if (signals.cleanCode) {
+        return "Improve this code to make it secure, clean, and maintainable.";
+      }
+
       return "Improve this code to make it more secure.";
     }
 
@@ -328,7 +338,7 @@ function modeRequirements(
   }
 
   if (mode === "security" && signals.securityHardening) {
-    return [
+    const requirements = [
       "Identify the security risks that are relevant to the provided code or request.",
       "Make the smallest safe changes needed to improve security.",
       "Preserve existing behavior and public APIs unless a security fix requires otherwise.",
@@ -337,6 +347,16 @@ function modeRequirements(
       "Run the relevant build, test, or security check when available.",
       "Explain what was hardened and why."
     ];
+
+    if (signals.cleanCode) {
+      requirements.splice(
+        3,
+        0,
+        "Improve readability, structure, and maintainability without changing behavior."
+      );
+    }
+
+    return requirements;
   }
 
   return template.requirements ?? [];
@@ -511,6 +531,21 @@ function detectSignals(text: string): PromptSignals {
       "متعدلش",
       "من غير تعديل"
     ]);
+  const cleanCode = containsAny(normalized, [
+    "clean",
+    "clean code",
+    "maintainable",
+    "maintainability",
+    "نضيف",
+    "نظيف",
+    "نظيفة",
+    "نضيفه",
+    "نضف",
+    "نظف",
+    "رتب",
+    "منظم",
+    "قابل للصيانة"
+  ]);
   const friendly = containsAny(normalized, [
     "هاي",
     "هاى",
@@ -572,6 +607,9 @@ function detectSignals(text: string): PromptSignals {
     "أضيف",
     "ضيف",
     "زود",
+    "ظبط",
+    "ظبطلي",
+    "اضبط",
     "خلي",
     "اكتب",
     "حوّل",
@@ -660,6 +698,7 @@ function detectSignals(text: string): PromptSignals {
     responsive ||
     performance ||
     security ||
+    cleanCode ||
     simpleExplanation ||
     tests ||
     review ||
@@ -681,6 +720,17 @@ function detectSignals(text: string): PromptSignals {
       "ui",
       "ux"
     ]);
+  const selectedFragment =
+    hasArabicText(normalized) &&
+    !generalRequest &&
+    !implementation &&
+    !review &&
+    !tests &&
+    !simpleExplanation &&
+    !buildError &&
+    !error &&
+    !crash &&
+    wordCount(normalized) <= 5;
 
   return {
     hasArabic: hasArabicText(normalized),
@@ -688,7 +738,9 @@ function detectSignals(text: string): PromptSignals {
     friendlyOnly,
     business,
     generalRequest,
+    selectedFragment,
     codingIntent,
+    cleanCode,
     responsive,
     performance,
     implementation,
@@ -824,6 +876,10 @@ function containsAny(input: string, values: string[]): boolean {
 
 function hasArabicText(input: string): boolean {
   return /[\u0600-\u06ff]/.test(input);
+}
+
+function wordCount(input: string): number {
+  return input.trim().split(/\s+/).filter(Boolean).length;
 }
 
 function isFriendlyOnlyMessage(input: string): boolean {

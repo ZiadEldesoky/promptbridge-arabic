@@ -166,6 +166,26 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["general"]
   },
   {
+    arabic: "خلي الكود آمن ونظيف",
+    english: "make the code secure, clean, and maintainable",
+    tags: ["security", "refactor"]
+  },
+  {
+    arabic: "خلي الكود آمن ونضيف",
+    english: "make the code secure, clean, and maintainable",
+    tags: ["security", "refactor"]
+  },
+  {
+    arabic: "خلي الكود امن ونظيف",
+    english: "make the code secure, clean, and maintainable",
+    tags: ["security", "refactor"]
+  },
+  {
+    arabic: "خلي الكود امن ونضيف",
+    english: "make the code secure, clean, and maintainable",
+    tags: ["security", "refactor"]
+  },
+  {
     arabic: "خلي الكود آمن",
     english: "make the code secure",
     tags: ["security"]
@@ -214,6 +234,26 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     arabic: "الكود",
     english: "the code",
     tags: ["general"]
+  },
+  {
+    arabic: "آمن ونظيف",
+    english: "secure, clean, and maintainable",
+    tags: ["security", "refactor"]
+  },
+  {
+    arabic: "آمن ونضيف",
+    english: "secure, clean, and maintainable",
+    tags: ["security", "refactor"]
+  },
+  {
+    arabic: "امن ونظيف",
+    english: "secure, clean, and maintainable",
+    tags: ["security", "refactor"]
+  },
+  {
+    arabic: "امن ونضيف",
+    english: "secure, clean, and maintainable",
+    tags: ["security", "refactor"]
   },
   {
     arabic: "آمن",
@@ -451,13 +491,53 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["refactor"]
   },
   {
+    arabic: "نظف الكود",
+    english: "clean up the code",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "خلي الكود نضيف",
+    english: "make the code clean and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "خلي الكود نظيف",
+    english: "make the code clean and maintainable",
+    tags: ["refactor"]
+  },
+  {
     arabic: "رتب الكود",
     english: "organize the code",
     tags: ["refactor"]
   },
   {
     arabic: "الكود نضيف",
-    english: "clean code",
+    english: "clean and maintainable code",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "الكود نظيف",
+    english: "clean and maintainable code",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "نضيف",
+    english: "clean and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "نظيف",
+    english: "clean and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "نظيفة",
+    english: "clean and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "نضيفه",
+    english: "clean and maintainable",
     tags: ["refactor"]
   },
   {
