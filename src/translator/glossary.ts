@@ -166,6 +166,26 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["general"]
   },
   {
+    arabic: "خلي الكود منظم وآمن وقابل للصيانة",
+    english: "make the code organized, secure, and maintainable",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "خلي الكود منظم وامن وقابل للصيانة",
+    english: "make the code organized, secure, and maintainable",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "خلي الكود مرتب وآمن وقابل للصيانة",
+    english: "make the code organized, secure, and maintainable",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "خلي الكود مرتب وامن وقابل للصيانة",
+    english: "make the code organized, secure, and maintainable",
+    tags: ["refactor", "security"]
+  },
+  {
     arabic: "خلي الكود منظم وآمن",
     english: "make the code organized, maintainable, and secure",
     tags: ["refactor", "security"]
@@ -254,6 +274,26 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     arabic: "الكود",
     english: "the code",
     tags: ["general"]
+  },
+  {
+    arabic: "منظم وآمن وقابل للصيانة",
+    english: "organized, secure, and maintainable",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "منظم وامن وقابل للصيانة",
+    english: "organized, secure, and maintainable",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "مرتب وآمن وقابل للصيانة",
+    english: "organized, secure, and maintainable",
+    tags: ["refactor", "security"]
+  },
+  {
+    arabic: "مرتب وامن وقابل للصيانة",
+    english: "organized, secure, and maintainable",
+    tags: ["refactor", "security"]
   },
   {
     arabic: "منظم وآمن",
@@ -588,6 +628,16 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
   {
     arabic: "نضيفه",
     english: "clean and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "قابل للصيانة",
+    english: "maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "قابلة للصيانة",
+    english: "maintainable",
     tags: ["refactor"]
   },
   {

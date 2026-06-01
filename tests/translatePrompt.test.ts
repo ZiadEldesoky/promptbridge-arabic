@@ -120,6 +120,34 @@ describe("translatePrompt", () => {
     expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
   });
 
+  it("handles organized secure and maintainable code requests without Arabic leftovers", () => {
+    const direct = translatePrompt("خلي الكود منظم وآمن وقابل للصيانة", {
+      mode: "general"
+    });
+    const structured = translatePrompt("خلي الكود منظم وآمن وقابل للصيانة");
+
+    expect(direct.output).toBe(
+      "Make the code organized, secure, and maintainable"
+    );
+    expect(direct.output).not.toMatch(/[\u0600-\u06ff]/);
+    expect(structured.mode).toBe("security");
+    expect(structured.englishPrompt).toContain(
+      "Improve this code to make it secure, organized, and maintainable."
+    );
+    expect(structured.englishPrompt).toContain(
+      "Natural English interpretation: make the code organized, secure, and maintainable"
+    );
+    expect(structured.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("keeps maintainability fragments as direct fragment translations", () => {
+    const result = translatePrompt("قابل للصيانة");
+
+    expect(result.mode).toBe("general");
+    expect(result.output).toBe("Maintainable");
+    expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
   it("keeps organized-code fragments as fragment translations", () => {
     const result = translatePrompt("منظم");
 

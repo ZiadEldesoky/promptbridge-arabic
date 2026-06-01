@@ -293,6 +293,26 @@
       tags: ["general"]
     },
     {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0646\u0638\u0645 \u0648\u0622\u0645\u0646 \u0648\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "make the code organized, secure, and maintainable",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0646\u0638\u0645 \u0648\u0627\u0645\u0646 \u0648\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "make the code organized, secure, and maintainable",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0631\u062A\u0628 \u0648\u0622\u0645\u0646 \u0648\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "make the code organized, secure, and maintainable",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0631\u062A\u0628 \u0648\u0627\u0645\u0646 \u0648\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "make the code organized, secure, and maintainable",
+      tags: ["refactor", "security"]
+    },
+    {
       arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0646\u0638\u0645 \u0648\u0622\u0645\u0646",
       english: "make the code organized, maintainable, and secure",
       tags: ["refactor", "security"]
@@ -381,6 +401,26 @@
       arabic: "\u0627\u0644\u0643\u0648\u062F",
       english: "the code",
       tags: ["general"]
+    },
+    {
+      arabic: "\u0645\u0646\u0638\u0645 \u0648\u0622\u0645\u0646 \u0648\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "organized, secure, and maintainable",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u0645\u0646\u0638\u0645 \u0648\u0627\u0645\u0646 \u0648\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "organized, secure, and maintainable",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u0645\u0631\u062A\u0628 \u0648\u0622\u0645\u0646 \u0648\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "organized, secure, and maintainable",
+      tags: ["refactor", "security"]
+    },
+    {
+      arabic: "\u0645\u0631\u062A\u0628 \u0648\u0627\u0645\u0646 \u0648\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "organized, secure, and maintainable",
+      tags: ["refactor", "security"]
     },
     {
       arabic: "\u0645\u0646\u0638\u0645 \u0648\u0622\u0645\u0646",
@@ -715,6 +755,16 @@
     {
       arabic: "\u0646\u0636\u064A\u0641\u0647",
       english: "clean and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      english: "maintainable",
       tags: ["refactor"]
     },
     {

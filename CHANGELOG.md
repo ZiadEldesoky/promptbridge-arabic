@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.6
+
+- Added deterministic support for maintainability phrases such as "قابل للصيانة".
+- Full prompts such as "خلي الكود منظم وآمن وقابل للصيانة" now translate without Arabic leftovers.
+- Added tests for maintainability fragments and combined organized/security/maintainability prompts.
+
 ## v0.11.5
 
 - Added deterministic support for combined organized-and-secure prompts such as "خلي الكود منظم وآمن".
