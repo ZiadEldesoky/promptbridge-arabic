@@ -22,6 +22,7 @@ describe("translatePrompt", () => {
   it("keeps natural friendly messages natural instead of forcing a coding template", () => {
     expect(translatePrompt("هاي").output).toBe("Hi.");
     expect(translatePrompt("مرحبا").output).toBe("Hello.");
+    expect(translatePrompt("ازيك عامل ايه").output).toBe("How are you?");
   });
 
   it("uses a general fallback for Arabic that is not specifically a coding task", () => {
@@ -85,8 +86,55 @@ describe("translatePrompt", () => {
     expect(result.englishPrompt).toContain(
       "Review this code for potential security issues."
     );
+    expect(result.englishPrompt).toContain(
+      "Natural English interpretation: review the code and check for security issues"
+    );
     expect(result.englishPrompt).toContain("Injection vulnerabilities.");
     expect(result.englishPrompt).toContain("Do not make changes yet.");
+  });
+
+  it("turns short Arabic security hardening requests into actionable security prompts", () => {
+    const result = translatePrompt("خلي الكود آمن");
+
+    expect(result.mode).toBe("security");
+    expect(result.englishPrompt).toContain(
+      "Improve this code to make it more secure."
+    );
+    expect(result.englishPrompt).toContain(
+      "Natural English interpretation: make the code secure"
+    );
+    expect(result.englishPrompt).toContain(
+      "Make the smallest safe changes needed to improve security."
+    );
+    expect(result.englishPrompt).toContain(
+      "The risks addressed by the changes."
+    );
+    expect(result.englishPrompt).not.toContain("Do not make changes yet.");
+    expect(result.englishPrompt).not.toContain(
+      "Investigate and fix the reported issue."
+    );
+  });
+
+  it("turns short Arabic performance requests into targeted refactor prompts", () => {
+    const result = translatePrompt("خلي الكود أسرع");
+
+    expect(result.mode).toBe("refactor");
+    expect(result.englishPrompt).toContain(
+      "Improve this code's performance while preserving its behavior."
+    );
+    expect(result.englishPrompt).toContain(
+      "Natural English interpretation: make the code faster"
+    );
+    expect(result.englishPrompt).toContain(
+      "Identify the likely performance bottleneck before changing code."
+    );
+  });
+
+  it("keeps non-coding selected Arabic text as a natural English translation", () => {
+    const result = translatePrompt("تمام");
+
+    expect(result.mode).toBe("general");
+    expect(result.output).toBe("Okay.");
   });
 
   it("supports bilingual output", () => {

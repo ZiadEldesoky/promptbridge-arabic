@@ -2,6 +2,14 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.1
+
+- Improved deterministic Arabic intent handling for short selected prompts such as "خلي الكود آمن" so they generate actionable security hardening prompts instead of generic fix templates.
+- Added performance-oriented prompt handling for short requests such as "خلي الكود أسرع".
+- Expanded the Egyptian Arabic glossary with common friendly, security, performance, testing, review, UI, auth, and business phrases.
+- Improved glossary matching for Arabic conjunctions attached to phrases, such as "وخليه" and "والعميل".
+- Kept non-coding selected Arabic text as natural English translation when no coding intent is detected.
+
 ## v0.11.0
 
 - Added experimental Windows and Linux support for `promptbridge replace-selection` using platform copy/paste automation.

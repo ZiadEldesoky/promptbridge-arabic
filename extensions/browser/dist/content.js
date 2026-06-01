@@ -178,6 +178,36 @@
       tags: ["friendly"]
     },
     {
+      arabic: "\u0625\u0632\u064A\u0643 \u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
+      english: "How are you",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0627\u0632\u064A\u0643 \u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
+      english: "How are you",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0625\u0632\u064A\u0643",
+      english: "How are you",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0627\u0632\u064A\u0643",
+      english: "How are you",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
+      english: "How are you",
+      tags: ["friendly"]
+    },
+    {
+      arabic: "\u062A\u0645\u0627\u0645",
+      english: "Okay",
+      tags: ["friendly"]
+    },
+    {
       arabic: "\u0644\u0648 \u0633\u0645\u062D\u062A",
       english: "please",
       tags: ["general"]
@@ -213,6 +243,136 @@
       tags: ["general"]
     },
     {
+      arabic: "\u062E\u0644\u064A",
+      english: "make",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A\u0647",
+      english: "make it",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A\u0647\u0627",
+      english: "make it",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u062F\u0627",
+      english: "this",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u062F\u0647",
+      english: "this",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u062F\u064A",
+      english: "this",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0641\u064A",
+      english: "in",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0645\u0646 \u063A\u064A\u0631",
+      english: "without",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0628\u062F\u0648\u0646",
+      english: "without",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0645\u0627 \u062A\u063A\u064A\u0631\u0634",
+      english: "do not change",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0622\u0645\u0646",
+      english: "make the code secure",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0627\u0645\u0646",
+      english: "make the code secure",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A\u0647 \u0622\u0645\u0646",
+      english: "make it secure",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A\u0647 \u0627\u0645\u0646",
+      english: "make it secure",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A\u0647\u0627 \u0622\u0645\u0646\u0629",
+      english: "make it secure",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A\u0647\u0627 \u0627\u0645\u0646\u0629",
+      english: "make it secure",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u062D\u0633\u0646 \u0623\u0645\u0627\u0646 \u0627\u0644\u0643\u0648\u062F",
+      english: "improve the code security",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u062D\u0633\u0646 \u0627\u0645\u0627\u0646 \u0627\u0644\u0643\u0648\u062F",
+      english: "improve the code security",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u0627\u0639\u0645\u0644 \u062D\u0645\u0627\u064A\u0629 \u0644\u0644\u0643\u0648\u062F",
+      english: "add security protection to the code",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u0627\u0644\u0643\u0648\u062F",
+      english: "the code",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0622\u0645\u0646",
+      english: "secure",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u0627\u0645\u0646",
+      english: "secure",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u0623\u0645\u0627\u0646",
+      english: "security",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u0627\u0645\u0627\u0646",
+      english: "security",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u0635\u0644\u0627\u062D\u064A\u0627\u062A",
+      english: "permissions or authorization",
+      tags: ["security"]
+    },
+    {
+      arabic: "\u0627\u0644\u0635\u0644\u0627\u062D\u064A\u0627\u062A",
+      english: "the permissions or authorization rules",
+      tags: ["security"]
+    },
+    {
       arabic: "\u0636\u064A\u0641",
       english: "add",
       tags: ["general"]
@@ -243,8 +403,28 @@
       tags: ["fix", "refactor"]
     },
     {
+      arabic: "\u062D\u0644 \u0627\u0644\u0645\u0634\u0643\u0644\u0629",
+      english: "fix the issue",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0627\u0644\u0645\u0634\u0643\u0644\u0629",
+      english: "the issue",
+      tags: ["fix"]
+    },
+    {
       arabic: "\u0634\u0648\u0641 \u0627\u0644\u0645\u0634\u0643\u0644\u0629",
       english: "investigate the issue",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0634\u0648\u0641 \u0627\u0644\u0645\u0634\u0643\u0644\u0629 \u062F\u064A",
+      english: "investigate this issue",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0635\u0644\u062D",
+      english: "fix",
       tags: ["fix"]
     },
     {
@@ -283,8 +463,23 @@
       tags: ["design"]
     },
     {
+      arabic: "\u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
+      english: "the design",
+      tags: ["design"]
+    },
+    {
+      arabic: "\u0627\u0644\u062A\u0635\u0645\u064A\u0645",
+      english: "the design",
+      tags: ["design"]
+    },
+    {
       arabic: "\u062E\u0644\u064A\u0647\u0627 responsive",
       english: "make it responsive",
+      tags: ["responsive"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F responsive",
+      english: "make the code responsive",
       tags: ["responsive"]
     },
     {
@@ -298,6 +493,56 @@
       tags: ["responsive"]
     },
     {
+      arabic: "\u0631\u064A\u0633\u0628\u0648\u0646\u0633\u064A\u0641",
+      english: "responsive",
+      tags: ["responsive"]
+    },
+    {
+      arabic: "\u0645\u062A\u062C\u0627\u0648\u0628",
+      english: "responsive",
+      tags: ["responsive"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0623\u0633\u0631\u0639",
+      english: "make the code faster",
+      tags: ["refactor", "performance"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0627\u0633\u0631\u0639",
+      english: "make the code faster",
+      tags: ["refactor", "performance"]
+    },
+    {
+      arabic: "\u062D\u0633\u0646 \u0627\u0644\u0623\u062F\u0627\u0621",
+      english: "improve performance",
+      tags: ["refactor", "performance"]
+    },
+    {
+      arabic: "\u062D\u0633\u0646 \u0627\u0644\u0627\u062F\u0627\u0621",
+      english: "improve performance",
+      tags: ["refactor", "performance"]
+    },
+    {
+      arabic: "\u0627\u0644\u0623\u062F\u0627\u0621",
+      english: "performance",
+      tags: ["performance"]
+    },
+    {
+      arabic: "\u0627\u0644\u0627\u062F\u0627\u0621",
+      english: "performance",
+      tags: ["performance"]
+    },
+    {
+      arabic: "\u0628\u0637\u064A\u0621",
+      english: "slow",
+      tags: ["performance"]
+    },
+    {
+      arabic: "\u0628\u0637\u0626",
+      english: "slow",
+      tags: ["performance"]
+    },
+    {
       arabic: "\u0628\u064A\u0643\u0631\u0627\u0634",
       english: "crashes",
       tags: ["fix", "crash"]
@@ -305,6 +550,16 @@
     {
       arabic: "\u0645\u0634 \u0631\u0627\u0636\u064A \u064A\u0634\u062A\u063A\u0644",
       english: "does not work",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0645\u0634 \u0634\u063A\u0627\u0644",
+      english: "does not work",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0645\u0634 \u0628\u064A\u062D\u0641\u0638",
+      english: "does not save",
       tags: ["fix"]
     },
     {
@@ -323,6 +578,16 @@
       tags: ["refactor"]
     },
     {
+      arabic: "\u0631\u062A\u0628 \u0627\u0644\u0643\u0648\u062F",
+      english: "organize the code",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0627\u0644\u0643\u0648\u062F \u0646\u0636\u064A\u0641",
+      english: "clean code",
+      tags: ["refactor"]
+    },
+    {
       arabic: "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644\u0644\u0648\u062C\u064A\u0643",
       english: "without changing the business logic",
       tags: ["logic"]
@@ -338,9 +603,84 @@
       tags: ["review"]
     },
     {
+      arabic: "\u0631\u0627\u062C\u0639 \u0627\u0644\u0643\u0648\u062F \u0648\u0634\u0648\u0641 \u0641\u064A\u0647 \u0645\u0634\u0627\u0643\u0644 security",
+      english: "review the code and check for security issues",
+      tags: ["review", "security"]
+    },
+    {
+      arabic: "\u0631\u0627\u062C\u0639 \u0627\u0644\u0643\u0648\u062F \u0648\u0634\u0648\u0641 \u0641\u064A\u0647 \u0645\u0634\u0627\u0643\u0644",
+      english: "review the code and check for issues",
+      tags: ["review"]
+    },
+    {
+      arabic: "\u0631\u0627\u062C\u0639",
+      english: "review",
+      tags: ["review"]
+    },
+    {
+      arabic: "\u0634\u0648\u0641 \u0641\u064A\u0647 \u0645\u0634\u0627\u0643\u0644",
+      english: "check for issues",
+      tags: ["review"]
+    },
+    {
+      arabic: "\u0641\u064A\u0647 \u0645\u0634\u0627\u0643\u0644",
+      english: "there are issues",
+      tags: ["review"]
+    },
+    {
+      arabic: "\u0645\u0634\u0627\u0643\u0644",
+      english: "issues",
+      tags: ["review"]
+    },
+    {
+      arabic: "\u0627\u0641\u062D\u0635",
+      english: "inspect",
+      tags: ["review"]
+    },
+    {
       arabic: "\u0627\u0634\u0631\u062D\u0644\u064A",
       english: "explain to me",
       tags: ["explain"]
+    },
+    {
+      arabic: "\u0627\u0634\u0631\u062D\u0644\u064A \u0627\u0644\u0643\u0648\u062F",
+      english: "explain the code to me",
+      tags: ["explain"]
+    },
+    {
+      arabic: "\u0627\u0634\u0631\u062D \u0627\u0644\u0643\u0648\u062F",
+      english: "explain the code",
+      tags: ["explain"]
+    },
+    {
+      arabic: "\u0627\u0643\u062A\u0628 tests",
+      english: "write tests",
+      tags: ["tests"]
+    },
+    {
+      arabic: "\u0627\u0639\u0645\u0644 tests",
+      english: "write tests",
+      tags: ["tests"]
+    },
+    {
+      arabic: "\u0627\u0643\u062A\u0628 \u062A\u064A\u0633\u062A\u0627\u062A",
+      english: "write tests",
+      tags: ["tests"]
+    },
+    {
+      arabic: "\u0627\u0639\u0645\u0644 \u062A\u064A\u0633\u062A\u0627\u062A",
+      english: "write tests",
+      tags: ["tests"]
+    },
+    {
+      arabic: "\u062A\u064A\u0633\u062A\u0627\u062A",
+      english: "tests",
+      tags: ["tests"]
+    },
+    {
+      arabic: "\u0627\u062E\u062A\u0628\u0627\u0631\u0627\u062A",
+      english: "tests",
+      tags: ["tests"]
     },
     {
       arabic: "\u0631\u0633\u0627\u0644\u0629 \u062A\u0631\u062D\u064A\u0628 \u0628\u0633\u064A\u0637\u0629",
@@ -393,8 +733,18 @@
       tags: ["business"]
     },
     {
+      arabic: "\u0644\u0644\u0639\u0645\u064A\u0644",
+      english: "customer",
+      tags: ["business"]
+    },
+    {
       arabic: "\u0644\u0644\u0639\u0645\u0644\u0627\u0621",
       english: "for customers",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0644\u0644\u0639\u0645\u0644\u0627\u0621",
+      english: "customers",
       tags: ["business"]
     },
     {
@@ -410,6 +760,56 @@
     {
       arabic: "\u0635\u0641\u062D\u0629 \u0627\u0644\u0637\u0644\u0628\u0627\u062A",
       english: "orders page",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0635\u0641\u062D\u0629 login",
+      english: "login page",
+      tags: ["business", "auth"]
+    },
+    {
+      arabic: "\u0635\u0641\u062D\u0629 \u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644",
+      english: "login page",
+      tags: ["business", "auth"]
+    },
+    {
+      arabic: "\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644",
+      english: "login",
+      tags: ["business", "auth"]
+    },
+    {
+      arabic: "\u0635\u0641\u062D\u0629",
+      english: "page",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0632\u0631\u0627\u0631",
+      english: "button",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0641\u0648\u0631\u0645",
+      english: "form",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0648\u0627\u062C\u0647\u0629",
+      english: "UI",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0627\u0644\u0648\u0627\u062C\u0647\u0629",
+      english: "the UI",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0645\u0633\u062A\u062E\u062F\u0645",
+      english: "user",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u064A\u0648\u0632\u0631",
+      english: "user",
       tags: ["business"]
     },
     {
@@ -468,9 +868,10 @@
   }
   function findGlossaryMatches(input, glossary = egyptianDeveloperGlossary) {
     const normalizedInput = input.toLowerCase();
-    return glossary.filter(
-      (entry) => normalizedInput.includes(entry.arabic.toLowerCase())
+    const matches = glossary.filter(
+      (entry) => matchesPhrase(normalizedInput, entry.arabic.toLowerCase())
     );
+    return removeCoveredMatches(matches);
   }
   function normalizeDeveloperPhrases(input, glossary = egyptianDeveloperGlossary) {
     const seen = /* @__PURE__ */ new Set();
@@ -481,6 +882,38 @@
       seen.add(english);
       return true;
     });
+  }
+  function matchesPhrase(input, phrase) {
+    if (!phrase.trim()) {
+      return false;
+    }
+    return phrasePattern(phrase).test(input);
+  }
+  function removeCoveredMatches(matches) {
+    return matches.filter((entry) => {
+      const entryArabic = entry.arabic.toLowerCase();
+      return !matches.some((candidate) => {
+        const candidateArabic = candidate.arabic.toLowerCase();
+        return candidateArabic !== entryArabic && candidateArabic.length > entryArabic.length && candidateArabic.includes(entryArabic);
+      });
+    });
+  }
+  function replaceGlossaryPhrase(input, phrase, replacement) {
+    return input.replace(phrasePattern(phrase), (_match, prefix) => {
+      return `${prefix}${replacement}`;
+    });
+  }
+  function phrasePattern(phrase) {
+    const escapedPhrase = escapeRegExp(phrase.trim());
+    const boundary = "[^\\p{L}\\p{N}_]";
+    const arabicConjunction = "\u0648?";
+    return new RegExp(
+      `(^|${boundary})${arabicConjunction}${escapedPhrase}(?=$|${boundary})`,
+      "giu"
+    );
+  }
+  function escapeRegExp(input) {
+    return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
   // src/translator/modes.ts
@@ -719,8 +1152,12 @@
   }
   function buildStructuredPrompt(mode, signals, text, tokens, glossary) {
     const friendlyTranslation = translateFriendlyOnlyMessage(text);
+    const naturalTranslation = translateNaturalMessage(text, glossary);
     if (mode === "general" && signals.friendlyOnly && friendlyTranslation) {
       return { task: friendlyTranslation };
+    }
+    if (mode === "general" && !signals.codingIntent && naturalTranslation) {
+      return { task: naturalTranslation };
     }
     const template = modeTemplates[mode];
     const prompt = {
@@ -732,10 +1169,10 @@
       ]),
       focus: template.focus,
       constraints: unique([
-        ...template.constraints ?? [],
+        ...modeConstraints(mode, template, signals),
         ...signalConstraints(mode, signals)
       ]),
-      expectedOutput: expectedOutputForMode(mode),
+      expectedOutput: expectedOutputForMode(mode, signals),
       technicalContext: technicalContextFromTokens(tokens)
     };
     if (!prompt.requirements?.length) {
@@ -754,7 +1191,9 @@
   }
   function contextFromInput(text, signals, glossary) {
     const approximateRequest = approximateEnglishRequest(text, glossary);
-    const phraseContext = normalizeDeveloperPhrases(text, glossary);
+    const phraseContext = normalizeDeveloperPhrases(text, glossary).filter(
+      (phrase) => !approximateRequest?.includes(phrase)
+    );
     const context = approximateRequest ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext] : [...phraseContext];
     if (signals.buildError) {
       context.push("The user is likely reporting a build failure.");
@@ -797,10 +1236,16 @@
     if (mode === "refactor" && signals.responsive) {
       return "Refactor this code to make it responsive.";
     }
+    if (mode === "refactor" && signals.performance) {
+      return "Improve this code's performance while preserving its behavior.";
+    }
     if (mode === "explain" && signals.simpleExplanation) {
       return "Explain how this code works in simple language.";
     }
     if (mode === "security") {
+      if (signals.securityHardening) {
+        return "Improve this code to make it more secure.";
+      }
       return "Review this code for potential security issues.";
     }
     return template.task;
@@ -815,7 +1260,34 @@
         "Explain what was changed and why."
       ];
     }
+    if (mode === "refactor" && signals.performance) {
+      return [
+        "Identify the likely performance bottleneck before changing code.",
+        "Make targeted improvements that preserve existing behavior.",
+        "Avoid broad rewrites unless they are necessary for the performance fix.",
+        "Keep public APIs stable unless a change is required.",
+        "Run the relevant build, test, or profiling command when available.",
+        "Explain what improved and how it was verified."
+      ];
+    }
+    if (mode === "security" && signals.securityHardening) {
+      return [
+        "Identify the security risks that are relevant to the provided code or request.",
+        "Make the smallest safe changes needed to improve security.",
+        "Preserve existing behavior and public APIs unless a security fix requires otherwise.",
+        "Avoid broad rewrites or unrelated refactors.",
+        "Add or update tests if the security change affects behavior.",
+        "Run the relevant build, test, or security check when available.",
+        "Explain what was hardened and why."
+      ];
+    }
     return template.requirements ?? [];
+  }
+  function modeConstraints(mode, template, signals) {
+    if (mode === "security" && signals.securityHardening) {
+      return [];
+    }
+    return template.constraints ?? [];
   }
   function signalRequirements(mode, signals) {
     const requirements = [];
@@ -845,6 +1317,9 @@
         "Preserve any business entities, workflows, and product constraints mentioned by the user."
       );
     }
+    if (mode === "general" && signals.implementation) {
+      requirements.push("Express the request as a concise implementation prompt.");
+    }
     return requirements;
   }
   function signalConstraints(mode, signals) {
@@ -857,11 +1332,18 @@
     }
     return constraints;
   }
-  function expectedOutputForMode(mode) {
+  function expectedOutputForMode(mode, signals) {
     if (mode === "general") {
       return [
         "A natural English version of the request.",
         "A concise actionable prompt when the request is product or implementation related."
+      ];
+    }
+    if (mode === "security" && signals.securityHardening) {
+      return [
+        "A concise summary of the security changes.",
+        "The risks addressed by the changes.",
+        "What was verified."
       ];
     }
     if (mode === "review" || mode === "security") {
@@ -882,78 +1364,224 @@
   }
   function detectSignals(text) {
     const normalized = text.toLowerCase();
+    const security = containsAny(normalized, [
+      "security",
+      "secure",
+      "secure it",
+      "secure the code",
+      "make it secure",
+      "make the code secure",
+      "harden",
+      "hardening",
+      "\u062D\u0645\u0627\u064A\u0629",
+      "\u0623\u0645\u0627\u0646",
+      "\u0627\u0645\u0627\u0646",
+      "\u0623\u0645\u0646",
+      "\u0627\u0645\u0646",
+      "\u0622\u0645\u0646",
+      "\u0622\u0645\u0646\u0629",
+      "\u0627\u0645\u0646\u0629",
+      "\u062B\u063A\u0631\u0629",
+      "\u062B\u063A\u0631\u0627\u062A",
+      "vulnerability",
+      "vulnerabilities"
+    ]);
+    const securityHardening = security && containsAny(normalized, [
+      "\u062E\u0644\u064A",
+      "\u062E\u0644\u0651\u064A",
+      "\u062E\u0644\u064A\u0647",
+      "\u062E\u0644\u064A\u0647\u0627",
+      "\u0627\u062C\u0639\u0644",
+      "\u0627\u0639\u0645\u0644",
+      "\u062D\u0633\u0646",
+      "\u062D\u0633\u0651\u0646",
+      "\u0632\u0648\u062F",
+      "\u0636\u064A\u0641",
+      "\u0635\u0644\u062D",
+      "make",
+      "improve",
+      "secure it",
+      "secure the code",
+      "make it secure",
+      "make this secure",
+      "make the code secure",
+      "harden"
+    ]) && !containsAny(normalized, [
+      "\u0631\u0627\u062C\u0639 \u0628\u0633",
+      "review only",
+      "do not change",
+      "without changing",
+      "\u0645\u062A\u0639\u062F\u0644\u0634",
+      "\u0645\u0646 \u063A\u064A\u0631 \u062A\u0639\u062F\u064A\u0644"
+    ]);
+    const friendly = containsAny(normalized, [
+      "\u0647\u0627\u064A",
+      "\u0647\u0627\u0649",
+      "\u0645\u0631\u062D\u0628\u0627",
+      "\u0623\u0647\u0644\u0627",
+      "\u0627\u0647\u0644\u0627",
+      "\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064A\u0643\u0645",
+      "\u0627\u0632\u064A\u0643",
+      "\u0625\u0632\u064A\u0643",
+      "\u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
+      "\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631",
+      "\u0645\u0633\u0627\u0621 \u0627\u0644\u062E\u064A\u0631",
+      "\u0634\u0643\u0631\u0627"
+    ]);
+    const friendlyOnly = isFriendlyOnlyMessage(normalized);
+    const business = containsAny(normalized, [
+      "business",
+      "product",
+      "\u0628\u0632\u0646\u0633",
+      "\u0628\u064A\u0632\u0646\u0633",
+      "\u0645\u0646\u062A\u062C",
+      "\u0645\u0634\u0631\u0648\u0639",
+      "\u0639\u0645\u064A\u0644",
+      "\u0639\u0645\u0644\u0627\u0621",
+      "\u0637\u0644\u0628\u0627\u062A",
+      "\u0627\u0648\u0631\u062F\u0631",
+      "\u0623\u0648\u0631\u062F\u0631",
+      "order",
+      "orders",
+      "\u0645\u0628\u064A\u0639\u0627\u062A",
+      "sales",
+      "\u0645\u062E\u0632\u0648\u0646",
+      "inventory",
+      "\u0641\u0627\u062A\u0648\u0631\u0629",
+      "invoice",
+      "checkout",
+      "\u062F\u0641\u0639",
+      "payment",
+      "\u0634\u062D\u0646",
+      "shipping",
+      "store",
+      "\u0645\u062A\u062C\u0631",
+      "\u0644\u0648\u062D\u0629 \u062A\u062D\u0643\u0645",
+      "dashboard",
+      "\u0635\u0641\u062D\u0629",
+      "\u0632\u0631\u0627\u0631",
+      "\u0641\u0648\u0631\u0645",
+      "\u0648\u0627\u062C\u0647\u0629",
+      "login",
+      "auth"
+    ]);
+    const generalRequest = containsAny(normalized, [
+      "\u0639\u0627\u064A\u0632",
+      "\u0645\u062D\u062A\u0627\u062C",
+      "\u0644\u0648 \u0633\u0645\u062D\u062A",
+      "\u0627\u0639\u0645\u0644",
+      "\u0623\u0632\u0648\u062F",
+      "\u0627\u0632\u0648\u062F",
+      "\u0623\u0636\u064A\u0641",
+      "\u0636\u064A\u0641",
+      "\u0632\u0648\u062F",
+      "\u062E\u0644\u064A",
+      "\u0627\u0643\u062A\u0628",
+      "\u062D\u0648\u0651\u0644",
+      "\u062D\u0648\u0644",
+      "translate",
+      "convert"
+    ]);
+    const responsive = containsAny(normalized, [
+      "responsive",
+      "\u0631\u064A\u0633\u0628\u0648\u0646\u0633\u064A\u0641",
+      "\u0645\u062A\u062C\u0627\u0648\u0628",
+      "\u0627\u0644\u0645\u0648\u0628\u0627\u064A\u0644",
+      "\u0645\u0648\u0628\u0627\u064A\u0644",
+      "mobile"
+    ]);
+    const performance = containsAny(normalized, [
+      "performance",
+      "faster",
+      "slow",
+      "optimize",
+      "\u062A\u062D\u0633\u064A\u0646 \u0627\u0644\u0623\u062F\u0627\u0621",
+      "\u062A\u062D\u0633\u064A\u0646 \u0627\u0644\u0627\u062F\u0627\u0621",
+      "\u0627\u0644\u0623\u062F\u0627\u0621",
+      "\u0627\u0644\u0627\u062F\u0627\u0621",
+      "\u0623\u0633\u0631\u0639",
+      "\u0627\u0633\u0631\u0639",
+      "\u0628\u0637\u064A\u0621",
+      "\u0628\u0637\u0626"
+    ]);
+    const simpleExplanation = containsAny(normalized, [
+      "\u0627\u0634\u0631\u062D",
+      "\u0627\u0634\u0631\u062D\u0644\u064A",
+      "\u0628\u0628\u0633\u0627\u0637\u0629",
+      "explain",
+      "simple"
+    ]);
+    const tests = containsAny(normalized, [
+      "test",
+      "tests",
+      "\u0627\u062E\u062A\u0628\u0627\u0631",
+      "\u0627\u062E\u062A\u0628\u0627\u0631\u0627\u062A",
+      "\u062A\u064A\u0633\u062A",
+      "\u062A\u064A\u0633\u062A\u0627\u062A",
+      "vitest",
+      "jest"
+    ]);
+    const review = containsAny(normalized, [
+      "\u0631\u0627\u062C\u0639",
+      "\u0627\u0641\u062D\u0635",
+      "review",
+      "code review",
+      "\u0634\u0648\u0641 \u0641\u064A\u0647 \u0645\u0634\u0627\u0643\u0644"
+    ]);
+    const buildError = containsAny(normalized, [
+      "build error",
+      "\u0628\u064A\u0644\u062F error",
+      "\u062E\u0637\u0623 build",
+      "\u0645\u0634\u0643\u0644\u0629 build",
+      "npm run build"
+    ]);
+    const error = containsAny(normalized, [
+      "error",
+      "bug",
+      "\u0645\u0634\u0643\u0644\u0629",
+      "\u063A\u0644\u0637",
+      "\u0645\u0634 \u0634\u063A\u0627\u0644",
+      "\u0645\u0634 \u0631\u0627\u0636\u064A \u064A\u0634\u062A\u063A\u0644",
+      "\u0628\u064A\u0637\u0644\u0639"
+    ]);
+    const crash = containsAny(normalized, ["crash", "\u0628\u064A\u0643\u0631\u0627\u0634", "\u0628\u064A\u0647\u0646\u062C", "hang"]);
+    const implementation = containsAny(normalized, [
+      "\u0646\u0641\u0630",
+      "\u0637\u0628\u0651\u0642",
+      "\u0637\u0628\u0642",
+      "\u0627\u0628\u0646\u064A",
+      "\u0627\u0639\u0645\u0644",
+      "\u0636\u064A\u0641",
+      "\u0632\u0648\u062F",
+      "implement",
+      "build",
+      "add",
+      "create"
+    ]);
+    const codingIntent = business || responsive || performance || security || simpleExplanation || tests || review || buildError || error || crash || implementation || containsAny(normalized, [
+      "\u0627\u0644\u0643\u0648\u062F",
+      "\u0643\u0648\u062F",
+      "code",
+      "api",
+      "function",
+      "component",
+      "database",
+      "db",
+      "frontend",
+      "backend",
+      "ui",
+      "ux"
+    ]);
     return {
       hasArabic: hasArabicText(normalized),
-      friendly: containsAny(normalized, [
-        "\u0647\u0627\u064A",
-        "\u0647\u0627\u0649",
-        "\u0645\u0631\u062D\u0628\u0627",
-        "\u0623\u0647\u0644\u0627",
-        "\u0627\u0647\u0644\u0627",
-        "\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064A\u0643\u0645",
-        "\u0627\u0632\u064A\u0643",
-        "\u0625\u0632\u064A\u0643",
-        "\u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
-        "\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631",
-        "\u0645\u0633\u0627\u0621 \u0627\u0644\u062E\u064A\u0631",
-        "\u0634\u0643\u0631\u0627"
-      ]),
-      friendlyOnly: isFriendlyOnlyMessage(normalized),
-      business: containsAny(normalized, [
-        "business",
-        "product",
-        "\u0628\u0632\u0646\u0633",
-        "\u0628\u064A\u0632\u0646\u0633",
-        "\u0645\u0646\u062A\u062C",
-        "\u0645\u0634\u0631\u0648\u0639",
-        "\u0639\u0645\u064A\u0644",
-        "\u0639\u0645\u0644\u0627\u0621",
-        "\u0637\u0644\u0628\u0627\u062A",
-        "\u0627\u0648\u0631\u062F\u0631",
-        "\u0623\u0648\u0631\u062F\u0631",
-        "order",
-        "orders",
-        "\u0645\u0628\u064A\u0639\u0627\u062A",
-        "sales",
-        "\u0645\u062E\u0632\u0648\u0646",
-        "inventory",
-        "\u0641\u0627\u062A\u0648\u0631\u0629",
-        "invoice",
-        "checkout",
-        "\u062F\u0641\u0639",
-        "payment",
-        "\u0634\u062D\u0646",
-        "shipping",
-        "store",
-        "\u0645\u062A\u062C\u0631",
-        "\u0644\u0648\u062D\u0629 \u062A\u062D\u0643\u0645",
-        "dashboard"
-      ]),
-      generalRequest: containsAny(normalized, [
-        "\u0639\u0627\u064A\u0632",
-        "\u0645\u062D\u062A\u0627\u062C",
-        "\u0644\u0648 \u0633\u0645\u062D\u062A",
-        "\u0627\u0639\u0645\u0644",
-        "\u0623\u0632\u0648\u062F",
-        "\u0627\u0632\u0648\u062F",
-        "\u0623\u0636\u064A\u0641",
-        "\u0636\u064A\u0641",
-        "\u0632\u0648\u062F",
-        "\u062E\u0644\u064A",
-        "\u0627\u0643\u062A\u0628",
-        "\u062D\u0648\u0651\u0644",
-        "\u062D\u0648\u0644",
-        "translate",
-        "convert"
-      ]),
-      responsive: containsAny(normalized, [
-        "responsive",
-        "\u0631\u064A\u0633\u0628\u0648\u0646\u0633\u064A\u0641",
-        "\u0645\u062A\u062C\u0627\u0648\u0628",
-        "\u0627\u0644\u0645\u0648\u0628\u0627\u064A\u0644",
-        "\u0645\u0648\u0628\u0627\u064A\u0644",
-        "mobile"
-      ]),
+      friendly,
+      friendlyOnly,
+      business,
+      generalRequest,
+      codingIntent,
+      responsive,
+      performance,
+      implementation,
       preserveDesign: containsAny(normalized, [
         "\u0628\u062F\u0648\u0646 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0641\u064A \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
         "\u0628\u062F\u0648\u0646 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
@@ -987,58 +1615,18 @@
         "smallest safe",
         "safe change"
       ]),
-      buildError: containsAny(normalized, [
-        "build error",
-        "\u0628\u064A\u0644\u062F error",
-        "\u062E\u0637\u0623 build",
-        "\u0645\u0634\u0643\u0644\u0629 build",
-        "npm run build"
-      ]),
-      error: containsAny(normalized, [
-        "error",
-        "bug",
-        "\u0645\u0634\u0643\u0644\u0629",
-        "\u063A\u0644\u0637",
-        "\u0645\u0634 \u0634\u063A\u0627\u0644",
-        "\u0645\u0634 \u0631\u0627\u0636\u064A \u064A\u0634\u062A\u063A\u0644",
-        "\u0628\u064A\u0637\u0644\u0639"
-      ]),
-      crash: containsAny(normalized, ["crash", "\u0628\u064A\u0643\u0631\u0627\u0634", "\u0628\u064A\u0647\u0646\u062C", "hang"]),
+      buildError,
+      error,
+      crash,
       saveReload: containsAny(normalized, [
         "save",
         "\u062D\u0641\u0638"
       ]) && containsAny(normalized, ["reload", "refresh", "\u0631\u064A\u0644\u0648\u062F", "\u0628\u062A\u0639\u0645\u0644 reload"]),
-      security: containsAny(normalized, [
-        "security",
-        "secure",
-        "\u062D\u0645\u0627\u064A\u0629",
-        "\u0623\u0645\u0627\u0646",
-        "\u0627\u0645\u0627\u0646",
-        "\u062B\u063A\u0631\u0629",
-        "vulnerability"
-      ]),
-      simpleExplanation: containsAny(normalized, [
-        "\u0627\u0634\u0631\u062D",
-        "\u0627\u0634\u0631\u062D\u0644\u064A",
-        "\u0628\u0628\u0633\u0627\u0637\u0629",
-        "explain",
-        "simple"
-      ]),
-      tests: containsAny(normalized, [
-        "test",
-        "tests",
-        "\u0627\u062E\u062A\u0628\u0627\u0631",
-        "\u0627\u062E\u062A\u0628\u0627\u0631\u0627\u062A",
-        "\u062A\u064A\u0633\u062A",
-        "vitest",
-        "jest"
-      ]),
-      review: containsAny(normalized, [
-        "\u0631\u0627\u062C\u0639",
-        "review",
-        "code review",
-        "\u0634\u0648\u0641 \u0641\u064A\u0647 \u0645\u0634\u0627\u0643\u0644"
-      ]),
+      security,
+      securityHardening,
+      simpleExplanation,
+      tests,
+      review,
       noDeletion: containsAny(normalized, [
         "\u0645\u062A\u062D\u0630\u0641\u0634",
         "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u062D\u0630\u0641",
@@ -1066,6 +1654,9 @@
       security: "\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0631\u0627\u062C\u0639\u0629 \u0627\u0644\u0643\u0648\u062F \u0645\u0646 \u0646\u0627\u062D\u064A\u0629 security \u0648\u0625\u062E\u0631\u0627\u062C findings \u0648\u0627\u0636\u062D\u0629 \u0628\u0627\u0644\u062E\u0637\u0648\u0631\u0629 \u0648\u0627\u0644\u062D\u0644\u0648\u0644 \u0627\u0644\u0645\u0642\u062A\u0631\u062D\u0629."
     };
     const details = [summaries[mode]];
+    if (mode === "security" && signals.securityHardening) {
+      details[0] = "\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u062A\u062D\u0633\u064A\u0646 \u0623\u0645\u0627\u0646 \u0627\u0644\u0643\u0648\u062F \u0628\u0623\u0642\u0644 \u062A\u063A\u064A\u064A\u0631\u0627\u062A \u0622\u0645\u0646\u0629 \u0645\u0645\u0643\u0646\u0629\u060C \u0645\u0639 \u0627\u0644\u062D\u0641\u0627\u0638 \u0639\u0644\u0649 \u0627\u0644\u0633\u0644\u0648\u0643 \u0627\u0644\u062D\u0627\u0644\u064A \u0648\u062A\u0634\u063A\u064A\u0644 \u0627\u0644\u0627\u062E\u062A\u0628\u0627\u0631 \u0627\u0644\u0645\u0646\u0627\u0633\u0628.";
+    }
     if (signals.responsive) {
       details.push("\u0643\u0645\u0627\u0646 \u0644\u0627\u0632\u0645 \u0646\u062E\u0644\u064A \u0627\u0644\u0648\u0627\u062C\u0647\u0629 responsive.");
     }
@@ -1109,7 +1700,13 @@
       "\u0627\u0644\u0633\u0644\u0627\u0645 \u0639\u0644\u064A\u0643\u0645",
       "\u0635\u0628\u0627\u062D \u0627\u0644\u062E\u064A\u0631",
       "\u0645\u0633\u0627\u0621 \u0627\u0644\u062E\u064A\u0631",
-      "\u0634\u0643\u0631\u0627"
+      "\u0634\u0643\u0631\u0627",
+      "\u0627\u0632\u064A\u0643",
+      "\u0625\u0632\u064A\u0643",
+      "\u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
+      "\u0625\u0632\u064A\u0643 \u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
+      "\u0627\u0632\u064A\u0643 \u0639\u0627\u0645\u0644 \u0627\u064A\u0647",
+      "\u062A\u0645\u0627\u0645"
     ];
     return friendlyPhrases.includes(normalized);
   }
@@ -1129,6 +1726,14 @@
         return "Good evening.";
       case "\u0634\u0643\u0631\u0627":
         return "Thank you.";
+      case "\u0627\u0632\u064A\u0643":
+      case "\u0625\u0632\u064A\u0643":
+      case "\u0639\u0627\u0645\u0644 \u0627\u064A\u0647":
+      case "\u0625\u0632\u064A\u0643 \u0639\u0627\u0645\u0644 \u0627\u064A\u0647":
+      case "\u0627\u0632\u064A\u0643 \u0639\u0627\u0645\u0644 \u0627\u064A\u0647":
+        return "How are you?";
+      case "\u062A\u0645\u0627\u0645":
+        return "Okay.";
       default:
         return void 0;
     }
@@ -1148,13 +1753,27 @@
     }
     let translated = text.trim();
     for (const entry of matches) {
-      translated = replaceAllLiteral(translated, entry.arabic, entry.english);
+      translated = replaceGlossaryPhrase(translated, entry.arabic, entry.english);
     }
     translated = translated.replace(/[،؛]/g, ",").replace(/\s+/g, " ").trim();
     return translated === text.trim() ? void 0 : translated;
   }
-  function replaceAllLiteral(input, search, replacement) {
-    return input.split(search).join(replacement);
+  function translateNaturalMessage(text, glossary) {
+    const translated = approximateEnglishRequest(text, glossary);
+    if (!translated) {
+      return void 0;
+    }
+    return sentenceCase(cleanApproximateTranslation(translated));
+  }
+  function cleanApproximateTranslation(input) {
+    return input.replace(/\s+,/g, ",").replace(/\s+\./g, ".").replace(/\s+/g, " ").trim();
+  }
+  function sentenceCase(input) {
+    const trimmed = input.trim();
+    if (!trimmed) {
+      return trimmed;
+    }
+    return `${trimmed.charAt(0).toUpperCase()}${trimmed.slice(1)}`;
   }
   function unique(values) {
     return values.filter((value, index, array) => array.indexOf(value) === index);

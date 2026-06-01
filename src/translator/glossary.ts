@@ -51,6 +51,36 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["friendly"]
   },
   {
+    arabic: "إزيك عامل ايه",
+    english: "How are you",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "ازيك عامل ايه",
+    english: "How are you",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "إزيك",
+    english: "How are you",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "ازيك",
+    english: "How are you",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "عامل ايه",
+    english: "How are you",
+    tags: ["friendly"]
+  },
+  {
+    arabic: "تمام",
+    english: "Okay",
+    tags: ["friendly"]
+  },
+  {
     arabic: "لو سمحت",
     english: "please",
     tags: ["general"]
@@ -86,6 +116,136 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["general"]
   },
   {
+    arabic: "خلي",
+    english: "make",
+    tags: ["general"]
+  },
+  {
+    arabic: "خليه",
+    english: "make it",
+    tags: ["general"]
+  },
+  {
+    arabic: "خليها",
+    english: "make it",
+    tags: ["general"]
+  },
+  {
+    arabic: "دا",
+    english: "this",
+    tags: ["general"]
+  },
+  {
+    arabic: "ده",
+    english: "this",
+    tags: ["general"]
+  },
+  {
+    arabic: "دي",
+    english: "this",
+    tags: ["general"]
+  },
+  {
+    arabic: "في",
+    english: "in",
+    tags: ["general"]
+  },
+  {
+    arabic: "من غير",
+    english: "without",
+    tags: ["general"]
+  },
+  {
+    arabic: "بدون",
+    english: "without",
+    tags: ["general"]
+  },
+  {
+    arabic: "ما تغيرش",
+    english: "do not change",
+    tags: ["general"]
+  },
+  {
+    arabic: "خلي الكود آمن",
+    english: "make the code secure",
+    tags: ["security"]
+  },
+  {
+    arabic: "خلي الكود امن",
+    english: "make the code secure",
+    tags: ["security"]
+  },
+  {
+    arabic: "خليه آمن",
+    english: "make it secure",
+    tags: ["security"]
+  },
+  {
+    arabic: "خليه امن",
+    english: "make it secure",
+    tags: ["security"]
+  },
+  {
+    arabic: "خليها آمنة",
+    english: "make it secure",
+    tags: ["security"]
+  },
+  {
+    arabic: "خليها امنة",
+    english: "make it secure",
+    tags: ["security"]
+  },
+  {
+    arabic: "حسن أمان الكود",
+    english: "improve the code security",
+    tags: ["security"]
+  },
+  {
+    arabic: "حسن امان الكود",
+    english: "improve the code security",
+    tags: ["security"]
+  },
+  {
+    arabic: "اعمل حماية للكود",
+    english: "add security protection to the code",
+    tags: ["security"]
+  },
+  {
+    arabic: "الكود",
+    english: "the code",
+    tags: ["general"]
+  },
+  {
+    arabic: "آمن",
+    english: "secure",
+    tags: ["security"]
+  },
+  {
+    arabic: "امن",
+    english: "secure",
+    tags: ["security"]
+  },
+  {
+    arabic: "أمان",
+    english: "security",
+    tags: ["security"]
+  },
+  {
+    arabic: "امان",
+    english: "security",
+    tags: ["security"]
+  },
+  {
+    arabic: "صلاحيات",
+    english: "permissions or authorization",
+    tags: ["security"]
+  },
+  {
+    arabic: "الصلاحيات",
+    english: "the permissions or authorization rules",
+    tags: ["security"]
+  },
+  {
     arabic: "ضيف",
     english: "add",
     tags: ["general"]
@@ -116,8 +276,28 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["fix", "refactor"]
   },
   {
+    arabic: "حل المشكلة",
+    english: "fix the issue",
+    tags: ["fix"]
+  },
+  {
+    arabic: "المشكلة",
+    english: "the issue",
+    tags: ["fix"]
+  },
+  {
     arabic: "شوف المشكلة",
     english: "investigate the issue",
+    tags: ["fix"]
+  },
+  {
+    arabic: "شوف المشكلة دي",
+    english: "investigate this issue",
+    tags: ["fix"]
+  },
+  {
+    arabic: "صلح",
+    english: "fix",
     tags: ["fix"]
   },
   {
@@ -156,8 +336,23 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["design"]
   },
   {
+    arabic: "الديزاين",
+    english: "the design",
+    tags: ["design"]
+  },
+  {
+    arabic: "التصميم",
+    english: "the design",
+    tags: ["design"]
+  },
+  {
     arabic: "خليها responsive",
     english: "make it responsive",
+    tags: ["responsive"]
+  },
+  {
+    arabic: "خلي الكود responsive",
+    english: "make the code responsive",
     tags: ["responsive"]
   },
   {
@@ -171,6 +366,56 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["responsive"]
   },
   {
+    arabic: "ريسبونسيف",
+    english: "responsive",
+    tags: ["responsive"]
+  },
+  {
+    arabic: "متجاوب",
+    english: "responsive",
+    tags: ["responsive"]
+  },
+  {
+    arabic: "خلي الكود أسرع",
+    english: "make the code faster",
+    tags: ["refactor", "performance"]
+  },
+  {
+    arabic: "خلي الكود اسرع",
+    english: "make the code faster",
+    tags: ["refactor", "performance"]
+  },
+  {
+    arabic: "حسن الأداء",
+    english: "improve performance",
+    tags: ["refactor", "performance"]
+  },
+  {
+    arabic: "حسن الاداء",
+    english: "improve performance",
+    tags: ["refactor", "performance"]
+  },
+  {
+    arabic: "الأداء",
+    english: "performance",
+    tags: ["performance"]
+  },
+  {
+    arabic: "الاداء",
+    english: "performance",
+    tags: ["performance"]
+  },
+  {
+    arabic: "بطيء",
+    english: "slow",
+    tags: ["performance"]
+  },
+  {
+    arabic: "بطئ",
+    english: "slow",
+    tags: ["performance"]
+  },
+  {
     arabic: "بيكراش",
     english: "crashes",
     tags: ["fix", "crash"]
@@ -178,6 +423,16 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
   {
     arabic: "مش راضي يشتغل",
     english: "does not work",
+    tags: ["fix"]
+  },
+  {
+    arabic: "مش شغال",
+    english: "does not work",
+    tags: ["fix"]
+  },
+  {
+    arabic: "مش بيحفظ",
+    english: "does not save",
     tags: ["fix"]
   },
   {
@@ -196,6 +451,16 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["refactor"]
   },
   {
+    arabic: "رتب الكود",
+    english: "organize the code",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "الكود نضيف",
+    english: "clean code",
+    tags: ["refactor"]
+  },
+  {
     arabic: "من غير ما تغير اللوجيك",
     english: "without changing the business logic",
     tags: ["logic"]
@@ -211,9 +476,84 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["review"]
   },
   {
+    arabic: "راجع الكود وشوف فيه مشاكل security",
+    english: "review the code and check for security issues",
+    tags: ["review", "security"]
+  },
+  {
+    arabic: "راجع الكود وشوف فيه مشاكل",
+    english: "review the code and check for issues",
+    tags: ["review"]
+  },
+  {
+    arabic: "راجع",
+    english: "review",
+    tags: ["review"]
+  },
+  {
+    arabic: "شوف فيه مشاكل",
+    english: "check for issues",
+    tags: ["review"]
+  },
+  {
+    arabic: "فيه مشاكل",
+    english: "there are issues",
+    tags: ["review"]
+  },
+  {
+    arabic: "مشاكل",
+    english: "issues",
+    tags: ["review"]
+  },
+  {
+    arabic: "افحص",
+    english: "inspect",
+    tags: ["review"]
+  },
+  {
     arabic: "اشرحلي",
     english: "explain to me",
     tags: ["explain"]
+  },
+  {
+    arabic: "اشرحلي الكود",
+    english: "explain the code to me",
+    tags: ["explain"]
+  },
+  {
+    arabic: "اشرح الكود",
+    english: "explain the code",
+    tags: ["explain"]
+  },
+  {
+    arabic: "اكتب tests",
+    english: "write tests",
+    tags: ["tests"]
+  },
+  {
+    arabic: "اعمل tests",
+    english: "write tests",
+    tags: ["tests"]
+  },
+  {
+    arabic: "اكتب تيستات",
+    english: "write tests",
+    tags: ["tests"]
+  },
+  {
+    arabic: "اعمل تيستات",
+    english: "write tests",
+    tags: ["tests"]
+  },
+  {
+    arabic: "تيستات",
+    english: "tests",
+    tags: ["tests"]
+  },
+  {
+    arabic: "اختبارات",
+    english: "tests",
+    tags: ["tests"]
   },
   {
     arabic: "رسالة ترحيب بسيطة",
@@ -266,8 +606,18 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["business"]
   },
   {
+    arabic: "للعميل",
+    english: "customer",
+    tags: ["business"]
+  },
+  {
     arabic: "للعملاء",
     english: "for customers",
+    tags: ["business"]
+  },
+  {
+    arabic: "للعملاء",
+    english: "customers",
     tags: ["business"]
   },
   {
@@ -283,6 +633,56 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
   {
     arabic: "صفحة الطلبات",
     english: "orders page",
+    tags: ["business"]
+  },
+  {
+    arabic: "صفحة login",
+    english: "login page",
+    tags: ["business", "auth"]
+  },
+  {
+    arabic: "صفحة تسجيل الدخول",
+    english: "login page",
+    tags: ["business", "auth"]
+  },
+  {
+    arabic: "تسجيل الدخول",
+    english: "login",
+    tags: ["business", "auth"]
+  },
+  {
+    arabic: "صفحة",
+    english: "page",
+    tags: ["business"]
+  },
+  {
+    arabic: "زرار",
+    english: "button",
+    tags: ["business"]
+  },
+  {
+    arabic: "فورم",
+    english: "form",
+    tags: ["business"]
+  },
+  {
+    arabic: "واجهة",
+    english: "UI",
+    tags: ["business"]
+  },
+  {
+    arabic: "الواجهة",
+    english: "the UI",
+    tags: ["business"]
+  },
+  {
+    arabic: "مستخدم",
+    english: "user",
+    tags: ["business"]
+  },
+  {
+    arabic: "يوزر",
+    english: "user",
     tags: ["business"]
   },
   {
@@ -348,10 +748,11 @@ export function findGlossaryMatches(
   glossary: GlossaryEntry[] = egyptianDeveloperGlossary
 ): GlossaryEntry[] {
   const normalizedInput = input.toLowerCase();
-
-  return glossary.filter((entry) =>
-    normalizedInput.includes(entry.arabic.toLowerCase())
+  const matches = glossary.filter((entry) =>
+    matchesPhrase(normalizedInput, entry.arabic.toLowerCase())
   );
+
+  return removeCoveredMatches(matches);
 }
 
 export function normalizeDeveloperPhrases(
@@ -370,4 +771,53 @@ export function normalizeDeveloperPhrases(
       seen.add(english);
       return true;
     });
+}
+
+function matchesPhrase(input: string, phrase: string): boolean {
+  if (!phrase.trim()) {
+    return false;
+  }
+
+  return phrasePattern(phrase).test(input);
+}
+
+function removeCoveredMatches(matches: GlossaryEntry[]): GlossaryEntry[] {
+  return matches.filter((entry) => {
+    const entryArabic = entry.arabic.toLowerCase();
+
+    return !matches.some((candidate) => {
+      const candidateArabic = candidate.arabic.toLowerCase();
+
+      return (
+        candidateArabic !== entryArabic &&
+        candidateArabic.length > entryArabic.length &&
+        candidateArabic.includes(entryArabic)
+      );
+    });
+  });
+}
+
+export function replaceGlossaryPhrase(
+  input: string,
+  phrase: string,
+  replacement: string
+): string {
+  return input.replace(phrasePattern(phrase), (_match, prefix) => {
+    return `${prefix}${replacement}`;
+  });
+}
+
+function phrasePattern(phrase: string): RegExp {
+  const escapedPhrase = escapeRegExp(phrase.trim());
+  const boundary = "[^\\p{L}\\p{N}_]";
+  const arabicConjunction = "و?";
+
+  return new RegExp(
+    `(^|${boundary})${arabicConjunction}${escapedPhrase}(?=$|${boundary})`,
+    "giu"
+  );
+}
+
+function escapeRegExp(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

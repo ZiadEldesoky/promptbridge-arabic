@@ -8,6 +8,7 @@ import {
   findGlossaryMatches,
   mergeGlossaries,
   normalizeDeveloperPhrases,
+  replaceGlossaryPhrase,
   type GlossaryEntry
 } from "./glossary.js";
 import {
@@ -42,7 +43,10 @@ interface PromptSignals {
   friendlyOnly: boolean;
   business: boolean;
   generalRequest: boolean;
+  codingIntent: boolean;
   responsive: boolean;
+  performance: boolean;
+  implementation: boolean;
   preserveDesign: boolean;
   preserveLogic: boolean;
   smallSafeChange: boolean;
@@ -51,6 +55,7 @@ interface PromptSignals {
   crash: boolean;
   saveReload: boolean;
   security: boolean;
+  securityHardening: boolean;
   simpleExplanation: boolean;
   tests: boolean;
   review: boolean;
@@ -160,9 +165,14 @@ function buildStructuredPrompt(
   glossary: GlossaryEntry[]
 ): StructuredPrompt {
   const friendlyTranslation = translateFriendlyOnlyMessage(text);
+  const naturalTranslation = translateNaturalMessage(text, glossary);
 
   if (mode === "general" && signals.friendlyOnly && friendlyTranslation) {
     return { task: friendlyTranslation };
+  }
+
+  if (mode === "general" && !signals.codingIntent && naturalTranslation) {
+    return { task: naturalTranslation };
   }
 
   const template = modeTemplates[mode];
@@ -175,10 +185,10 @@ function buildStructuredPrompt(
     ]),
     focus: template.focus,
     constraints: unique([
-      ...(template.constraints ?? []),
+      ...modeConstraints(mode, template, signals),
       ...signalConstraints(mode, signals)
     ]),
-    expectedOutput: expectedOutputForMode(mode),
+    expectedOutput: expectedOutputForMode(mode, signals),
     technicalContext: technicalContextFromTokens(tokens)
   };
 
@@ -207,7 +217,9 @@ function contextFromInput(
   glossary: GlossaryEntry[]
 ): string[] {
   const approximateRequest = approximateEnglishRequest(text, glossary);
-  const phraseContext = normalizeDeveloperPhrases(text, glossary);
+  const phraseContext = normalizeDeveloperPhrases(text, glossary).filter(
+    (phrase) => !approximateRequest?.includes(phrase)
+  );
   const context = approximateRequest
     ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext]
     : [...phraseContext];
@@ -270,11 +282,19 @@ function buildTask(
     return "Refactor this code to make it responsive.";
   }
 
+  if (mode === "refactor" && signals.performance) {
+    return "Improve this code's performance while preserving its behavior.";
+  }
+
   if (mode === "explain" && signals.simpleExplanation) {
     return "Explain how this code works in simple language.";
   }
 
   if (mode === "security") {
+    if (signals.securityHardening) {
+      return "Improve this code to make it more secure.";
+    }
+
     return "Review this code for potential security issues.";
   }
 
@@ -296,7 +316,42 @@ function modeRequirements(
     ];
   }
 
+  if (mode === "refactor" && signals.performance) {
+    return [
+      "Identify the likely performance bottleneck before changing code.",
+      "Make targeted improvements that preserve existing behavior.",
+      "Avoid broad rewrites unless they are necessary for the performance fix.",
+      "Keep public APIs stable unless a change is required.",
+      "Run the relevant build, test, or profiling command when available.",
+      "Explain what improved and how it was verified."
+    ];
+  }
+
+  if (mode === "security" && signals.securityHardening) {
+    return [
+      "Identify the security risks that are relevant to the provided code or request.",
+      "Make the smallest safe changes needed to improve security.",
+      "Preserve existing behavior and public APIs unless a security fix requires otherwise.",
+      "Avoid broad rewrites or unrelated refactors.",
+      "Add or update tests if the security change affects behavior.",
+      "Run the relevant build, test, or security check when available.",
+      "Explain what was hardened and why."
+    ];
+  }
+
   return template.requirements ?? [];
+}
+
+function modeConstraints(
+  mode: PromptMode,
+  template: ModeTemplate,
+  signals: PromptSignals
+): string[] {
+  if (mode === "security" && signals.securityHardening) {
+    return [];
+  }
+
+  return template.constraints ?? [];
 }
 
 function signalRequirements(
@@ -339,6 +394,10 @@ function signalRequirements(
     );
   }
 
+  if (mode === "general" && signals.implementation) {
+    requirements.push("Express the request as a concise implementation prompt.");
+  }
+
   return requirements;
 }
 
@@ -359,11 +418,22 @@ function signalConstraints(
   return constraints;
 }
 
-function expectedOutputForMode(mode: PromptMode): string[] {
+function expectedOutputForMode(
+  mode: PromptMode,
+  signals: PromptSignals
+): string[] {
   if (mode === "general") {
     return [
       "A natural English version of the request.",
       "A concise actionable prompt when the request is product or implementation related."
+    ];
+  }
+
+  if (mode === "security" && signals.securityHardening) {
+    return [
+      "A concise summary of the security changes.",
+      "The risks addressed by the changes.",
+      "What was verified."
     ];
   }
 
@@ -388,79 +458,240 @@ function expectedOutputForMode(mode: PromptMode): string[] {
 
 function detectSignals(text: string): PromptSignals {
   const normalized = text.toLowerCase();
+  const security = containsAny(normalized, [
+    "security",
+    "secure",
+    "secure it",
+    "secure the code",
+    "make it secure",
+    "make the code secure",
+    "harden",
+    "hardening",
+    "حماية",
+    "أمان",
+    "امان",
+    "أمن",
+    "امن",
+    "آمن",
+    "آمنة",
+    "امنة",
+    "ثغرة",
+    "ثغرات",
+    "vulnerability",
+    "vulnerabilities"
+  ]);
+  const securityHardening =
+    security &&
+    containsAny(normalized, [
+      "خلي",
+      "خلّي",
+      "خليه",
+      "خليها",
+      "اجعل",
+      "اعمل",
+      "حسن",
+      "حسّن",
+      "زود",
+      "ضيف",
+      "صلح",
+      "make",
+      "improve",
+      "secure it",
+      "secure the code",
+      "make it secure",
+      "make this secure",
+      "make the code secure",
+      "harden"
+    ]) &&
+    !containsAny(normalized, [
+      "راجع بس",
+      "review only",
+      "do not change",
+      "without changing",
+      "متعدلش",
+      "من غير تعديل"
+    ]);
+  const friendly = containsAny(normalized, [
+    "هاي",
+    "هاى",
+    "مرحبا",
+    "أهلا",
+    "اهلا",
+    "السلام عليكم",
+    "ازيك",
+    "إزيك",
+    "عامل ايه",
+    "صباح الخير",
+    "مساء الخير",
+    "شكرا"
+  ]);
+  const friendlyOnly = isFriendlyOnlyMessage(normalized);
+  const business = containsAny(normalized, [
+    "business",
+    "product",
+    "بزنس",
+    "بيزنس",
+    "منتج",
+    "مشروع",
+    "عميل",
+    "عملاء",
+    "طلبات",
+    "اوردر",
+    "أوردر",
+    "order",
+    "orders",
+    "مبيعات",
+    "sales",
+    "مخزون",
+    "inventory",
+    "فاتورة",
+    "invoice",
+    "checkout",
+    "دفع",
+    "payment",
+    "شحن",
+    "shipping",
+    "store",
+    "متجر",
+    "لوحة تحكم",
+    "dashboard",
+    "صفحة",
+    "زرار",
+    "فورم",
+    "واجهة",
+    "login",
+    "auth"
+  ]);
+  const generalRequest = containsAny(normalized, [
+    "عايز",
+    "محتاج",
+    "لو سمحت",
+    "اعمل",
+    "أزود",
+    "ازود",
+    "أضيف",
+    "ضيف",
+    "زود",
+    "خلي",
+    "اكتب",
+    "حوّل",
+    "حول",
+    "translate",
+    "convert"
+  ]);
+  const responsive = containsAny(normalized, [
+    "responsive",
+    "ريسبونسيف",
+    "متجاوب",
+    "الموبايل",
+    "موبايل",
+    "mobile"
+  ]);
+  const performance = containsAny(normalized, [
+    "performance",
+    "faster",
+    "slow",
+    "optimize",
+    "تحسين الأداء",
+    "تحسين الاداء",
+    "الأداء",
+    "الاداء",
+    "أسرع",
+    "اسرع",
+    "بطيء",
+    "بطئ"
+  ]);
+  const simpleExplanation = containsAny(normalized, [
+    "اشرح",
+    "اشرحلي",
+    "ببساطة",
+    "explain",
+    "simple"
+  ]);
+  const tests = containsAny(normalized, [
+    "test",
+    "tests",
+    "اختبار",
+    "اختبارات",
+    "تيست",
+    "تيستات",
+    "vitest",
+    "jest"
+  ]);
+  const review = containsAny(normalized, [
+    "راجع",
+    "افحص",
+    "review",
+    "code review",
+    "شوف فيه مشاكل"
+  ]);
+  const buildError = containsAny(normalized, [
+    "build error",
+    "بيلد error",
+    "خطأ build",
+    "مشكلة build",
+    "npm run build"
+  ]);
+  const error = containsAny(normalized, [
+    "error",
+    "bug",
+    "مشكلة",
+    "غلط",
+    "مش شغال",
+    "مش راضي يشتغل",
+    "بيطلع"
+  ]);
+  const crash = containsAny(normalized, ["crash", "بيكراش", "بيهنج", "hang"]);
+  const implementation = containsAny(normalized, [
+    "نفذ",
+    "طبّق",
+    "طبق",
+    "ابني",
+    "اعمل",
+    "ضيف",
+    "زود",
+    "implement",
+    "build",
+    "add",
+    "create"
+  ]);
+  const codingIntent =
+    business ||
+    responsive ||
+    performance ||
+    security ||
+    simpleExplanation ||
+    tests ||
+    review ||
+    buildError ||
+    error ||
+    crash ||
+    implementation ||
+    containsAny(normalized, [
+      "الكود",
+      "كود",
+      "code",
+      "api",
+      "function",
+      "component",
+      "database",
+      "db",
+      "frontend",
+      "backend",
+      "ui",
+      "ux"
+    ]);
 
   return {
     hasArabic: hasArabicText(normalized),
-    friendly: containsAny(normalized, [
-      "هاي",
-      "هاى",
-      "مرحبا",
-      "أهلا",
-      "اهلا",
-      "السلام عليكم",
-      "ازيك",
-      "إزيك",
-      "عامل ايه",
-      "صباح الخير",
-      "مساء الخير",
-      "شكرا"
-    ]),
-    friendlyOnly: isFriendlyOnlyMessage(normalized),
-    business: containsAny(normalized, [
-      "business",
-      "product",
-      "بزنس",
-      "بيزنس",
-      "منتج",
-      "مشروع",
-      "عميل",
-      "عملاء",
-      "طلبات",
-      "اوردر",
-      "أوردر",
-      "order",
-      "orders",
-      "مبيعات",
-      "sales",
-      "مخزون",
-      "inventory",
-      "فاتورة",
-      "invoice",
-      "checkout",
-      "دفع",
-      "payment",
-      "شحن",
-      "shipping",
-      "store",
-      "متجر",
-      "لوحة تحكم",
-      "dashboard"
-    ]),
-    generalRequest: containsAny(normalized, [
-      "عايز",
-      "محتاج",
-      "لو سمحت",
-      "اعمل",
-      "أزود",
-      "ازود",
-      "أضيف",
-      "ضيف",
-      "زود",
-      "خلي",
-      "اكتب",
-      "حوّل",
-      "حول",
-      "translate",
-      "convert"
-    ]),
-    responsive: containsAny(normalized, [
-      "responsive",
-      "ريسبونسيف",
-      "متجاوب",
-      "الموبايل",
-      "موبايل",
-      "mobile"
-    ]),
+    friendly,
+    friendlyOnly,
+    business,
+    generalRequest,
+    codingIntent,
+    responsive,
+    performance,
+    implementation,
     preserveDesign: containsAny(normalized, [
       "بدون ما تغير في الديزاين",
       "بدون ما تغير الديزاين",
@@ -494,58 +725,18 @@ function detectSignals(text: string): PromptSignals {
       "smallest safe",
       "safe change"
     ]),
-    buildError: containsAny(normalized, [
-      "build error",
-      "بيلد error",
-      "خطأ build",
-      "مشكلة build",
-      "npm run build"
-    ]),
-    error: containsAny(normalized, [
-      "error",
-      "bug",
-      "مشكلة",
-      "غلط",
-      "مش شغال",
-      "مش راضي يشتغل",
-      "بيطلع"
-    ]),
-    crash: containsAny(normalized, ["crash", "بيكراش", "بيهنج", "hang"]),
+    buildError,
+    error,
+    crash,
     saveReload: containsAny(normalized, [
       "save",
       "حفظ"
     ]) && containsAny(normalized, ["reload", "refresh", "ريلود", "بتعمل reload"]),
-    security: containsAny(normalized, [
-      "security",
-      "secure",
-      "حماية",
-      "أمان",
-      "امان",
-      "ثغرة",
-      "vulnerability"
-    ]),
-    simpleExplanation: containsAny(normalized, [
-      "اشرح",
-      "اشرحلي",
-      "ببساطة",
-      "explain",
-      "simple"
-    ]),
-    tests: containsAny(normalized, [
-      "test",
-      "tests",
-      "اختبار",
-      "اختبارات",
-      "تيست",
-      "vitest",
-      "jest"
-    ]),
-    review: containsAny(normalized, [
-      "راجع",
-      "review",
-      "code review",
-      "شوف فيه مشاكل"
-    ]),
+    security,
+    securityHardening,
+    simpleExplanation,
+    tests,
+    review,
     noDeletion: containsAny(normalized, [
       "متحذفش",
       "من غير ما تحذف",
@@ -586,6 +777,11 @@ function buildArabicSummary(
   };
 
   const details: string[] = [summaries[mode]];
+
+  if (mode === "security" && signals.securityHardening) {
+    details[0] =
+      "المطلوب تحسين أمان الكود بأقل تغييرات آمنة ممكنة، مع الحفاظ على السلوك الحالي وتشغيل الاختبار المناسب.";
+  }
 
   if (signals.responsive) {
     details.push("كمان لازم نخلي الواجهة responsive.");
@@ -641,7 +837,13 @@ function isFriendlyOnlyMessage(input: string): boolean {
     "السلام عليكم",
     "صباح الخير",
     "مساء الخير",
-    "شكرا"
+    "شكرا",
+    "ازيك",
+    "إزيك",
+    "عامل ايه",
+    "إزيك عامل ايه",
+    "ازيك عامل ايه",
+    "تمام"
   ];
 
   return friendlyPhrases.includes(normalized);
@@ -663,6 +865,14 @@ function translateFriendlyOnlyMessage(input: string): string | undefined {
       return "Good evening.";
     case "شكرا":
       return "Thank you.";
+    case "ازيك":
+    case "إزيك":
+    case "عامل ايه":
+    case "إزيك عامل ايه":
+    case "ازيك عامل ايه":
+      return "How are you?";
+    case "تمام":
+      return "Okay.";
     default:
       return undefined;
   }
@@ -695,7 +905,7 @@ function approximateEnglishRequest(
   let translated = text.trim();
 
   for (const entry of matches) {
-    translated = replaceAllLiteral(translated, entry.arabic, entry.english);
+    translated = replaceGlossaryPhrase(translated, entry.arabic, entry.english);
   }
 
   translated = translated
@@ -706,8 +916,35 @@ function approximateEnglishRequest(
   return translated === text.trim() ? undefined : translated;
 }
 
-function replaceAllLiteral(input: string, search: string, replacement: string) {
-  return input.split(search).join(replacement);
+function translateNaturalMessage(
+  text: string,
+  glossary: GlossaryEntry[]
+): string | undefined {
+  const translated = approximateEnglishRequest(text, glossary);
+
+  if (!translated) {
+    return undefined;
+  }
+
+  return sentenceCase(cleanApproximateTranslation(translated));
+}
+
+function cleanApproximateTranslation(input: string): string {
+  return input
+    .replace(/\s+,/g, ",")
+    .replace(/\s+\./g, ".")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function sentenceCase(input: string): string {
+  const trimmed = input.trim();
+
+  if (!trimmed) {
+    return trimmed;
+  }
+
+  return `${trimmed.charAt(0).toUpperCase()}${trimmed.slice(1)}`;
 }
 
 function unique(values: string[]): string[] {
