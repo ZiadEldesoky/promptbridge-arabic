@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.8
+
+- Added deterministic support for Arabic completed-work feedback prompts such as "إيه رأيك في الشغل اللي معمول دا".
+- Auto mode now turns these phrases into a focused review prompt instead of a generic translation template.
+- General mode now keeps the same intent as a concise natural English request: "Review the completed work and provide feedback".
+
 ## v0.11.7
 
 - Added a local deterministic code-quality parser for longer Arabic prompts.

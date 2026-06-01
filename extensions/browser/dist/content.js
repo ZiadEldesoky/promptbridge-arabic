@@ -1346,6 +1346,9 @@
     if (signals.tests || tags.has("tests")) {
       return "tests";
     }
+    if (signals.reviewFeedback) {
+      return "review";
+    }
     if (signals.review || tags.has("review")) {
       return "review";
     }
@@ -1398,8 +1401,8 @@
   }
   function contextFromInput(text, signals, glossary) {
     const approximateRequest = approximateEnglishRequest(text, glossary);
-    const qualityTranslation = translateCodeQualityRequest(text);
-    const phraseContext = qualityTranslation ? [] : normalizeDeveloperPhrases(text, glossary).filter(
+    const handledTranslation = translateReviewFeedbackRequest(text) ?? translateCodeQualityRequest(text);
+    const phraseContext = handledTranslation ? [] : normalizeDeveloperPhrases(text, glossary).filter(
       (phrase) => !approximateRequest?.includes(phrase)
     );
     const context = approximateRequest ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext] : [...phraseContext];
@@ -1441,6 +1444,9 @@
         return "Investigate and fix the reported error.";
       }
     }
+    if (mode === "review" && signals.reviewFeedback) {
+      return "Review the completed work and provide actionable feedback.";
+    }
     if (mode === "refactor" && signals.responsive) {
       return "Refactor this code to make it responsive.";
     }
@@ -1471,6 +1477,15 @@
     return template.task;
   }
   function modeRequirements(mode, template, signals) {
+    if (mode === "review" && signals.reviewFeedback) {
+      return [
+        "Assess whether the completed work is correct, maintainable, and aligned with the likely request.",
+        "Call out concrete issues, risks, and missing tests.",
+        "Mention what looks good when it is useful.",
+        "Suggest practical next improvements.",
+        "Do not modify the code yet."
+      ];
+    }
     if (mode === "refactor" && signals.responsive) {
       return [
         "Make the affected UI responsive across common screen sizes.",
@@ -1592,6 +1607,13 @@
         "A concise summary of the security changes.",
         "The risks addressed by the changes.",
         "What was verified."
+      ];
+    }
+    if (mode === "review" && signals.reviewFeedback) {
+      return [
+        "High-signal feedback on what works and what needs attention.",
+        "Findings ordered by impact.",
+        "Concrete next steps."
       ];
     }
     if (mode === "review" || mode === "security") {
@@ -1804,7 +1826,8 @@
       "vitest",
       "jest"
     ]);
-    const review = containsAny(normalized, [
+    const reviewFeedback = Boolean(translateReviewFeedbackRequest(normalized));
+    const review = reviewFeedback || containsAny(normalized, [
       "\u0631\u0627\u062C\u0639",
       "\u0627\u0641\u062D\u0635",
       "review",
@@ -1915,6 +1938,7 @@
       simpleExplanation,
       tests,
       review,
+      reviewFeedback,
       noDeletion: containsAny(normalized, [
         "\u0645\u062A\u062D\u0630\u0641\u0634",
         "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u062D\u0630\u0641",
@@ -2036,6 +2060,10 @@
     if (!hasArabicText(text)) {
       return void 0;
     }
+    const reviewFeedbackTranslation = translateReviewFeedbackRequest(text);
+    if (reviewFeedbackTranslation) {
+      return reviewFeedbackTranslation;
+    }
     const codeQualityTranslation = translateCodeQualityRequest(text);
     if (codeQualityTranslation) {
       return codeQualityTranslation;
@@ -2052,6 +2080,64 @@
     }
     translated = translated.replace(/[،؛]/g, ",").replace(/\s+/g, " ").trim();
     return translated === text.trim() ? void 0 : translated;
+  }
+  function translateReviewFeedbackRequest(text) {
+    const normalized = normalizeArabicIntentText(text);
+    const asksForOpinion = containsAny(normalized, [
+      "\u0627\u064A\u0647 \u0631\u0627\u064A\u0643",
+      "\u0627\u064A \u0631\u0627\u064A\u0643",
+      "\u0631\u0627\u064A\u0643 \u0627\u064A\u0647",
+      "\u0642\u0648\u0644 \u0631\u0627\u064A\u0643",
+      "\u0642\u0648\u0644\u064A \u0631\u0627\u064A\u0643",
+      "\u0642\u0648\u0644\u0644\u064A \u0631\u0627\u064A\u0643",
+      "\u0627\u062F\u064A\u0646\u064A \u0631\u0627\u064A\u0643",
+      "\u0639\u0627\u064A\u0632 \u0631\u0627\u064A\u0643",
+      "what do you think",
+      "give me feedback",
+      "feedback"
+    ]);
+    if (!asksForOpinion) {
+      return void 0;
+    }
+    const mentionsCompletedWork = containsAny(normalized, [
+      "\u0627\u0644\u0634\u063A\u0644 \u0627\u0644\u0645\u0639\u0645\u0648\u0644",
+      "\u0627\u0644\u0634\u063A\u0644 \u0627\u0644\u0644\u064A \u0645\u0639\u0645\u0648\u0644",
+      "\u0627\u0644\u0634\u063A\u0644 \u0627\u0644\u064A \u0645\u0639\u0645\u0648\u0644",
+      "\u0627\u0644\u0634\u063A\u0644 \u0627\u0644\u0644\u064A \u0627\u062A\u0639\u0645\u0644",
+      "\u0627\u0644\u0634\u063A\u0644 \u0627\u0644\u064A \u0627\u062A\u0639\u0645\u0644",
+      "\u0627\u0644\u0634\u063A\u0644 \u0627\u0644\u0645\u062A\u0639\u0645\u0644",
+      "\u0627\u0644\u0634\u063A\u0644 \u062F\u0647",
+      "\u0627\u0644\u0634\u063A\u0644 \u062F\u0627",
+      "\u0627\u0644\u0634\u063A\u0644",
+      "\u0627\u0644\u0644\u064A \u0627\u062A\u0639\u0645\u0644",
+      "\u0627\u0644\u064A \u0627\u062A\u0639\u0645\u0644",
+      "\u0627\u0644\u0645\u0639\u0645\u0648\u0644",
+      "\u0627\u0644\u062A\u0646\u0641\u064A\u0630",
+      "\u0627\u0644\u0644\u064A \u0646\u0641\u0630\u062A\u0647",
+      "\u0627\u0644\u064A \u0646\u0641\u0630\u062A\u0647",
+      "completed work",
+      "done work",
+      "implementation"
+    ]);
+    const mentionsCode = containsAny(normalized, [
+      "\u0627\u0644\u0643\u0648\u062F",
+      "\u0643\u0648\u062F",
+      "code",
+      "pull request",
+      "pr",
+      "branch",
+      "\u0628\u0631\u0646\u0634"
+    ]);
+    if (mentionsCompletedWork) {
+      return "review the completed work and provide feedback";
+    }
+    if (mentionsCode) {
+      return "review this code and provide feedback";
+    }
+    return void 0;
+  }
+  function normalizeArabicIntentText(input) {
+    return input.normalize("NFC").toLowerCase().replace(/[\u064b-\u065f\u0670]/g, "").replace(/[إأآٱ]/g, "\u0627").replace(/ؤ/g, "\u0648").replace(/ئ/g, "\u064A").replace(/ى/g, "\u064A").replace(/ة/g, "\u0647").replace(/\u0640/g, "").replace(/[؟?!.,،؛:]+/g, " ").replace(/\s+/g, " ").trim();
   }
   function translateCodeQualityRequest(text) {
     const normalized = text.normalize("NFC").toLowerCase();

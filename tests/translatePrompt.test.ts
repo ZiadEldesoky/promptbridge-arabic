@@ -166,6 +166,35 @@ describe("translatePrompt", () => {
     expect(structured.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
   });
 
+  it("turns completed-work opinion requests into review feedback prompts", () => {
+    const result = translatePrompt("إيه رأيك في الشغل اللي معمول دا");
+
+    expect(result.mode).toBe("review");
+    expect(result.englishPrompt).toContain(
+      "Review the completed work and provide actionable feedback."
+    );
+    expect(result.englishPrompt).toContain(
+      "Natural English interpretation: review the completed work and provide feedback"
+    );
+    expect(result.englishPrompt).toContain(
+      "Assess whether the completed work is correct, maintainable, and aligned with the likely request."
+    );
+    expect(result.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("keeps completed-work feedback requests natural in general mode", () => {
+    const result = translatePrompt("ايه رايك في الشغل المعمول دا this}", {
+      mode: "general"
+    });
+
+    expect(result.mode).toBe("general");
+    expect(result.output).toBe(
+      "Review the completed work and provide feedback"
+    );
+    expect(result.output).not.toContain("Translate and clarify");
+    expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
   it("deduplicates maintainability when organized and maintainable fragments are selected", () => {
     const result = translatePrompt("منظم وقابل للصيانة");
 

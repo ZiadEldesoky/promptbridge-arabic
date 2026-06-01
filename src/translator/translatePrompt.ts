@@ -62,6 +62,7 @@ interface PromptSignals {
   simpleExplanation: boolean;
   tests: boolean;
   review: boolean;
+  reviewFeedback: boolean;
   noDeletion: boolean;
   urgent: boolean;
 }
@@ -135,6 +136,10 @@ function inferMode(
 
   if (signals.tests || tags.has("tests")) {
     return "tests";
+  }
+
+  if (signals.reviewFeedback) {
+    return "review";
   }
 
   if (signals.review || tags.has("review")) {
@@ -227,8 +232,9 @@ function contextFromInput(
   glossary: GlossaryEntry[]
 ): string[] {
   const approximateRequest = approximateEnglishRequest(text, glossary);
-  const qualityTranslation = translateCodeQualityRequest(text);
-  const phraseContext = qualityTranslation
+  const handledTranslation =
+    translateReviewFeedbackRequest(text) ?? translateCodeQualityRequest(text);
+  const phraseContext = handledTranslation
     ? []
     : normalizeDeveloperPhrases(text, glossary).filter(
         (phrase) => !approximateRequest?.includes(phrase)
@@ -291,6 +297,10 @@ function buildTask(
     }
   }
 
+  if (mode === "review" && signals.reviewFeedback) {
+    return "Review the completed work and provide actionable feedback.";
+  }
+
   if (mode === "refactor" && signals.responsive) {
     return "Refactor this code to make it responsive.";
   }
@@ -335,6 +345,16 @@ function modeRequirements(
   template: ModeTemplate,
   signals: PromptSignals
 ): string[] {
+  if (mode === "review" && signals.reviewFeedback) {
+    return [
+      "Assess whether the completed work is correct, maintainable, and aligned with the likely request.",
+      "Call out concrete issues, risks, and missing tests.",
+      "Mention what looks good when it is useful.",
+      "Suggest practical next improvements.",
+      "Do not modify the code yet."
+    ];
+  }
+
   if (mode === "refactor" && signals.responsive) {
     return [
       "Make the affected UI responsive across common screen sizes.",
@@ -495,6 +515,14 @@ function expectedOutputForMode(
       "A concise summary of the security changes.",
       "The risks addressed by the changes.",
       "What was verified."
+    ];
+  }
+
+  if (mode === "review" && signals.reviewFeedback) {
+    return [
+      "High-signal feedback on what works and what needs attention.",
+      "Findings ordered by impact.",
+      "Concrete next steps."
     ];
   }
 
@@ -714,13 +742,16 @@ function detectSignals(text: string): PromptSignals {
     "vitest",
     "jest"
   ]);
-  const review = containsAny(normalized, [
-    "راجع",
-    "افحص",
-    "review",
-    "code review",
-    "شوف فيه مشاكل"
-  ]);
+  const reviewFeedback = Boolean(translateReviewFeedbackRequest(normalized));
+  const review =
+    reviewFeedback ||
+    containsAny(normalized, [
+      "راجع",
+      "افحص",
+      "review",
+      "code review",
+      "شوف فيه مشاكل"
+    ]);
   const buildError = containsAny(normalized, [
     "build error",
     "بيلد error",
@@ -850,6 +881,7 @@ function detectSignals(text: string): PromptSignals {
     simpleExplanation,
     tests,
     review,
+    reviewFeedback,
     noDeletion: containsAny(normalized, [
       "متحذفش",
       "من غير ما تحذف",
@@ -1011,6 +1043,12 @@ function approximateEnglishRequest(
     return undefined;
   }
 
+  const reviewFeedbackTranslation = translateReviewFeedbackRequest(text);
+
+  if (reviewFeedbackTranslation) {
+    return reviewFeedbackTranslation;
+  }
+
   const codeQualityTranslation = translateCodeQualityRequest(text);
 
   if (codeQualityTranslation) {
@@ -1037,6 +1075,83 @@ function approximateEnglishRequest(
     .trim();
 
   return translated === text.trim() ? undefined : translated;
+}
+
+function translateReviewFeedbackRequest(text: string): string | undefined {
+  const normalized = normalizeArabicIntentText(text);
+  const asksForOpinion = containsAny(normalized, [
+    "ايه رايك",
+    "اي رايك",
+    "رايك ايه",
+    "قول رايك",
+    "قولي رايك",
+    "قوللي رايك",
+    "اديني رايك",
+    "عايز رايك",
+    "what do you think",
+    "give me feedback",
+    "feedback"
+  ]);
+
+  if (!asksForOpinion) {
+    return undefined;
+  }
+
+  const mentionsCompletedWork = containsAny(normalized, [
+    "الشغل المعمول",
+    "الشغل اللي معمول",
+    "الشغل الي معمول",
+    "الشغل اللي اتعمل",
+    "الشغل الي اتعمل",
+    "الشغل المتعمل",
+    "الشغل ده",
+    "الشغل دا",
+    "الشغل",
+    "اللي اتعمل",
+    "الي اتعمل",
+    "المعمول",
+    "التنفيذ",
+    "اللي نفذته",
+    "الي نفذته",
+    "completed work",
+    "done work",
+    "implementation"
+  ]);
+  const mentionsCode = containsAny(normalized, [
+    "الكود",
+    "كود",
+    "code",
+    "pull request",
+    "pr",
+    "branch",
+    "برنش"
+  ]);
+
+  if (mentionsCompletedWork) {
+    return "review the completed work and provide feedback";
+  }
+
+  if (mentionsCode) {
+    return "review this code and provide feedback";
+  }
+
+  return undefined;
+}
+
+function normalizeArabicIntentText(input: string): string {
+  return input
+    .normalize("NFC")
+    .toLowerCase()
+    .replace(/[\u064b-\u065f\u0670]/g, "")
+    .replace(/[إأآٱ]/g, "ا")
+    .replace(/ؤ/g, "و")
+    .replace(/ئ/g, "ي")
+    .replace(/ى/g, "ي")
+    .replace(/ة/g, "ه")
+    .replace(/\u0640/g, "")
+    .replace(/[؟?!.,،؛:]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 interface CodeQualityAttribute {
