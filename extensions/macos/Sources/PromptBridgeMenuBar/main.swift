@@ -329,6 +329,7 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
           self.checkLatestTag(
             preferredVersion: nil,
             preferredURL: nil,
+            preferredDownloadURL: nil,
             fallbackError: error.localizedDescription
           )
           return
@@ -344,6 +345,7 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
           self.checkLatestTag(
             preferredVersion: nil,
             preferredURL: nil,
+            preferredDownloadURL: nil,
             fallbackError: "GitHub did not return a readable latest release."
           )
           return
@@ -352,6 +354,7 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
         self.checkLatestTag(
           preferredVersion: latestVersion,
           preferredURL: release.releaseURL ?? latestReleasePageURL,
+          preferredDownloadURL: release.macOSDownloadURL(for: latestVersion),
           fallbackError: nil
         )
       }
@@ -361,6 +364,7 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   private func checkLatestTag(
     preferredVersion: String?,
     preferredURL: URL?,
+    preferredDownloadURL: URL?,
     fallbackError: String?
   ) {
     var request = URLRequest(url: latestTagApiURL)
@@ -381,7 +385,8 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
           if let preferredVersion, let preferredURL {
             self.finishUpdateCheck(
               latestVersion: preferredVersion,
-              releaseURL: preferredURL
+              releaseURL: preferredURL,
+              downloadURL: preferredDownloadURL
             )
             return
           }
@@ -402,7 +407,8 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
           if let preferredVersion, let preferredURL {
             self.finishUpdateCheck(
               latestVersion: preferredVersion,
-              releaseURL: preferredURL
+              releaseURL: preferredURL,
+              downloadURL: preferredDownloadURL
             )
             return
           }
@@ -418,17 +424,26 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
            compareVersions(preferredVersion, tagVersion) >= 0 {
           self.finishUpdateCheck(
             latestVersion: preferredVersion,
-            releaseURL: preferredURL
+            releaseURL: preferredURL,
+            downloadURL: preferredDownloadURL
           )
           return
         }
 
-        self.finishUpdateCheck(latestVersion: tagVersion, releaseURL: tagsPageURL)
+        self.finishUpdateCheck(
+          latestVersion: tagVersion,
+          releaseURL: tagsPageURL,
+          downloadURL: nil
+        )
       }
     }.resume()
   }
 
-  private func finishUpdateCheck(latestVersion: String, releaseURL: URL) {
+  private func finishUpdateCheck(
+    latestVersion: String,
+    releaseURL: URL,
+    downloadURL: URL?
+  ) {
     isCheckingForUpdates = false
 
     let currentVersion = currentAppVersion()
@@ -438,7 +453,8 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
       showUpdateAvailable(
         currentVersion: currentVersion,
         latestVersion: latestVersion,
-        releaseURL: releaseURL
+        releaseURL: releaseURL,
+        downloadURL: downloadURL
       )
       return
     }
@@ -556,17 +572,116 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   private func showUpdateAvailable(
     currentVersion: String,
     latestVersion: String,
-    releaseURL: URL
+    releaseURL: URL,
+    downloadURL: URL?
   ) {
     let alert = NSAlert()
     alert.messageText = "PromptBridge Arabic update available"
-    alert.informativeText = "Installed: \(currentVersion)\nLatest: \(latestVersion)\n\nOpen the release page to download the newest build."
+    alert.informativeText = downloadURL == nil
+      ? "Installed: \(currentVersion)\nLatest: \(latestVersion)\n\nOpen the release page to download the newest build."
+      : "Installed: \(currentVersion)\nLatest: \(latestVersion)\n\nDownload the macOS build directly, or open the release page for all assets."
+    alert.addButton(withTitle: downloadURL == nil ? "Open Release" : "Download Update")
     alert.addButton(withTitle: "Open Release")
     alert.addButton(withTitle: "Later")
 
     NSApp.activate(ignoringOtherApps: true)
-    if alert.runModal() == .alertFirstButtonReturn {
+    let response = alert.runModal()
+
+    if response == .alertFirstButtonReturn {
+      guard let downloadURL else {
+        NSWorkspace.shared.open(releaseURL)
+        return
+      }
+
+      downloadUpdate(from: downloadURL, latestVersion: latestVersion)
+      return
+    }
+
+    if response == .alertSecondButtonReturn {
       NSWorkspace.shared.open(releaseURL)
+    }
+  }
+
+  private func downloadUpdate(from downloadURL: URL, latestVersion: String) {
+    updateStatus("Downloading update \(latestVersion)")
+
+    URLSession.shared.downloadTask(with: downloadURL) { [weak self] temporaryURL, response, error in
+      guard let self else {
+        return
+      }
+
+      if let error {
+        DispatchQueue.main.async {
+          self.updateStatus("Download failed")
+          self.showUpdateDownloadFailed(error.localizedDescription, downloadURL: downloadURL)
+        }
+        return
+      }
+
+      guard
+        let temporaryURL,
+        let httpResponse = response as? HTTPURLResponse,
+        (200...299).contains(httpResponse.statusCode)
+      else {
+        DispatchQueue.main.async {
+          self.updateStatus("Download failed")
+          self.showUpdateDownloadFailed("GitHub did not return a downloadable macOS asset.", downloadURL: downloadURL)
+        }
+        return
+      }
+
+      do {
+        let downloadsDirectory = try FileManager.default.url(
+          for: .downloadsDirectory,
+          in: .userDomainMask,
+          appropriateFor: nil,
+          create: true
+        )
+        let destinationURL = downloadsDirectory
+          .appendingPathComponent("PromptBridgeArabicMenuBar-v\(latestVersion)-macos.zip")
+
+        if FileManager.default.fileExists(atPath: destinationURL.path) {
+          try FileManager.default.removeItem(at: destinationURL)
+        }
+
+        try FileManager.default.moveItem(at: temporaryURL, to: destinationURL)
+
+        DispatchQueue.main.async {
+          self.updateStatus("Downloaded update \(latestVersion)")
+          self.showUpdateDownloaded(destinationURL)
+        }
+      } catch {
+        DispatchQueue.main.async {
+          self.updateStatus("Download failed")
+          self.showUpdateDownloadFailed(error.localizedDescription, downloadURL: downloadURL)
+        }
+      }
+    }.resume()
+  }
+
+  private func showUpdateDownloaded(_ fileURL: URL) {
+    let alert = NSAlert()
+    alert.messageText = "PromptBridge Arabic update downloaded"
+    alert.informativeText = "The newest macOS build was saved to Downloads.\n\nOpen the downloaded zip, then replace the existing app when you are ready."
+    alert.addButton(withTitle: "Show in Finder")
+    alert.addButton(withTitle: "OK")
+
+    NSApp.activate(ignoringOtherApps: true)
+    if alert.runModal() == .alertFirstButtonReturn {
+      NSWorkspace.shared.activateFileViewerSelecting([fileURL])
+    }
+  }
+
+  private func showUpdateDownloadFailed(_ message: String, downloadURL: URL) {
+    let alert = NSAlert()
+    alert.messageText = "Could not download update"
+    alert.informativeText = "\(message)\n\nYou can open the download link in your browser instead."
+    alert.addButton(withTitle: "Open Download")
+    alert.addButton(withTitle: "OK")
+
+    NSApp.activate(ignoringOtherApps: true)
+    if alert.runModal() == .alertFirstButtonReturn {
+      NSWorkspace.shared.open(downloadURL)
     }
   }
 
@@ -600,10 +715,12 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
 private struct GitHubRelease: Decodable {
   let tagName: String?
   let htmlURL: URL?
+  let assets: [GitHubReleaseAsset]?
 
   enum CodingKeys: String, CodingKey {
     case tagName = "tag_name"
     case htmlURL = "html_url"
+    case assets
   }
 
   var normalizedVersion: String? {
@@ -616,6 +733,33 @@ private struct GitHubRelease: Decodable {
 
   var releaseURL: URL? {
     htmlURL
+  }
+
+  func macOSDownloadURL(for version: String) -> URL? {
+    let expectedName = "PromptBridgeArabicMenuBar-v\(version)-macos.zip"
+    let releaseAssets = assets ?? []
+    let exactMatch = releaseAssets.first { asset in
+      asset.name == expectedName
+    }
+
+    if let exactMatch {
+      return exactMatch.downloadURL
+    }
+
+    return releaseAssets.first { asset in
+      asset.name.hasPrefix("PromptBridgeArabicMenuBar-v") &&
+        asset.name.hasSuffix("-macos.zip")
+    }?.downloadURL
+  }
+}
+
+private struct GitHubReleaseAsset: Decodable {
+  let name: String
+  let downloadURL: URL?
+
+  enum CodingKeys: String, CodingKey {
+    case name
+    case downloadURL = "browser_download_url"
   }
 }
 

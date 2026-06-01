@@ -230,6 +230,10 @@ describe("GUI integration metadata", () => {
     expect(source).toContain("unicodeScalars.contains");
     expect(source).not.toContain("NSRegularExpression");
     expect(source).toContain("Auto Replace Selected Arabic");
+    expect(source).toContain("Download Update");
+    expect(source).toContain("downloadsDirectory");
+    expect(source).toContain("activateFileViewerSelecting");
+    expect(source).toContain("browser_download_url");
     expect(source).toContain("originalChangeCount");
     expect(source).toContain("promptbridge-convert.mjs");
     expect(converter).toContain("translatePrompt");

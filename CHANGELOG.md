@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.12.1
+
+- Added direct macOS update downloads from the menu bar helper when the latest GitHub Release includes a macOS zip asset.
+- The update dialog now offers **Download Update** before falling back to opening the release page.
+- Downloaded macOS builds are saved to the user's Downloads folder and can be revealed in Finder.
+
 ## v0.12.0
 
 - Added a simpler `Alt+Y` IDE shortcut for VS Code-compatible editors, including Cursor and Antigravity.
