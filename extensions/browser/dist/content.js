@@ -1398,7 +1398,8 @@
   }
   function contextFromInput(text, signals, glossary) {
     const approximateRequest = approximateEnglishRequest(text, glossary);
-    const phraseContext = normalizeDeveloperPhrases(text, glossary).filter(
+    const qualityTranslation = translateCodeQualityRequest(text);
+    const phraseContext = qualityTranslation ? [] : normalizeDeveloperPhrases(text, glossary).filter(
       (phrase) => !approximateRequest?.includes(phrase)
     );
     const context = approximateRequest ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext] : [...phraseContext];
@@ -1623,6 +1624,12 @@
       "\u062D\u0645\u0627\u064A\u0629",
       "\u0623\u0645\u0627\u0646",
       "\u0627\u0645\u0627\u0646",
+      "\u0627\u0644\u0623\u0645\u0627\u0646",
+      "\u0627\u0644\u0627\u0645\u0627\u0646",
+      "\u0628\u0627\u0644\u0623\u0645\u0627\u0646",
+      "\u0628\u0627\u0644\u0627\u0645\u0627\u0646",
+      "\u0627\u0647\u062A\u0645 \u0628\u0627\u0644\u0623\u0645\u0627\u0646",
+      "\u0627\u0647\u062A\u0645 \u0628\u0627\u0644\u0627\u0645\u0627\u0646",
       "\u0623\u0645\u0646",
       "\u0627\u0645\u0646",
       "\u0622\u0645\u0646",
@@ -1645,6 +1652,7 @@
       "\u0632\u0648\u062F",
       "\u0636\u064A\u0641",
       "\u0635\u0644\u062D",
+      "\u0627\u0647\u062A\u0645",
       "make",
       "improve",
       "secure it",
@@ -1746,6 +1754,7 @@
       "\u0623\u0636\u064A\u0641",
       "\u0636\u064A\u0641",
       "\u0632\u0648\u062F",
+      "\u0627\u0647\u062A\u0645",
       "\u0638\u0628\u0637",
       "\u0638\u0628\u0637\u0644\u064A",
       "\u0627\u0636\u0628\u0637",
@@ -1827,6 +1836,7 @@
       "\u0627\u0639\u0645\u0644",
       "\u0636\u064A\u0641",
       "\u0632\u0648\u062F",
+      "\u0627\u0647\u062A\u0645",
       "implement",
       "build",
       "add",
@@ -2026,6 +2036,10 @@
     if (!hasArabicText(text)) {
       return void 0;
     }
+    const codeQualityTranslation = translateCodeQualityRequest(text);
+    if (codeQualityTranslation) {
+      return codeQualityTranslation;
+    }
     const matches = findGlossaryMatches(text, glossary).sort(
       (left, right) => right.arabic.length - left.arabic.length
     );
@@ -2038,6 +2052,130 @@
     }
     translated = translated.replace(/[،؛]/g, ",").replace(/\s+/g, " ").trim();
     return translated === text.trim() ? void 0 : translated;
+  }
+  function translateCodeQualityRequest(text) {
+    const normalized = text.normalize("NFC").toLowerCase();
+    if (containsAny(normalized, [
+      "\u0631\u0627\u062C\u0639",
+      "\u0627\u0641\u062D\u0635",
+      "review",
+      "code review",
+      "\u0634\u0648\u0641 \u0641\u064A\u0647 \u0645\u0634\u0627\u0643\u0644",
+      "\u0645\u0634\u0627\u0643\u0644 security",
+      "security issues"
+    ])) {
+      return void 0;
+    }
+    const attributes = codeQualityAttributes(normalized);
+    if (!attributes.length) {
+      return void 0;
+    }
+    const isRequest = containsAny(normalized, [
+      "\u0627\u0644\u0643\u0648\u062F",
+      "\u0643\u0648\u062F",
+      "code",
+      "\u062E\u0644\u064A",
+      "\u062E\u0644\u0651\u064A",
+      "\u062E\u0644\u064A\u0647",
+      "\u0627\u062C\u0639\u0644",
+      "\u0627\u0639\u0645\u0644",
+      "\u0627\u0647\u062A\u0645",
+      "\u062D\u0633\u0646",
+      "\u062D\u0633\u0651\u0646",
+      "\u0638\u0628\u0637",
+      "\u0638\u0628\u0637\u0644\u064A",
+      "make",
+      "improve"
+    ]);
+    const labels = formatCodeQualityLabels(attributes);
+    if (isRequest) {
+      return `make the code ${labels}`;
+    }
+    return labels;
+  }
+  function codeQualityAttributes(input) {
+    const attributes = [];
+    addCodeQualityAttribute(attributes, input, "organized", "organized", [
+      "organized",
+      "organization",
+      "structured",
+      "structure",
+      "\u0645\u0646\u0638\u0645",
+      "\u0645\u0646\u0638\u0645\u0629",
+      "\u0645\u0631\u062A\u0628",
+      "\u0645\u0631\u062A\u0628\u0629",
+      "\u0631\u062A\u0628"
+    ]);
+    addCodeQualityAttribute(attributes, input, "clean", "clean", [
+      "clean",
+      "clean code",
+      "\u0646\u0638\u064A\u0641",
+      "\u0646\u0636\u064A\u0641\u0629",
+      "\u0646\u0638\u064A\u0641\u0629",
+      "\u0646\u0636\u064A\u0641",
+      "\u0646\u0636\u064A\u0641\u0647",
+      "\u0646\u0636\u0641",
+      "\u0646\u0638\u0641"
+    ]);
+    addCodeQualityAttribute(attributes, input, "secure", "secure", [
+      "secure",
+      "security",
+      "harden",
+      "hardening",
+      "\u0622\u0645\u0646",
+      "\u0627\u0645\u0646",
+      "\u0622\u0645\u0646\u0629",
+      "\u0627\u0645\u0646\u0629",
+      "\u0623\u0645\u0627\u0646",
+      "\u0627\u0645\u0627\u0646",
+      "\u0627\u0644\u0623\u0645\u0627\u0646",
+      "\u0627\u0644\u0627\u0645\u0627\u0646",
+      "\u0628\u0627\u0644\u0623\u0645\u0627\u0646",
+      "\u0628\u0627\u0644\u0627\u0645\u0627\u0646",
+      "\u062D\u0645\u0627\u064A\u0629"
+    ]);
+    addCodeQualityAttribute(attributes, input, "maintainable", "maintainable", [
+      "maintainable",
+      "maintainability",
+      "\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629",
+      "\u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0635\u064A\u0627\u0646\u0629"
+    ]);
+    if ((attributes.some((attribute) => attribute.key === "organized") || attributes.some((attribute) => attribute.key === "clean")) && !attributes.some((attribute) => attribute.key === "maintainable")) {
+      const anchor = attributes.find((attribute) => attribute.key === "organized") ?? attributes.find((attribute) => attribute.key === "clean");
+      attributes.push({
+        key: "maintainable",
+        label: "maintainable",
+        index: (anchor?.index ?? 0) + 0.1
+      });
+    }
+    return attributes.sort((left, right) => left.index - right.index);
+  }
+  function addCodeQualityAttribute(attributes, input, key, label, aliases) {
+    if (attributes.some((attribute) => attribute.key === key)) {
+      return;
+    }
+    const index = firstIndexOfAny(input, aliases);
+    if (index === -1) {
+      return;
+    }
+    attributes.push({ key, label, index });
+  }
+  function firstIndexOfAny(input, values) {
+    const indexes = values.map((value) => input.indexOf(value.toLowerCase())).filter((index) => index !== -1);
+    return indexes.length ? Math.min(...indexes) : -1;
+  }
+  function formatCodeQualityLabels(attributes) {
+    return formatEnglishList(attributes.map((attribute) => attribute.label));
+  }
+  function formatEnglishList(values) {
+    const uniqueValues = unique(values);
+    if (uniqueValues.length <= 1) {
+      return uniqueValues[0] ?? "";
+    }
+    if (uniqueValues.length === 2) {
+      return `${uniqueValues[0]} and ${uniqueValues[1]}`;
+    }
+    return `${uniqueValues.slice(0, -1).join(", ")}, and ${uniqueValues.at(-1)}`;
   }
   function translateNaturalMessage(text, glossary) {
     const translated = approximateEnglishRequest(text, glossary);

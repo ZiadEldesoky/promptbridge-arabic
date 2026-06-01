@@ -227,9 +227,12 @@ function contextFromInput(
   glossary: GlossaryEntry[]
 ): string[] {
   const approximateRequest = approximateEnglishRequest(text, glossary);
-  const phraseContext = normalizeDeveloperPhrases(text, glossary).filter(
-    (phrase) => !approximateRequest?.includes(phrase)
-  );
+  const qualityTranslation = translateCodeQualityRequest(text);
+  const phraseContext = qualityTranslation
+    ? []
+    : normalizeDeveloperPhrases(text, glossary).filter(
+        (phrase) => !approximateRequest?.includes(phrase)
+      );
   const context = approximateRequest
     ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext]
     : [...phraseContext];
@@ -528,6 +531,12 @@ function detectSignals(text: string): PromptSignals {
     "حماية",
     "أمان",
     "امان",
+    "الأمان",
+    "الامان",
+    "بالأمان",
+    "بالامان",
+    "اهتم بالأمان",
+    "اهتم بالامان",
     "أمن",
     "امن",
     "آمن",
@@ -552,6 +561,7 @@ function detectSignals(text: string): PromptSignals {
       "زود",
       "ضيف",
       "صلح",
+      "اهتم",
       "make",
       "improve",
       "secure it",
@@ -654,6 +664,7 @@ function detectSignals(text: string): PromptSignals {
     "أضيف",
     "ضيف",
     "زود",
+    "اهتم",
     "ظبط",
     "ظبطلي",
     "اضبط",
@@ -735,6 +746,7 @@ function detectSignals(text: string): PromptSignals {
     "اعمل",
     "ضيف",
     "زود",
+    "اهتم",
     "implement",
     "build",
     "add",
@@ -999,6 +1011,12 @@ function approximateEnglishRequest(
     return undefined;
   }
 
+  const codeQualityTranslation = translateCodeQualityRequest(text);
+
+  if (codeQualityTranslation) {
+    return codeQualityTranslation;
+  }
+
   const matches = findGlossaryMatches(text, glossary).sort(
     (left, right) => right.arabic.length - left.arabic.length
   );
@@ -1019,6 +1037,175 @@ function approximateEnglishRequest(
     .trim();
 
   return translated === text.trim() ? undefined : translated;
+}
+
+interface CodeQualityAttribute {
+  key: string;
+  label: string;
+  index: number;
+}
+
+function translateCodeQualityRequest(text: string): string | undefined {
+  const normalized = text.normalize("NFC").toLowerCase();
+
+  if (
+    containsAny(normalized, [
+      "راجع",
+      "افحص",
+      "review",
+      "code review",
+      "شوف فيه مشاكل",
+      "مشاكل security",
+      "security issues"
+    ])
+  ) {
+    return undefined;
+  }
+
+  const attributes = codeQualityAttributes(normalized);
+
+  if (!attributes.length) {
+    return undefined;
+  }
+
+  const isRequest = containsAny(normalized, [
+    "الكود",
+    "كود",
+    "code",
+    "خلي",
+    "خلّي",
+    "خليه",
+    "اجعل",
+    "اعمل",
+    "اهتم",
+    "حسن",
+    "حسّن",
+    "ظبط",
+    "ظبطلي",
+    "make",
+    "improve"
+  ]);
+  const labels = formatCodeQualityLabels(attributes);
+
+  if (isRequest) {
+    return `make the code ${labels}`;
+  }
+
+  return labels;
+}
+
+function codeQualityAttributes(input: string): CodeQualityAttribute[] {
+  const attributes: CodeQualityAttribute[] = [];
+
+  addCodeQualityAttribute(attributes, input, "organized", "organized", [
+    "organized",
+    "organization",
+    "structured",
+    "structure",
+    "منظم",
+    "منظمة",
+    "مرتب",
+    "مرتبة",
+    "رتب"
+  ]);
+  addCodeQualityAttribute(attributes, input, "clean", "clean", [
+    "clean",
+    "clean code",
+    "نظيف",
+    "نضيفة",
+    "نظيفة",
+    "نضيف",
+    "نضيفه",
+    "نضف",
+    "نظف"
+  ]);
+  addCodeQualityAttribute(attributes, input, "secure", "secure", [
+    "secure",
+    "security",
+    "harden",
+    "hardening",
+    "آمن",
+    "امن",
+    "آمنة",
+    "امنة",
+    "أمان",
+    "امان",
+    "الأمان",
+    "الامان",
+    "بالأمان",
+    "بالامان",
+    "حماية"
+  ]);
+  addCodeQualityAttribute(attributes, input, "maintainable", "maintainable", [
+    "maintainable",
+    "maintainability",
+    "قابل للصيانة",
+    "قابلة للصيانة"
+  ]);
+
+  if (
+    (attributes.some((attribute) => attribute.key === "organized") ||
+      attributes.some((attribute) => attribute.key === "clean")) &&
+    !attributes.some((attribute) => attribute.key === "maintainable")
+  ) {
+    const anchor =
+      attributes.find((attribute) => attribute.key === "organized") ??
+      attributes.find((attribute) => attribute.key === "clean");
+
+    attributes.push({
+      key: "maintainable",
+      label: "maintainable",
+      index: (anchor?.index ?? 0) + 0.1
+    });
+  }
+
+  return attributes.sort((left, right) => left.index - right.index);
+}
+
+function addCodeQualityAttribute(
+  attributes: CodeQualityAttribute[],
+  input: string,
+  key: string,
+  label: string,
+  aliases: string[]
+): void {
+  if (attributes.some((attribute) => attribute.key === key)) {
+    return;
+  }
+
+  const index = firstIndexOfAny(input, aliases);
+
+  if (index === -1) {
+    return;
+  }
+
+  attributes.push({ key, label, index });
+}
+
+function firstIndexOfAny(input: string, values: string[]): number {
+  const indexes = values
+    .map((value) => input.indexOf(value.toLowerCase()))
+    .filter((index) => index !== -1);
+
+  return indexes.length ? Math.min(...indexes) : -1;
+}
+
+function formatCodeQualityLabels(attributes: CodeQualityAttribute[]): string {
+  return formatEnglishList(attributes.map((attribute) => attribute.label));
+}
+
+function formatEnglishList(values: string[]): string {
+  const uniqueValues = unique(values);
+
+  if (uniqueValues.length <= 1) {
+    return uniqueValues[0] ?? "";
+  }
+
+  if (uniqueValues.length === 2) {
+    return `${uniqueValues[0]} and ${uniqueValues[1]}`;
+  }
+
+  return `${uniqueValues.slice(0, -1).join(", ")}, and ${uniqueValues.at(-1)}`;
 }
 
 function translateNaturalMessage(

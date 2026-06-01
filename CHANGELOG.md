@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.7
+
+- Added a local deterministic code-quality parser for longer Arabic prompts.
+- Longer prompts such as "خلي الكود منظم وقابل للصيانة واهتم بالأمان بتاعه" now translate without duplicated words or Arabic leftovers.
+- Reduced duplicate context lines when quality attributes are parsed from the same selected prompt.
+
 ## v0.11.6
 
 - Added deterministic support for maintainability phrases such as "قابل للصيانة".

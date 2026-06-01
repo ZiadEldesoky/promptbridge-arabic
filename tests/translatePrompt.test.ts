@@ -106,6 +106,9 @@ describe("translatePrompt", () => {
     expect(structured.englishPrompt).toContain(
       "Natural English interpretation: make the code organized, maintainable, and secure"
     );
+    expect(structured.englishPrompt).not.toContain(
+      "make the code organized and maintainable"
+    );
     expect(structured.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
   });
 
@@ -138,6 +141,38 @@ describe("translatePrompt", () => {
       "Natural English interpretation: make the code organized, secure, and maintainable"
     );
     expect(structured.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("parses longer code quality prompts without relying on exact phrase order", () => {
+    const direct = translatePrompt(
+      "خلي الكود منظم وقابل للصيانة واهتم بالأمان بتاعه",
+      { mode: "general" }
+    );
+    const structured = translatePrompt(
+      "خلي الكود منظم وقابل للصيانة واهتم بالأمان بتاعه"
+    );
+
+    expect(direct.output).toBe(
+      "Make the code organized, maintainable, and secure"
+    );
+    expect(direct.output).not.toMatch(/[\u0600-\u06ff]/);
+    expect(structured.mode).toBe("security");
+    expect(structured.englishPrompt).toContain(
+      "Improve this code to make it secure, organized, and maintainable."
+    );
+    expect(structured.englishPrompt).toContain(
+      "Natural English interpretation: make the code organized, maintainable, and secure"
+    );
+    expect(structured.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("deduplicates maintainability when organized and maintainable fragments are selected", () => {
+    const result = translatePrompt("منظم وقابل للصيانة");
+
+    expect(result.mode).toBe("general");
+    expect(result.output).toBe("Organized and maintainable");
+    expect(result.output).not.toContain("maintainable maintainable");
+    expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
   });
 
   it("keeps maintainability fragments as direct fragment translations", () => {
