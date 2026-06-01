@@ -633,6 +633,16 @@
       tags: ["refactor"]
     },
     {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0646\u0638\u0645",
+      english: "make the code organized and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u062E\u0644\u064A \u0627\u0644\u0643\u0648\u062F \u0645\u0631\u062A\u0628",
+      english: "make the code organized and maintainable",
+      tags: ["refactor"]
+    },
+    {
       arabic: "\u0631\u062A\u0628 \u0627\u0644\u0643\u0648\u062F",
       english: "organize the code",
       tags: ["refactor"]
@@ -665,6 +675,26 @@
     {
       arabic: "\u0646\u0636\u064A\u0641\u0647",
       english: "clean and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0645\u0646\u0638\u0645",
+      english: "organized and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0645\u0646\u0638\u0645\u0629",
+      english: "organized and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0645\u0631\u062A\u0628",
+      english: "organized and maintainable",
+      tags: ["refactor"]
+    },
+    {
+      arabic: "\u0645\u0631\u062A\u0628\u0629",
+      english: "organized and maintainable",
       tags: ["refactor"]
     },
     {
@@ -1225,7 +1255,7 @@
     if (signals.review || tags.has("review")) {
       return "review";
     }
-    if (signals.responsive || signals.preserveDesign || signals.preserveLogic || tags.has("refactor")) {
+    if (signals.responsive || signals.cleanCode || signals.preserveDesign || signals.preserveLogic || tags.has("refactor")) {
       return "refactor";
     }
     if (signals.friendlyOnly || signals.business || signals.generalRequest || tags.has("friendly") || tags.has("business") || tags.has("general") || signals.hasArabic) {
@@ -1322,6 +1352,9 @@
     if (mode === "refactor" && signals.performance) {
       return "Improve this code's performance while preserving its behavior.";
     }
+    if (mode === "refactor" && signals.cleanCode) {
+      return "Organize and clean up this code while preserving its behavior.";
+    }
     if (mode === "explain" && signals.simpleExplanation) {
       return "Explain how this code works in simple language.";
     }
@@ -1354,6 +1387,16 @@
         "Keep public APIs stable unless a change is required.",
         "Run the relevant build, test, or profiling command when available.",
         "Explain what improved and how it was verified."
+      ];
+    }
+    if (mode === "refactor" && signals.cleanCode) {
+      return [
+        "Improve readability, structure, and maintainability.",
+        "Preserve the existing behavior.",
+        "Avoid changing public APIs unless necessary.",
+        "Avoid broad rewrites or unrelated refactors.",
+        "Keep the smallest clear improvement that satisfies the request.",
+        "Explain what was cleaned up or reorganized."
       ];
     }
     if (mode === "security" && signals.securityHardening) {
@@ -1520,7 +1563,10 @@
       "\u0646\u0636\u0641",
       "\u0646\u0638\u0641",
       "\u0631\u062A\u0628",
+      "\u0645\u0631\u062A\u0628",
+      "\u0645\u0631\u062A\u0628\u0629",
       "\u0645\u0646\u0638\u0645",
+      "\u0645\u0646\u0638\u0645\u0629",
       "\u0642\u0627\u0628\u0644 \u0644\u0644\u0635\u064A\u0627\u0646\u0629"
     ]);
     const friendly = containsAny(normalized, [

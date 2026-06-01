@@ -75,6 +75,31 @@ describe("translatePrompt", () => {
     expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
   });
 
+  it("translates organized-code requests without leaving Arabic fragments", () => {
+    const direct = translatePrompt("خلي الكود منظم", { mode: "general" });
+    const structured = translatePrompt("خلي الكود منظم");
+
+    expect(direct.output).toBe("Make the code organized and maintainable");
+    expect(direct.output).not.toMatch(/[\u0600-\u06ff]/);
+    expect(structured.mode).toBe("refactor");
+    expect(structured.englishPrompt).toContain(
+      "Organize and clean up this code while preserving its behavior."
+    );
+    expect(structured.englishPrompt).toContain(
+      "Natural English interpretation: make the code organized and maintainable"
+    );
+    expect(structured.englishPrompt).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
+  it("keeps organized-code fragments as fragment translations", () => {
+    const result = translatePrompt("منظم");
+
+    expect(result.mode).toBe("general");
+    expect(result.output).toBe("Organized and maintainable");
+    expect(result.output).not.toContain("Translate and clarify");
+    expect(result.output).not.toMatch(/[\u0600-\u06ff]/);
+  });
+
   it("preserves business context inside coding prompts", () => {
     const result = translatePrompt(
       "ظبطلي صفحة الطلبات عشان العميل يعرف حالة الشحن والدفع"

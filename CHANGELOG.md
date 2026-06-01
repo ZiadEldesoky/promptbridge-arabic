@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.4
+
+- Added deterministic support for organized-code phrases such as "خلي الكود منظم".
+- Full selected prompts now produce practical refactor guidance for organized, maintainable code.
+- Short selected fragments such as "منظم" now translate as "Organized and maintainable" instead of expanding into a meta-prompt.
+
 ## v0.11.3
 
 - Improved deterministic handling for compound code-quality phrases such as "خلي الكود آمن ونظيف".

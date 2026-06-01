@@ -506,6 +506,16 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["refactor"]
   },
   {
+    arabic: "خلي الكود منظم",
+    english: "make the code organized and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "خلي الكود مرتب",
+    english: "make the code organized and maintainable",
+    tags: ["refactor"]
+  },
+  {
     arabic: "رتب الكود",
     english: "organize the code",
     tags: ["refactor"]
@@ -538,6 +548,26 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
   {
     arabic: "نضيفه",
     english: "clean and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "منظم",
+    english: "organized and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "منظمة",
+    english: "organized and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "مرتب",
+    english: "organized and maintainable",
+    tags: ["refactor"]
+  },
+  {
+    arabic: "مرتبة",
+    english: "organized and maintainable",
     tags: ["refactor"]
   },
   {

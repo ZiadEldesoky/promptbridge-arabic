@@ -141,6 +141,7 @@ function inferMode(
 
   if (
     signals.responsive ||
+    signals.cleanCode ||
     signals.preserveDesign ||
     signals.preserveLogic ||
     tags.has("refactor")
@@ -292,6 +293,10 @@ function buildTask(
     return "Improve this code's performance while preserving its behavior.";
   }
 
+  if (mode === "refactor" && signals.cleanCode) {
+    return "Organize and clean up this code while preserving its behavior.";
+  }
+
   if (mode === "explain" && signals.simpleExplanation) {
     return "Explain how this code works in simple language.";
   }
@@ -334,6 +339,17 @@ function modeRequirements(
       "Keep public APIs stable unless a change is required.",
       "Run the relevant build, test, or profiling command when available.",
       "Explain what improved and how it was verified."
+    ];
+  }
+
+  if (mode === "refactor" && signals.cleanCode) {
+    return [
+      "Improve readability, structure, and maintainability.",
+      "Preserve the existing behavior.",
+      "Avoid changing public APIs unless necessary.",
+      "Avoid broad rewrites or unrelated refactors.",
+      "Keep the smallest clear improvement that satisfies the request.",
+      "Explain what was cleaned up or reorganized."
     ];
   }
 
@@ -543,7 +559,10 @@ function detectSignals(text: string): PromptSignals {
     "نضف",
     "نظف",
     "رتب",
+    "مرتب",
+    "مرتبة",
     "منظم",
+    "منظمة",
     "قابل للصيانة"
   ]);
   const friendly = containsAny(normalized, [
