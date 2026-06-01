@@ -171,7 +171,7 @@ function buildStructuredPrompt(
     return { task: friendlyTranslation };
   }
 
-  if (mode === "general" && !signals.codingIntent && naturalTranslation) {
+  if (mode === "general" && naturalTranslation) {
     return { task: naturalTranslation };
   }
 

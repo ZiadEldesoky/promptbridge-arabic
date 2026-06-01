@@ -36,9 +36,7 @@ await buildBundledConverter();
 await writeFile(resolve(appDir, "Contents/Info.plist"), infoPlist(), "utf8");
 
 run("chmod", ["755", appBinaryPath]);
-run("codesign", ["--force", "--deep", "--sign", "-", appDir], {
-  optional: true
-});
+codesignApp();
 run("ditto", ["-c", "-k", "--sequesterRsrc", "--keepParent", appDir, zipPath]);
 
 console.log(`Created ${zipPath}`);
@@ -71,6 +69,34 @@ function run(command, args, options = {}) {
       `Skipping optional step: ${command} ${args.join(" ")}\n${result.stderr ?? ""}`
     );
   }
+}
+
+function codesignApp() {
+  const identity =
+    process.env.PROMPTBRIDGE_CODESIGN_IDENTITY ?? findAppleDevelopmentIdentity();
+
+  run("codesign", ["--force", "--deep", "--sign", identity ?? "-", appDir], {
+    optional: true
+  });
+}
+
+function findAppleDevelopmentIdentity() {
+  const result = spawnSync(
+    "security",
+    ["find-identity", "-v", "-p", "codesigning"],
+    {
+      cwd: rootDir,
+      encoding: "utf8",
+      stdio: "pipe"
+    }
+  );
+
+  if (result.status !== 0) {
+    return undefined;
+  }
+
+  const identityMatch = result.stdout.match(/"([^"]*Apple Development:[^"]+)"/);
+  return identityMatch?.[1];
 }
 
 function infoPlist() {

@@ -89,9 +89,7 @@ describe("replaceSelectedText", () => {
 
     expect(result.converted).toBe(true);
     expect(shortcuts).toEqual(["copy", "paste"]);
-    expect(clipboardText).toContain(
-      "Turn this Arabic business or product request into a clear English implementation prompt."
-    );
+    expect(clipboardText).toBe("I want a simple welcome message for the customer");
   });
 
   it("can restore the previous clipboard after pasting", async () => {

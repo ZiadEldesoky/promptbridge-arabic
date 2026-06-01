@@ -1156,7 +1156,7 @@
     if (mode === "general" && signals.friendlyOnly && friendlyTranslation) {
       return { task: friendlyTranslation };
     }
-    if (mode === "general" && !signals.codingIntent && naturalTranslation) {
+    if (mode === "general" && naturalTranslation) {
       return { task: naturalTranslation };
     }
     const template = modeTemplates[mode];

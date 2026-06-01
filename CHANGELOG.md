@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.2
+
+- Fixed local macOS menu bar helper builds to prefer an available Apple Development signing identity instead of ad-hoc-only signing.
+- This keeps the app's Accessibility permission stable across local rebuilds because macOS no longer keys the helper only by a changing cdhash.
+- Kept explicit `general` mode as direct translation when PromptBridge understands the Arabic text, avoiding meta-prompts such as "Translate and clarify..." in selected-text workflows.
+
 ## v0.11.1
 
 - Improved deterministic Arabic intent handling for short selected prompts such as "خلي الكود آمن" so they generate actionable security hardening prompts instead of generic fix templates.

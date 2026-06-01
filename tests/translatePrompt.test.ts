@@ -29,14 +29,15 @@ describe("translatePrompt", () => {
     const result = translatePrompt("عايز رسالة ترحيب بسيطة للعميل");
 
     expect(result.mode).toBe("general");
-    expect(result.englishPrompt).toContain(
-      "Turn this Arabic business or product request into a clear English implementation prompt."
-    );
-    expect(result.englishPrompt).toContain(
-      "Natural English interpretation: I want a simple welcome message for the customer"
-    );
-    expect(result.englishPrompt).toContain("I want");
-    expect(result.englishPrompt).toContain("customer");
+    expect(result.output).toBe("I want a simple welcome message for the customer");
+  });
+
+  it("keeps explicit general mode as direct translation instead of a meta-template", () => {
+    const result = translatePrompt("خلي الكود آمن", { mode: "general" });
+
+    expect(result.mode).toBe("general");
+    expect(result.output).toBe("Make the code secure");
+    expect(result.output).not.toContain("Translate and clarify");
   });
 
   it("preserves business context inside coding prompts", () => {
