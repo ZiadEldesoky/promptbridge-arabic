@@ -2,7 +2,7 @@
   "name": "promptbridge-arabic",
   "displayName": "PromptBridge Arabic",
   "description": "Convert Arabic or Egyptian Arabic coding prompts into structured English prompts inside VS Code-compatible editors.",
-  "version": "0.11.9",
+  "version": "0.12.0",
   "publisher": "ziadeldesoky",
   "license": "MIT",
   "repository": {
@@ -61,9 +61,21 @@
     "keybindings": [
       {
         "command": "promptbridge.convertSelection",
+        "key": "alt+y",
+        "mac": "alt+y",
+        "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "promptbridge.convertSelection",
         "key": "ctrl+shift+y",
         "mac": "cmd+shift+y",
         "when": "editorTextFocus && editorHasSelection"
+      },
+      {
+        "command": "promptbridge.replaceFocusedSelection",
+        "key": "alt+y",
+        "mac": "alt+y",
+        "when": "!editorTextFocus"
       },
       {
         "command": "promptbridge.convertInputToClipboard",

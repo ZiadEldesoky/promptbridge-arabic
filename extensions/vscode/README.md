@@ -8,12 +8,14 @@ This extension uses the same deterministic local core engine as the PromptBridge
 
 - **PromptBridge: Convert Arabic Selection**
   Replaces the selected Arabic text in the active editor with an English coding-agent prompt.
-  Shortcut: `Cmd+Shift+Y` on macOS or `Ctrl+Shift+Y` on Windows/Linux.
+  Shortcut: `Option+Y` on macOS or `Alt+Y` on Windows/Linux.
+  The older `Cmd+Shift+Y` / `Ctrl+Shift+Y` shortcut still works as a fallback, and users can remap the shortcut from the editor's Keyboard Shortcuts if `Alt+Y` conflicts with their setup.
   You can also right-click selected text in the editor and choose **PromptBridge: Convert Arabic Selection**.
 
 - **PromptBridge: Replace Selected Text in Focused Input**
   For IDE chat inputs and other focused text boxes that are not real editor documents, copies the selected Arabic text, converts it, and pastes the English prompt back over the selection.
-  Shortcut: `Cmd+Shift+Y` on macOS or `Ctrl+Shift+Y` on Windows/Linux when focus is outside an editor document.
+  Shortcut: `Option+Y` on macOS or `Alt+Y` on Windows/Linux when focus is outside an editor document.
+  The older `Cmd+Shift+Y` / `Ctrl+Shift+Y` shortcut still works as a fallback, and users can remap the shortcut from the editor's Keyboard Shortcuts if `Alt+Y` conflicts with their setup.
 
 - **PromptBridge: Convert Arabic Prompt to Clipboard**
   Opens an input box, converts the Arabic prompt, and copies the English prompt to the clipboard.
@@ -30,7 +32,7 @@ This extension uses the same deterministic local core engine as the PromptBridge
 ## Local install from VSIX
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.11.9.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.12.0.vsix
 ```
 
 Cursor and other VS Code-compatible editors may also support installing a `.vsix` file manually. Support varies by editor and version.

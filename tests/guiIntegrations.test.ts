@@ -84,8 +84,24 @@ describe("GUI integration metadata", () => {
     expect(manifest.contributes.keybindings).toContainEqual(
       expect.objectContaining({
         command: "promptbridge.convertSelection",
+        key: "alt+y",
+        mac: "alt+y",
+        when: "editorTextFocus && editorHasSelection"
+      })
+    );
+    expect(manifest.contributes.keybindings).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.convertSelection",
         mac: "cmd+shift+y",
         when: "editorTextFocus && editorHasSelection"
+      })
+    );
+    expect(manifest.contributes.keybindings).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.replaceFocusedSelection",
+        key: "alt+y",
+        mac: "alt+y",
+        when: "!editorTextFocus"
       })
     );
     expect(manifest.contributes.keybindings).toContainEqual(

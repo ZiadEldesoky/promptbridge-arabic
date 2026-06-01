@@ -147,7 +147,7 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.11.9.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.12.0.vsix
 ```
 
 Available commands / الأوامر المتاحة:
@@ -160,11 +160,11 @@ Available commands / الأوامر المتاحة:
 Quick selection workflow / أسرع workflow للتحديد:
 
 1. Select Arabic text inside a real editor document.
-2. Press `Cmd+Shift+Y` on macOS or `Ctrl+Shift+Y` on Windows/Linux, or right-click and choose **PromptBridge: Convert Arabic Selection**.
+2. Press `Option+Y` on macOS or `Alt+Y` on Windows/Linux, or right-click and choose **PromptBridge: Convert Arabic Selection**.
 
-For IDE chat inputs such as Antigravity's prompt box, select the Arabic text and press `Cmd+Shift+Y` on macOS or `Ctrl+Shift+Y` on Windows/Linux. PromptBridge will copy the selected text, convert it, and paste the English prompt back over the same selection when platform input automation is available.
+For IDE chat inputs such as Antigravity's prompt box, select the Arabic text and press `Option+Y` on macOS or `Alt+Y` on Windows/Linux. PromptBridge will copy the selected text, convert it, and paste the English prompt back over the same selection when platform input automation is available. The older `Cmd+Shift+Y` / `Ctrl+Shift+Y` shortcut still works as a fallback, and users can remap the shortcut from the editor's Keyboard Shortcuts if `Alt+Y` conflicts with their setup.
 
-لو بتكتب في chat input جوه Antigravity أو Cursor، حدد النص العربي واضغط `Cmd+Shift+Y` على macOS أو `Ctrl+Shift+Y` على Windows/Linux. الأداة هتعمل copy للنص المحدد، تحوله، وتعمل paste للإنجليزي مكان نفس التحديد لو input automation متاح على النظام.
+لو بتكتب في chat input جوه Antigravity أو Cursor، حدد النص العربي واضغط `Option+Y` على macOS أو `Alt+Y` على Windows/Linux. الأداة هتعمل copy للنص المحدد، تحوله، وتعمل paste للإنجليزي مكان نفس التحديد لو input automation متاح على النظام. اختصار `Cmd+Shift+Y` / `Ctrl+Shift+Y` القديم لسه شغال كـ fallback، ولو `Alt+Y` اتعارض مع setup معين المستخدم يقدر يغيره من Keyboard Shortcuts.
 
 If the editor was already open during installation, run **Developer: Reload Window** once.
 
@@ -395,10 +395,10 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.11.9.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.12.0.vsix
 ```
 
-The extension adds commands for converting selected Arabic text, replacing selected text in focused IDE inputs, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It also adds `Cmd+Shift+Y` on macOS / `Ctrl+Shift+Y` on Windows and Linux for selected editor text and focused prompt inputs, plus an editor right-click menu item. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
+The extension adds commands for converting selected Arabic text, replacing selected text in focused IDE inputs, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It also adds `Option+Y` on macOS / `Alt+Y` on Windows and Linux for selected editor text and focused prompt inputs, keeps `Cmd+Shift+Y` / `Ctrl+Shift+Y` as a fallback, supports shortcut remapping from the editor's Keyboard Shortcuts, and includes an editor right-click menu item. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
 
 ### macOS menu bar helper
 

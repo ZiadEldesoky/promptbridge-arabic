@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.12.0
+
+- Added a simpler `Alt+Y` IDE shortcut for VS Code-compatible editors, including Cursor and Antigravity.
+- Kept the existing `Cmd+Shift+Y` / `Ctrl+Shift+Y` shortcut as a fallback for users who already use it.
+- Updated IDE extension documentation so the quick workflow is now select Arabic text, then press `Alt+Y` / `Option+Y`.
+
 ## v0.11.9
 
 - Added a user-triggered `promptbridge check-updates` CLI command that checks GitHub Releases for newer versions.
