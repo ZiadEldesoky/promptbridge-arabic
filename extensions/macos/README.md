@@ -9,6 +9,7 @@ Experimental macOS menu bar helper for selected Arabic prompt replacement.
 - Watches for selection changes from mouse or keyboard events.
 - Converts only the currently selected Arabic text.
 - Replaces the selection with the generated English coding-agent prompt.
+- Includes **Check for Updates**, which opens or checks GitHub Releases only when the user clicks it.
 
 ## Requirements
 
@@ -40,3 +41,4 @@ For the most stable Accessibility permission, copy the built app to `/Applicatio
 - Some apps do not expose selected text through Accessibility, so the helper falls back to copy/paste.
 - Auto replacement is intentionally off by default because it can affect any selected Arabic text while enabled.
 - It does not call external AI services; conversion uses a bundled deterministic PromptBridge converter built from the TypeScript core.
+- The update checker contacts GitHub Releases only when the user chooses **Check for Updates**.

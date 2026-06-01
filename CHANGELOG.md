@@ -2,6 +2,12 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.11.9
+
+- Added a user-triggered `promptbridge check-updates` CLI command that checks GitHub Releases for newer versions.
+- Added **Check for Updates** to the macOS menu bar helper, with update, up-to-date, and fallback release-page flows.
+- Updated privacy documentation to clarify that update checks contact GitHub only when the user explicitly requests them.
+
 ## v0.11.8
 
 - Added deterministic support for Arabic completed-work feedback prompts such as "إيه رأيك في الشغل اللي معمول دا".

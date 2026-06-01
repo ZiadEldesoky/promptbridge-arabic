@@ -5,6 +5,18 @@ private let copyTimeout: TimeInterval = 1.0
 private let clipboardPoll: TimeInterval = 0.05
 private let pasteDelay: TimeInterval = 0.3
 private let processingCooldown: TimeInterval = 1.2
+private let latestReleaseApiURL = URL(
+  string: "https://api.github.com/repos/ZiadEldesoky/promptbridge-arabic/releases/latest"
+)!
+private let latestTagApiURL = URL(
+  string: "https://api.github.com/repos/ZiadEldesoky/promptbridge-arabic/tags?per_page=1"
+)!
+private let latestReleasePageURL = URL(
+  string: "https://github.com/ZiadEldesoky/promptbridge-arabic/releases/latest"
+)!
+private let tagsPageURL = URL(
+  string: "https://github.com/ZiadEldesoky/promptbridge-arabic/tags"
+)!
 
 final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   private var statusItem: NSStatusItem!
@@ -16,6 +28,7 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   private var lastInput = ""
   private var lastProcessedAt = Date.distantPast
   private var isProcessing = false
+  private var isCheckingForUpdates = false
   private var eventMonitor: Any?
   private var allowTermination = false
   private var activity: NSObjectProtocol?
@@ -144,6 +157,15 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
     )
     accessibility.target = self
     menu.addItem(accessibility)
+
+    let checkUpdates = NSMenuItem(
+      title: "Check for Updates",
+      action: #selector(checkForUpdates),
+      keyEquivalent: ""
+    )
+    checkUpdates.target = self
+    checkUpdates.isEnabled = !isCheckingForUpdates
+    menu.addItem(checkUpdates)
 
     let quit = NSMenuItem(title: "Quit", action: #selector(quit), keyEquivalent: "q")
     quit.target = self
@@ -281,6 +303,156 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
     updateStatus("Check macOS Accessibility permission")
   }
 
+  @objc private func checkForUpdates() {
+    guard !isCheckingForUpdates else {
+      return
+    }
+
+    isCheckingForUpdates = true
+    updateStatus("Checking for updates")
+
+    var request = URLRequest(url: latestReleaseApiURL)
+    request.timeoutInterval = 10
+    request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+    request.setValue(
+      "PromptBridgeArabicMenuBar/\(currentAppVersion())",
+      forHTTPHeaderField: "User-Agent"
+    )
+
+    URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+      DispatchQueue.main.async {
+        guard let self else {
+          return
+        }
+
+        if let error {
+          self.checkLatestTag(
+            preferredVersion: nil,
+            preferredURL: nil,
+            fallbackError: error.localizedDescription
+          )
+          return
+        }
+
+        guard
+          let httpResponse = response as? HTTPURLResponse,
+          (200...299).contains(httpResponse.statusCode),
+          let data,
+          let release = try? JSONDecoder().decode(GitHubRelease.self, from: data),
+          let latestVersion = release.normalizedVersion
+        else {
+          self.checkLatestTag(
+            preferredVersion: nil,
+            preferredURL: nil,
+            fallbackError: "GitHub did not return a readable latest release."
+          )
+          return
+        }
+
+        self.checkLatestTag(
+          preferredVersion: latestVersion,
+          preferredURL: release.releaseURL ?? latestReleasePageURL,
+          fallbackError: nil
+        )
+      }
+    }.resume()
+  }
+
+  private func checkLatestTag(
+    preferredVersion: String?,
+    preferredURL: URL?,
+    fallbackError: String?
+  ) {
+    var request = URLRequest(url: latestTagApiURL)
+    request.timeoutInterval = 10
+    request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+    request.setValue(
+      "PromptBridgeArabicMenuBar/\(currentAppVersion())",
+      forHTTPHeaderField: "User-Agent"
+    )
+
+    URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+      DispatchQueue.main.async {
+        guard let self else {
+          return
+        }
+
+        if let error {
+          if let preferredVersion, let preferredURL {
+            self.finishUpdateCheck(
+              latestVersion: preferredVersion,
+              releaseURL: preferredURL
+            )
+            return
+          }
+
+          self.finishFailedUpdateCheck(
+            "\(fallbackError ?? "GitHub Releases could not be checked.")\n\(error.localizedDescription)"
+          )
+          return
+        }
+
+        guard
+          let httpResponse = response as? HTTPURLResponse,
+          (200...299).contains(httpResponse.statusCode),
+          let data,
+          let latestTag = try? JSONDecoder().decode([GitHubTag].self, from: data).first,
+          let tagVersion = latestTag.normalizedVersion
+        else {
+          if let preferredVersion, let preferredURL {
+            self.finishUpdateCheck(
+              latestVersion: preferredVersion,
+              releaseURL: preferredURL
+            )
+            return
+          }
+
+          self.finishFailedUpdateCheck(
+            fallbackError ?? "GitHub did not return a readable release or tag."
+          )
+          return
+        }
+
+        if let preferredVersion,
+           let preferredURL,
+           compareVersions(preferredVersion, tagVersion) >= 0 {
+          self.finishUpdateCheck(
+            latestVersion: preferredVersion,
+            releaseURL: preferredURL
+          )
+          return
+        }
+
+        self.finishUpdateCheck(latestVersion: tagVersion, releaseURL: tagsPageURL)
+      }
+    }.resume()
+  }
+
+  private func finishUpdateCheck(latestVersion: String, releaseURL: URL) {
+    isCheckingForUpdates = false
+
+    let currentVersion = currentAppVersion()
+
+    if compareVersions(latestVersion, currentVersion) > 0 {
+      updateStatus("Update available: \(latestVersion)")
+      showUpdateAvailable(
+        currentVersion: currentVersion,
+        latestVersion: latestVersion,
+        releaseURL: releaseURL
+      )
+      return
+    }
+
+    updateStatus("Up to date")
+    showUpToDate(currentVersion: currentVersion, releaseURL: releaseURL)
+  }
+
+  private func finishFailedUpdateCheck(_ message: String) {
+    isCheckingForUpdates = false
+    updateStatus("Update check failed")
+    showUpdateCheckFailed(message)
+  }
+
   @objc private func quit() {
     allowTermination = true
     NSApp.terminate(nil)
@@ -379,6 +551,83 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
     DispatchQueue.main.async {
       self.updateStatus(status)
     }
+  }
+
+  private func showUpdateAvailable(
+    currentVersion: String,
+    latestVersion: String,
+    releaseURL: URL
+  ) {
+    let alert = NSAlert()
+    alert.messageText = "PromptBridge Arabic update available"
+    alert.informativeText = "Installed: \(currentVersion)\nLatest: \(latestVersion)\n\nOpen the release page to download the newest build."
+    alert.addButton(withTitle: "Open Release")
+    alert.addButton(withTitle: "Later")
+
+    NSApp.activate(ignoringOtherApps: true)
+    if alert.runModal() == .alertFirstButtonReturn {
+      NSWorkspace.shared.open(releaseURL)
+    }
+  }
+
+  private func showUpToDate(currentVersion: String, releaseURL: URL) {
+    let alert = NSAlert()
+    alert.messageText = "PromptBridge Arabic is up to date"
+    alert.informativeText = "Installed version: \(currentVersion)"
+    alert.addButton(withTitle: "OK")
+    alert.addButton(withTitle: "Open Releases")
+
+    NSApp.activate(ignoringOtherApps: true)
+    if alert.runModal() == .alertSecondButtonReturn {
+      NSWorkspace.shared.open(releaseURL)
+    }
+  }
+
+  private func showUpdateCheckFailed(_ message: String) {
+    let alert = NSAlert()
+    alert.messageText = "Could not check for updates"
+    alert.informativeText = "\(message)\n\nYou can open GitHub Releases manually."
+    alert.addButton(withTitle: "Open Releases")
+    alert.addButton(withTitle: "OK")
+
+    NSApp.activate(ignoringOtherApps: true)
+    if alert.runModal() == .alertFirstButtonReturn {
+      NSWorkspace.shared.open(latestReleasePageURL)
+    }
+  }
+}
+
+private struct GitHubRelease: Decodable {
+  let tagName: String?
+  let htmlURL: URL?
+
+  enum CodingKeys: String, CodingKey {
+    case tagName = "tag_name"
+    case htmlURL = "html_url"
+  }
+
+  var normalizedVersion: String? {
+    guard let tagName else {
+      return nil
+    }
+
+    return normalizeVersion(tagName)
+  }
+
+  var releaseURL: URL? {
+    htmlURL
+  }
+}
+
+private struct GitHubTag: Decodable {
+  let name: String?
+
+  var normalizedVersion: String? {
+    guard let name else {
+      return nil
+    }
+
+    return normalizeVersion(name)
   }
 }
 
@@ -567,6 +816,58 @@ private func sendCommandKey(virtualKey: CGKeyCode) {
   keyUp?.flags = .maskCommand
   keyDown?.post(tap: .cghidEventTap)
   keyUp?.post(tap: .cghidEventTap)
+}
+
+private func currentAppVersion() -> String {
+  normalizeVersion(
+    Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+  )
+}
+
+private func normalizeVersion(_ version: String) -> String {
+  version
+    .trimmingCharacters(in: .whitespacesAndNewlines)
+    .replacingOccurrences(
+      of: #"^[vV]"#,
+      with: "",
+      options: .regularExpression
+    )
+    .split(separator: "-")
+    .first
+    .map(String.init) ?? version
+}
+
+private func compareVersions(_ left: String, _ right: String) -> Int {
+  let leftParts = versionParts(left)
+  let rightParts = versionParts(right)
+  let length = max(leftParts.count, rightParts.count)
+
+  for index in 0..<length {
+    let leftPart = index < leftParts.count ? leftParts[index] : 0
+    let rightPart = index < rightParts.count ? rightParts[index] : 0
+
+    if leftPart > rightPart {
+      return 1
+    }
+
+    if leftPart < rightPart {
+      return -1
+    }
+  }
+
+  return 0
+}
+
+private func versionParts(_ version: String) -> [Int] {
+  normalizeVersion(version)
+    .split(separator: ".")
+    .map { part in
+      let digits = part.prefix { character in
+        character.isNumber
+      }
+
+      return Int(String(digits)) ?? 0
+    }
 }
 
 private enum PromptBridgeMenuBarError: LocalizedError {

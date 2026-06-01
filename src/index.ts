@@ -36,3 +36,11 @@ export {
   restoreTechnicalTokens
 } from "./translator/preserveTechnicalTokens.js";
 export { redactSecrets } from "./redaction/redactSecrets.js";
+export {
+  checkForUpdates,
+  compareVersions,
+  latestReleaseApiUrl,
+  normalizeVersion,
+  releasesPageUrl
+} from "./updates/checkForUpdates.js";
+export type { UpdateCheckResult } from "./updates/checkForUpdates.js";

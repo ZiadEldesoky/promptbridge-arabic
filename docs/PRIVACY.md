@@ -10,6 +10,8 @@ PromptBridge Arabic does not collect, sell, share, or transmit user data.
 
 The CLI, browser extension, Raycast helper, VS Code-compatible extension, and experimental macOS menu bar helper run deterministic prompt conversion locally on the user's device. They do not call external AI services, analytics services, or remote translation APIs.
 
+When the user explicitly runs `promptbridge check-updates` or chooses **Check for Updates** in the macOS menu bar helper, PromptBridge contacts GitHub Releases to read the latest public release version. This update check does not send prompt text.
+
 ## Browser extension behavior
 
 The browser extension only accesses editable text when the user triggers PromptBridge through the popup, context menu, or keyboard shortcut.
@@ -27,6 +29,8 @@ The VS Code-compatible extension reads selected text or user-entered prompt text
 The experimental macOS menu bar helper can read the currently selected text only while the user enables **Auto Replace Selected Arabic** or manually chooses **Convert Current Selection Now**.
 
 The helper uses macOS Accessibility and local clipboard APIs to read and replace selected text. Conversion happens locally through a bundled deterministic converter built from the PromptBridge TypeScript core. Selected text is not transmitted to PromptBridge maintainers or any third party.
+
+The **Check for Updates** menu item contacts GitHub Releases only when the user clicks it.
 
 ## Secret redaction
 

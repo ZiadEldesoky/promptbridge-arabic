@@ -12,6 +12,7 @@ import type { LoadedPromptBridgeConfig } from "./config/types.js";
 import { runAgentCommand } from "./agents/runAgent.js";
 import { promptModes, type PromptMode } from "./translator/modes.js";
 import { translatePrompt } from "./translator/translatePrompt.js";
+import { checkForUpdates } from "./updates/checkForUpdates.js";
 import { getPackageVersion } from "./version.js";
 
 interface CliOptions {
@@ -37,6 +38,10 @@ interface ReplaceSelectionOptions extends CliOptions {
 
 interface RunOptions extends CliOptions {
   verbose?: boolean;
+}
+
+interface CheckUpdatesOptions {
+  json?: boolean;
 }
 
 const program = new Command();
@@ -82,6 +87,41 @@ program
     "Convert Arabic or Egyptian Arabic developer prompts into structured English prompts for AI coding agents."
   )
   .version(getPackageVersion());
+
+program
+  .command("check-updates")
+  .description("Check GitHub Releases for a newer PromptBridge Arabic version.")
+  .option("--json", "Print machine-readable update information")
+  .action(async (options: CheckUpdatesOptions) => {
+    const result = await checkForUpdates();
+
+    if (options.json) {
+      console.log(JSON.stringify(result, null, 2));
+      return;
+    }
+
+    console.log(`Current version: ${result.currentVersion}`);
+
+    if (result.latestVersion) {
+      console.log(`Latest version: ${result.latestVersion}`);
+    }
+
+    if (result.error) {
+      console.log(`Could not check for updates: ${result.error}`);
+      console.log(`Release page: ${result.releaseUrl}`);
+      process.exitCode = 1;
+      return;
+    }
+
+    if (result.updateAvailable) {
+      console.log(`Update available: ${result.latestVersion}`);
+      console.log(`Download: ${result.releaseUrl}`);
+      return;
+    }
+
+    console.log("PromptBridge Arabic is up to date.");
+    console.log(`Release page: ${result.releaseUrl}`);
+  });
 
 addPromptOptions(
   program
