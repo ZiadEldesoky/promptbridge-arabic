@@ -10,7 +10,7 @@ The user experience differs by platform because selected-text replacement outsid
 | --- | --- | --- | --- | --- |
 | CLI | Supported | Supported | Supported | Runs anywhere Node.js is available. |
 | Clipboard watch | Supported | Supported | Supported | Uses the system clipboard through Node.js. |
-| Browser extension | Supported | Supported | Supported | Works in Chrome-based browsers with editable prompt boxes. |
+| Browser extension | Supported | Supported | Supported | Works in Chrome-based browsers with editable prompt boxes, with a floating convert button on supported web AI domains. |
 | VS Code-compatible editor selection | Supported | Supported | Supported | Replaces selected text inside normal editor documents. |
 | VS Code-compatible focused chat input replacement | Supported | Experimental | Experimental | Uses platform copy/paste automation for custom IDE prompt boxes. |
 | CLI selected-text replacement | Supported | Experimental | Experimental | Runs `promptbridge replace-selection` through platform copy/paste automation. |

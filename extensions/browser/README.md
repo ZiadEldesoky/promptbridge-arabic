@@ -4,7 +4,7 @@ This extension lets GUI users convert Arabic or Egyptian Arabic prompt text dire
 
 It uses the same local deterministic PromptBridge core engine. It does not call an external AI service.
 
-The conversion script is injected into the active tab only after a user action, such as the popup, context menu, or keyboard shortcut.
+On supported web AI prompt boxes, the extension can show a small floating **Convert** button when Arabic text is selected. The context menu, popup, and keyboard shortcut remain available as fallback flows.
 
 ## Use without building
 
@@ -53,7 +53,7 @@ To load the local extension:
 1. Open a web AI app.
 2. Write Arabic text in the prompt box.
 3. Select the Arabic text, or leave the prompt box focused if focused-field fallback is enabled.
-4. Use right click -> **Convert Arabic prompt with saved settings**, click the extension popup, or press `Command+Shift+Y` on macOS.
+4. Click the floating **Convert** button when it appears, use right click -> **Convert Arabic prompt with saved settings**, click the extension popup, or press `Command+Shift+Y` on macOS.
 
 Use **Convert selected Arabic prompt and redact secrets** when you want common secret patterns redacted before the prompt is generated.
 
@@ -75,11 +75,13 @@ The extension includes prompt-box selectors for:
 - ChatGPT.
 - Claude.
 - Gemini.
+- Google AI Studio.
 - Cursor web tools.
 - Generic textareas, inputs, contenteditable fields, Lexical editors, and ProseMirror editors.
 
 ## Current limits
 
 - The extension replaces selected text or the focused editable prompt field. It does not translate every keystroke while typing.
+- The floating button is enabled on supported web AI domains; the context menu and popup still work through active-tab injection on other editable pages.
 - Some heavily customized editors may block synthetic input events.
 - Redaction is only applied when the redaction option is chosen.

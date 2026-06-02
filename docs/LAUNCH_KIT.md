@@ -6,14 +6,14 @@ This file collects ready-to-use launch copy and visual assets for sharing Prompt
 
 Use these neutral product screenshots. They show generic terminal, browser, and editor workflows rather than a specific AI app UI.
 
-PNG versions are best for X/social posts:
+PNG versions are the current GitHub and X/social screenshots:
 
 - Workflow overview: `docs/assets/screenshots/png/workflow-overview.png`
 - Browser extension: `docs/assets/screenshots/png/browser-extension.png`
 - VS Code-compatible extension: `docs/assets/screenshots/png/vscode-extension.png`
 - Terminal demo: `docs/assets/screenshots/png/terminal-demo.png`
 
-SVG versions are best for README and GitHub docs:
+SVG versions are kept as lightweight fallback diagrams:
 
 - Workflow overview: `docs/assets/screenshots/workflow-overview.svg`
 - Browser extension: `docs/assets/screenshots/browser-extension.svg`

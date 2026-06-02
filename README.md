@@ -8,7 +8,7 @@ Arabic-first prompt translator and optimizer for AI coding agents.
 
 PromptBridge Arabic lets Arabic-speaking developers write coding prompts in Arabic or Egyptian Arabic, then converts them into structured English prompts that work well with ChatGPT, Codex, Claude Code, Cursor, Gemini CLI, and other AI developer tools.
 
-![PromptBridge Arabic workflow overview](docs/assets/screenshots/workflow-overview.svg)
+![PromptBridge Arabic workflow overview](docs/assets/screenshots/png/workflow-overview.png)
 
 The current MVP is intentionally local and deterministic:
 
@@ -45,17 +45,17 @@ See [Platform Support](docs/PLATFORM_SUPPORT.md) for the full breakdown.
 
 ## Screenshots / لقطات الاستخدام
 
-These screenshots show PromptBridge workflows in neutral terminal, browser, and editor environments.
+These PNG screenshots show PromptBridge workflows in neutral terminal, browser, and editor environments.
 
 الصور دي بتوضح طريقة الاستخدام في terminal وbrowser وeditor بشكل محايد، من غير ربط الأداة بواجهة AI واحدة.
 
 ### Browser extension / إضافة المتصفح
 
-![PromptBridge Arabic browser extension screenshot](docs/assets/screenshots/browser-extension.svg)
+![PromptBridge Arabic browser extension screenshot](docs/assets/screenshots/png/browser-extension.png)
 
 ### IDE extension / إضافة محرر الأكواد
 
-![PromptBridge Arabic VS Code-compatible extension screenshot](docs/assets/screenshots/vscode-extension.svg)
+![PromptBridge Arabic VS Code-compatible extension screenshot](docs/assets/screenshots/png/vscode-extension.png)
 
 ### macOS menu bar / أداة شريط macOS
 
@@ -65,7 +65,7 @@ Experimental helper for lower-friction selected prompt replacement from the macO
 
 ### CLI / التيرمنال
 
-![PromptBridge Arabic terminal screenshot](docs/assets/screenshots/terminal-demo.svg)
+![PromptBridge Arabic terminal screenshot](docs/assets/screenshots/png/terminal-demo.png)
 
 ## Quick Start / التشغيل السريع
 
@@ -95,8 +95,9 @@ Workflow / طريقة الاستخدام:
 
 1. Write Arabic in the AI prompt box.
 2. Select the Arabic text, or keep the prompt box focused.
-3. Use right click -> **Convert Arabic prompt with saved settings**, the extension popup, or `Command+Shift+Y` on macOS.
-4. PromptBridge replaces it with a structured English coding-agent prompt.
+3. On supported web AI prompt boxes, click the floating **Convert** button that appears near selected Arabic text.
+4. You can also use right click -> **Convert Arabic prompt with saved settings**, the extension popup, or `Command+Shift+Y` on macOS.
+5. PromptBridge replaces it with a structured English coding-agent prompt.
 
 ### CLI users / مستخدمي التيرمنال
 
@@ -126,6 +127,16 @@ This contacts GitHub Releases only when you run the command.
 
 الأمر ده بيتواصل مع GitHub Releases فقط لما تشغله بنفسك.
 
+Show prompt stats / عرض إحصائيات الـ prompt:
+
+```bash
+promptbridge stats "ظبطلي الكود دا وخليه responsive من غير ما تغير الديزاين"
+```
+
+Stats are deterministic rough estimates, not model-specific tokenizer results.
+
+الإحصائيات تقديرية ومحلية، مش tokenizer رسمي لموديل معين.
+
 For development without linking / للتجربة أثناء التطوير:
 
 ```bash
@@ -147,12 +158,13 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.12.1.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.13.0.vsix
 ```
 
 Available commands / الأوامر المتاحة:
 
 - `PromptBridge: Convert Arabic Selection`
+- `PromptBridge: Convert Arabic Selection with Mode...`
 - `PromptBridge: Replace Selected Text in Focused Input`
 - `PromptBridge: Convert Arabic Prompt to Clipboard`
 - `PromptBridge: Insert Converted Arabic Prompt`
@@ -161,6 +173,7 @@ Quick selection workflow / أسرع workflow للتحديد:
 
 1. Select Arabic text inside a real editor document.
 2. Press `Option+Y` on macOS or `Alt+Y` on Windows/Linux, or right-click and choose **PromptBridge: Convert Arabic Selection**.
+3. Use **PromptBridge: Convert Arabic Selection with Mode...** when you want to choose `fix`, `refactor`, `review`, `tests`, `explain`, or `security` for this conversion only.
 
 For IDE chat inputs such as Antigravity's prompt box, select the Arabic text and press `Option+Y` on macOS or `Alt+Y` on Windows/Linux. PromptBridge will copy the selected text, convert it, and paste the English prompt back over the same selection when platform input automation is available. The older `Cmd+Shift+Y` / `Ctrl+Shift+Y` shortcut still works as a fallback, and users can remap the shortcut from the editor's Keyboard Shortcuts if `Alt+Y` conflicts with their setup.
 
@@ -366,7 +379,7 @@ Workflow:
 
 1. Write Arabic text inside a web AI prompt box.
 2. Select the Arabic text, or leave the prompt box focused if focused-field fallback is enabled.
-3. Use right click -> **Convert Arabic prompt with saved settings**, the extension popup, or `Command+Shift+Y` on macOS.
+3. Click the floating **Convert** button when it appears, use right click -> **Convert Arabic prompt with saved settings**, the extension popup, or `Command+Shift+Y` on macOS.
 4. PromptBridge replaces the selected text or focused prompt box with the structured English prompt.
 
 The extension uses the local deterministic core and does not call external AI services. The popup saves browser-local defaults for mode, bilingual output, redaction, and focused-field fallback. Redaction is only applied when selected or saved as a default.
@@ -396,10 +409,10 @@ npm run release:vscode
 Install in VS Code:
 
 ```bash
-code --install-extension artifacts/promptbridge-arabic-vscode-v0.12.1.vsix
+code --install-extension artifacts/promptbridge-arabic-vscode-v0.13.0.vsix
 ```
 
-The extension adds commands for converting selected Arabic text, replacing selected text in focused IDE inputs, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It also adds `Option+Y` on macOS / `Alt+Y` on Windows and Linux for selected editor text and focused prompt inputs, keeps `Cmd+Shift+Y` / `Ctrl+Shift+Y` as a fallback, supports shortcut remapping from the editor's Keyboard Shortcuts, and includes an editor right-click menu item. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
+The extension adds commands for converting selected Arabic text, converting selected text with a one-off mode picker, replacing selected text in focused IDE inputs, converting an input prompt to the clipboard, and inserting a converted prompt into the active editor. It also adds `Option+Y` on macOS / `Alt+Y` on Windows and Linux for selected editor text and focused prompt inputs, keeps `Cmd+Shift+Y` / `Ctrl+Shift+Y` as a fallback, supports shortcut remapping from the editor's Keyboard Shortcuts, and includes editor right-click menu items. It is intended for VS Code and VS Code-compatible editors that support VSIX installation.
 
 ### macOS menu bar helper
 
@@ -558,10 +571,11 @@ tests/
 docs/
   assets/
     screenshots/
-      browser-extension.svg
-      terminal-demo.svg
-      vscode-extension.svg
-      workflow-overview.svg
+      png/
+        browser-extension.png
+        terminal-demo.png
+        vscode-extension.png
+        workflow-overview.png
 extensions/
   browser/
     src/

@@ -44,3 +44,10 @@ export {
   releasesPageUrl
 } from "./updates/checkForUpdates.js";
 export type { UpdateCheckResult } from "./updates/checkForUpdates.js";
+export {
+  analyzePromptStats,
+  analyzeText,
+  estimateApproximateTokens,
+  formatPromptStats
+} from "./stats/promptStats.js";
+export type { PromptStatsResult, TextStats } from "./stats/promptStats.js";

@@ -2,6 +2,14 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.13.0
+
+- Added `promptbridge stats` to show deterministic prompt size, rough token estimates, selected mode, preserved technical tokens, and redaction count.
+- Added a floating **Convert** button in the browser extension for selected Arabic text inside supported web AI prompt boxes.
+- Added a VS Code-compatible **Convert Arabic Selection with Mode...** command so users can choose `auto`, `general`, `fix`, `refactor`, `review`, `tests`, `explain`, or `security` at conversion time.
+- Updated the GitHub and launch-kit screenshots with clean PNG captures for the browser extension, IDE extension, CLI, and workflow overview.
+- Kept all new flows local and deterministic, with no API key, telemetry, or external AI calls.
+
 ## v0.12.1
 
 - Added direct macOS update downloads from the menu bar helper when the latest GitHub Release includes a macOS zip asset.

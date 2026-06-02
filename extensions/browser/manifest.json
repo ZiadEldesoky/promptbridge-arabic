@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "PromptBridge Arabic",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "Convert selected Arabic developer prompts into structured English prompts inside web AI tools.",
   "permissions": ["activeTab", "contextMenus", "scripting", "storage"],
   "icons": {
@@ -13,6 +13,20 @@
   "background": {
     "service_worker": "dist/background.js"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://aistudio.google.com/*",
+        "https://cursor.com/*",
+        "https://www.cursor.com/*"
+      ],
+      "js": ["dist/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
   "action": {
     "default_title": "PromptBridge Arabic",
     "default_popup": "popup.html",

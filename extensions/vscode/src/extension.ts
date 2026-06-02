@@ -2,13 +2,18 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import * as vscode from "vscode";
 import { translatePrompt } from "../../../src/translator/translatePrompt.js";
-import { isPromptMode, type PromptMode } from "../../../src/translator/modes.js";
+import {
+  isPromptMode,
+  promptModes,
+  type PromptMode
+} from "../../../src/translator/modes.js";
 
 const ARABIC_TEXT_PATTERN = /[\u0600-\u06FF]/;
 const COPY_TIMEOUT_MS = 1000;
 const CLIPBOARD_POLL_MS = 50;
 const PASTE_DELAY_MS = 150;
 const execFileAsync = promisify(execFile);
+type ModeOverride = PromptMode | "auto";
 
 interface ExtensionSettings {
   mode?: PromptMode;
@@ -20,7 +25,11 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "promptbridge.convertSelection",
-      convertSelection
+      () => convertSelection()
+    ),
+    vscode.commands.registerCommand(
+      "promptbridge.convertSelectionWithMode",
+      convertSelectionWithMode
     ),
     vscode.commands.registerCommand(
       "promptbridge.convertInputToClipboard",
@@ -41,7 +50,7 @@ export function deactivate(): void {
   // VS Code calls this hook when the extension is unloaded.
 }
 
-async function convertSelection(): Promise<void> {
+async function convertSelection(modeOverride?: ModeOverride): Promise<void> {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
@@ -49,7 +58,7 @@ async function convertSelection(): Promise<void> {
     return;
   }
 
-  const settings = readSettings();
+  const settings = readSettings(modeOverride);
   const replacements = editor.selections.map((selection) => {
     const selectedText = editor.document.getText(selection);
 
@@ -80,6 +89,32 @@ async function convertSelection(): Promise<void> {
       convertible.length === 1 ? "" : "s"
     }.`
   );
+}
+
+async function convertSelectionWithMode(): Promise<void> {
+  const selectedMode = await vscode.window.showQuickPick(
+    [
+      {
+        label: "auto",
+        description: "Infer the best mode from the Arabic prompt",
+        mode: "auto" as const
+      },
+      ...promptModes.map((mode) => ({
+        label: mode,
+        description: modeDescription(mode),
+        mode
+      }))
+    ],
+    {
+      placeHolder: "Choose how PromptBridge should structure the selected Arabic prompt"
+    }
+  );
+
+  if (!selectedMode) {
+    return;
+  }
+
+  await convertSelection(selectedMode.mode);
 }
 
 async function convertInputToClipboard(): Promise<void> {
@@ -190,15 +225,33 @@ function convertText(
   return translatePrompt(trimmedInput, settings).output;
 }
 
-function readSettings(): ExtensionSettings {
+function readSettings(modeOverride?: ModeOverride): ExtensionSettings {
   const config = vscode.workspace.getConfiguration("promptbridge");
   const configuredMode = config.get<string>("mode", "auto");
+  const overrideMode =
+    modeOverride === "auto" ? undefined : modeOverride;
 
   return {
-    mode: isPromptMode(configuredMode) ? configuredMode : undefined,
+    mode:
+      overrideMode ??
+      (isPromptMode(configuredMode) ? configuredMode : undefined),
     bilingual: config.get<boolean>("bilingual", false),
     redact: config.get<boolean>("redact", false)
   };
+}
+
+function modeDescription(mode: PromptMode): string {
+  const descriptions: Record<PromptMode, string> = {
+    general: "Translate naturally without a coding template",
+    fix: "Investigate and fix an issue",
+    refactor: "Improve code while preserving behavior",
+    review: "Review work and provide findings",
+    tests: "Add or improve tests",
+    explain: "Explain code clearly",
+    security: "Review security risks"
+  };
+
+  return descriptions[mode];
 }
 
 function isSupportedFocusedInputPlatform(platform: NodeJS.Platform): boolean {

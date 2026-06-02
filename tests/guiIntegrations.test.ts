@@ -19,6 +19,10 @@ describe("GUI integration metadata", () => {
     ) as {
       version: string;
       permissions: string[];
+      content_scripts?: Array<{
+        matches: string[];
+        js: string[];
+      }>;
       icons: Record<string, string>;
     };
 
@@ -27,6 +31,13 @@ describe("GUI integration metadata", () => {
     expect(manifest.permissions).toContain("contextMenus");
     expect(manifest.permissions).toContain("scripting");
     expect(manifest.permissions).toContain("storage");
+    expect(manifest.content_scripts?.[0]?.matches).toContain(
+      "https://chatgpt.com/*"
+    );
+    expect(manifest.content_scripts?.[0]?.matches).toContain(
+      "https://claude.ai/*"
+    );
+    expect(manifest.content_scripts?.[0]?.js).toContain("dist/content.js");
     expect(manifest.icons["128"]).toBe("icons/icon128.png");
   });
 
@@ -70,6 +81,15 @@ describe("GUI integration metadata", () => {
     expect(manifest.contributes.commands).toContainEqual(
       expect.objectContaining({
         command: "promptbridge.convertSelection"
+      })
+    );
+    expect(manifest.activationEvents).toContain(
+      "onCommand:promptbridge.convertSelectionWithMode"
+    );
+    expect(manifest.contributes.commands).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.convertSelectionWithMode",
+        title: "PromptBridge: Convert Arabic Selection with Mode..."
       })
     );
     expect(manifest.contributes.commands).toContainEqual(
@@ -116,6 +136,11 @@ describe("GUI integration metadata", () => {
         command: "promptbridge.convertSelection"
       })
     );
+    expect(manifest.contributes.menus["editor/context"]).toContainEqual(
+      expect.objectContaining({
+        command: "promptbridge.convertSelectionWithMode"
+      })
+    );
   });
 
   it("keeps the load-unpacked browser extension bundle committed", async () => {
@@ -131,6 +156,18 @@ describe("GUI integration metadata", () => {
     await expect(
       access(new URL("../extensions/browser/icons/icon128.png", import.meta.url))
     ).resolves.toBeUndefined();
+  });
+
+  it("keeps the browser floating convert button wired locally", async () => {
+    const source = await readFile(
+      new URL("../extensions/browser/src/content.ts", import.meta.url),
+      "utf8"
+    );
+
+    expect(source).toContain("installFloatingConvertButton");
+    expect(source).toContain("promptbridge-arabic-floating-convert");
+    expect(source).toContain("loadBrowserSettings");
+    expect(source).toContain("Convert");
   });
 
   it("keeps the Raycast helper wired to selected-text replacement", async () => {
@@ -188,6 +225,8 @@ describe("GUI integration metadata", () => {
     );
 
     expect(source).toContain("vscode.env.clipboard.readText");
+    expect(source).toContain("convertSelectionWithMode");
+    expect(source).toContain("showQuickPick");
     expect(source).toContain("powershell.exe");
     expect(source).toContain("xdotool");
     expect(source).toContain("wtype");

@@ -1,6 +1,6 @@
 # PromptBridge Arabic Privacy Policy
 
-Last updated: May 31, 2026
+Last updated: June 3, 2026
 
 PromptBridge Arabic is local-first developer tooling for converting Arabic or Egyptian Arabic coding prompts into structured English prompts.
 
@@ -14,7 +14,7 @@ When the user explicitly runs `promptbridge check-updates` or chooses **Check fo
 
 ## Browser extension behavior
 
-The browser extension only accesses editable text when the user triggers PromptBridge through the popup, context menu, or keyboard shortcut.
+On supported web AI domains, the browser extension loads a local content script so it can show a floating **Convert** button when Arabic text is selected inside an editable prompt box. On other pages, PromptBridge still uses user-triggered active-tab injection through the popup, context menu, or keyboard shortcut.
 
 When triggered, the extension may read selected text or the currently focused editable prompt field, convert it locally, and replace it in the page. The selected or focused text is not sent to PromptBridge maintainers or any third party.
 

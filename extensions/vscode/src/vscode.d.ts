@@ -54,6 +54,12 @@ declare module "vscode" {
       placeHolder?: string;
       ignoreFocusOut?: boolean;
     }): Thenable<string | undefined>;
+    export function showQuickPick<T extends { label: string }>(
+      items: readonly T[],
+      options?: {
+        placeHolder?: string;
+      }
+    ): Thenable<T | undefined>;
     export function showInformationMessage(message: string): Thenable<string | undefined>;
     export function showWarningMessage(message: string): Thenable<string | undefined>;
   }

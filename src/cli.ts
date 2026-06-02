@@ -14,6 +14,10 @@ import { promptModes, type PromptMode } from "./translator/modes.js";
 import { translatePrompt } from "./translator/translatePrompt.js";
 import { checkForUpdates } from "./updates/checkForUpdates.js";
 import { getPackageVersion } from "./version.js";
+import {
+  analyzePromptStats,
+  formatPromptStats
+} from "./stats/promptStats.js";
 
 interface CliOptions {
   mode?: PromptMode;
@@ -41,6 +45,10 @@ interface RunOptions extends CliOptions {
 }
 
 interface CheckUpdatesOptions {
+  json?: boolean;
+}
+
+interface StatsOptions extends CliOptions {
   json?: boolean;
 }
 
@@ -122,6 +130,35 @@ program
     console.log("PromptBridge Arabic is up to date.");
     console.log(`Release page: ${result.releaseUrl}`);
   });
+
+addPromptOptions(
+  program
+    .command("stats")
+    .description(
+      "Show deterministic size and rough token estimates for a converted Arabic prompt."
+    )
+    .argument("<prompt...>", "Arabic or Egyptian Arabic coding prompt")
+    .option("--json", "Print machine-readable prompt statistics")
+).action(async (promptParts: string[], options: StatsOptions) => {
+  const input = promptParts.join(" ").trim();
+
+  if (!input) {
+    program.error("Please provide an Arabic or Egyptian Arabic prompt.");
+  }
+
+  const loadedConfig = await loadConfig({ configPath: options.config });
+  const stats = analyzePromptStats(
+    input,
+    translateOptionsFromConfig(options, loadedConfig)
+  );
+
+  if (options.json) {
+    console.log(JSON.stringify(stats, null, 2));
+    return;
+  }
+
+  console.log(formatPromptStats(stats));
+});
 
 addPromptOptions(
   program

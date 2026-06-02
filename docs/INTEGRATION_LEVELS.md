@@ -74,6 +74,8 @@ npm run release:vscode
 
 PromptBridge includes a VS Code-compatible extension that can convert selected Arabic text inside an editor, copy converted prompt input to the clipboard, or insert converted prompt input into the active editor.
 
+For editor documents, users can also run **PromptBridge: Convert Arabic Selection with Mode...** to choose `auto`, `general`, `fix`, `refactor`, `review`, `tests`, `explain`, or `security` before conversion.
+
 For custom IDE chat inputs such as Antigravity and Cursor prompt boxes, the extension also exposes focused selection replacement: the user selects Arabic text in the prompt box, presses `Option+Y` on macOS or `Alt+Y` on Windows/Linux, and PromptBridge copies, converts, and pastes the English prompt back over the same selection when platform input automation is available. The older `Cmd+Shift+Y` / `Ctrl+Shift+Y` shortcut still works as a fallback, and users can remap the shortcut from the editor's Keyboard Shortcuts if `Alt+Y` conflicts with their setup.
 
 Useful for VS Code and editors that support compatible VSIX extensions.

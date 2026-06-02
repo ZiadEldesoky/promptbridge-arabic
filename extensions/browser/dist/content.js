@@ -1120,6 +1120,15 @@
   }
 
   // src/translator/modes.ts
+  var promptModes = [
+    "general",
+    "fix",
+    "refactor",
+    "review",
+    "tests",
+    "explain",
+    "security"
+  ];
   var modeTemplates = {
     general: {
       task: "Translate and clarify this request in natural English.",
@@ -1204,6 +1213,9 @@
       ]
     }
   };
+  function isPromptMode(value) {
+    return promptModes.includes(value);
+  }
 
   // src/translator/preserveTechnicalTokens.ts
   var tokenPatterns = [
@@ -2284,6 +2296,44 @@
     return values.filter((value, index, array) => array.indexOf(value) === index);
   }
 
+  // extensions/browser/src/settings.ts
+  var STORAGE_KEY = "promptbridgeBrowserSettings";
+  var DEFAULT_BROWSER_SETTINGS = {
+    bilingual: false,
+    redact: false,
+    fallbackToFocusedField: true
+  };
+  async function loadBrowserSettings() {
+    if (!chrome?.storage?.sync) {
+      return DEFAULT_BROWSER_SETTINGS;
+    }
+    return new Promise((resolve) => {
+      chrome.storage?.sync?.get([STORAGE_KEY], (items) => {
+        if (chrome?.runtime?.lastError) {
+          resolve(DEFAULT_BROWSER_SETTINGS);
+          return;
+        }
+        resolve(normalizeBrowserSettings(items[STORAGE_KEY]));
+      });
+    });
+  }
+  function normalizeBrowserSettings(value) {
+    if (!isRecord(value)) {
+      return { ...DEFAULT_BROWSER_SETTINGS };
+    }
+    const mode = typeof value.mode === "string" && isPromptMode(value.mode) ? value.mode : void 0;
+    return {
+      ...DEFAULT_BROWSER_SETTINGS,
+      mode,
+      bilingual: typeof value.bilingual === "boolean" ? value.bilingual : DEFAULT_BROWSER_SETTINGS.bilingual,
+      redact: typeof value.redact === "boolean" ? value.redact : DEFAULT_BROWSER_SETTINGS.redact,
+      fallbackToFocusedField: typeof value.fallbackToFocusedField === "boolean" ? value.fallbackToFocusedField : DEFAULT_BROWSER_SETTINGS.fallbackToFocusedField
+    };
+  }
+  function isRecord(value) {
+    return typeof value === "object" && value !== null;
+  }
+
   // extensions/browser/src/siteAdapters.ts
   var COMMON_PROMPT_SELECTORS = [
     "textarea",
@@ -2353,6 +2403,7 @@
   // extensions/browser/src/content.ts
   var ARABIC_TEXT_PATTERN = /[\u0600-\u06FF]/;
   var readyKey = "__promptbridgeArabicContentReady";
+  var floatingButtonId = "promptbridge-arabic-floating-convert";
   var browserWindow = window;
   if (!browserWindow[readyKey]) {
     browserWindow[readyKey] = true;
@@ -2363,6 +2414,7 @@
       sendResponse(replaceActiveSelection(message.options ?? {}));
       return false;
     });
+    installFloatingConvertButton();
   }
   function replaceActiveSelection(options) {
     const normalizedOptions = normalizeOptions(options);
@@ -2598,6 +2650,139 @@
       return;
     }
     target.dispatchEvent(new Event("input", { bubbles: true, cancelable: true }));
+  }
+  function installFloatingConvertButton() {
+    const button = document.createElement("button");
+    button.id = floatingButtonId;
+    button.type = "button";
+    button.tabIndex = -1;
+    button.textContent = "Convert";
+    button.setAttribute("aria-label", "Convert Arabic prompt with PromptBridge");
+    button.style.cssText = [
+      "position:fixed",
+      "z-index:2147483647",
+      "display:none",
+      "min-width:72px",
+      "height:32px",
+      "padding:0 12px",
+      "border:0",
+      "border-radius:8px",
+      "background:#2563eb",
+      "color:#ffffff",
+      "font:600 13px/32px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif",
+      "box-shadow:0 8px 24px rgba(15,23,42,.28)",
+      "cursor:pointer"
+    ].join(";");
+    button.addEventListener("mousedown", (event) => {
+      event.preventDefault();
+    });
+    button.addEventListener("click", () => {
+      void convertFromFloatingButton(button);
+    });
+    document.documentElement.append(button);
+    const scheduleUpdate = () => {
+      window.setTimeout(() => {
+        updateFloatingButton(button);
+      }, 0);
+    };
+    document.addEventListener("selectionchange", scheduleUpdate);
+    document.addEventListener("mouseup", scheduleUpdate);
+    document.addEventListener("keyup", scheduleUpdate);
+    document.addEventListener("focusin", scheduleUpdate);
+    document.addEventListener("input", scheduleUpdate);
+    window.addEventListener("scroll", scheduleUpdate, true);
+    window.addEventListener("resize", scheduleUpdate);
+  }
+  async function convertFromFloatingButton(button) {
+    const originalLabel = button.textContent ?? "Convert";
+    button.disabled = true;
+    button.textContent = "Converting";
+    try {
+      const settings = await loadBrowserSettings();
+      const result = replaceActiveSelection(settings);
+      if (result.converted) {
+        button.textContent = "Converted";
+        window.setTimeout(() => {
+          hideFloatingButton(button);
+        }, 700);
+        return;
+      }
+      button.textContent = "No Arabic";
+      window.setTimeout(() => {
+        button.textContent = originalLabel;
+        button.disabled = false;
+        updateFloatingButton(button);
+      }, 900);
+    } catch {
+      button.textContent = "Failed";
+      window.setTimeout(() => {
+        button.textContent = originalLabel;
+        button.disabled = false;
+        updateFloatingButton(button);
+      }, 900);
+    }
+  }
+  function updateFloatingButton(button) {
+    if (button.disabled) {
+      return;
+    }
+    const placement = findFloatingButtonPlacement();
+    if (!placement) {
+      hideFloatingButton(button);
+      return;
+    }
+    const top = Math.max(placement.top - 42, 8);
+    const left = Math.min(
+      Math.max(placement.left, 8),
+      window.innerWidth - 88
+    );
+    button.style.top = `${top}px`;
+    button.style.left = `${left}px`;
+    button.style.display = "block";
+  }
+  function hideFloatingButton(button) {
+    button.style.display = "none";
+    button.disabled = false;
+    button.textContent = "Convert";
+  }
+  function findFloatingButtonPlacement() {
+    const activeElement = document.activeElement;
+    if (isTextControl(activeElement)) {
+      const selectedText = textControlSelectedText(activeElement);
+      if (selectedText && ARABIC_TEXT_PATTERN.test(selectedText)) {
+        const rect2 = activeElement.getBoundingClientRect();
+        return {
+          top: rect2.top,
+          left: rect2.right - 82
+        };
+      }
+    }
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed || selection.rangeCount === 0) {
+      return null;
+    }
+    if (!ARABIC_TEXT_PATTERN.test(selection.toString())) {
+      return null;
+    }
+    const editableRoot = findEditableRoot(selection.anchorNode) ?? findEditableRoot(selection.focusNode);
+    if (!editableRoot) {
+      return null;
+    }
+    const rangeRect = selection.getRangeAt(0).getBoundingClientRect();
+    const rootRect = editableRoot.getBoundingClientRect();
+    const rect = rangeRect.width > 0 && rangeRect.height > 0 ? rangeRect : rootRect;
+    return {
+      top: rect.top,
+      left: rect.right - 82
+    };
+  }
+  function textControlSelectedText(element) {
+    const selectionStart = element.selectionStart;
+    const selectionEnd = element.selectionEnd;
+    if (selectionStart === null || selectionEnd === null || selectionStart === selectionEnd) {
+      return null;
+    }
+    return element.value.slice(selectionStart, selectionEnd);
   }
 })();
 //# sourceMappingURL=content.js.map
