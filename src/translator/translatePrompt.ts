@@ -147,6 +147,15 @@ function inferMode(
   }
 
   if (
+    signals.buildError ||
+    signals.error ||
+    signals.crash ||
+    signals.saveReload
+  ) {
+    return "fix";
+  }
+
+  if (
     signals.responsive ||
     signals.cleanCode ||
     signals.organizedCode ||
@@ -155,6 +164,10 @@ function inferMode(
     tags.has("refactor")
   ) {
     return "refactor";
+  }
+
+  if (tags.has("fix")) {
+    return "fix";
   }
 
   if (
@@ -557,6 +570,13 @@ function detectSignals(text: string): PromptSignals {
     "harden",
     "hardening",
     "حماية",
+    "auth",
+    "authentication",
+    "authorization",
+    "data leak",
+    "data leakage",
+    "تسريب",
+    "تسريب بيانات",
     "أمان",
     "امان",
     "الأمان",
@@ -754,9 +774,12 @@ function detectSignals(text: string): PromptSignals {
     ]);
   const buildError = containsAny(normalized, [
     "build error",
+    "run build",
     "بيلد error",
     "خطأ build",
     "مشكلة build",
+    "بيفشل build",
+    "فشل build",
     "npm run build"
   ]);
   const error = containsAny(normalized, [
@@ -858,6 +881,7 @@ function detectSignals(text: string): PromptSignals {
       "من غير ما تغير اللوجيك",
       "متغيرش اللوجيك",
       "من غير ما تغير ال logic",
+      "اللوجيك",
       "business logic",
       "without changing the logic"
     ]),
@@ -865,6 +889,8 @@ function detectSignals(text: string): PromptSignals {
       "خلي التعديل بسيط",
       "تعديل بسيط",
       "بأقل تعديل",
+      "باقل تعديل",
+      "أقل تعديل",
       "اقل تعديل",
       "smallest safe",
       "safe change"
@@ -884,8 +910,15 @@ function detectSignals(text: string): PromptSignals {
     reviewFeedback,
     noDeletion: containsAny(normalized, [
       "متحذفش",
+      "متمسحش",
+      "متشيلش",
       "من غير ما تحذف",
+      "من غير ما تشيل",
       "بدون ما تحذف",
+      "أو تحذف",
+      "او تحذف",
+      "أو تشيل",
+      "او تشيل",
       "do not remove",
       "without removing"
     ]),
@@ -1071,6 +1104,16 @@ function approximateEnglishRequest(
 
   translated = translated
     .replace(/[،؛]/g, ",")
+    .replace(/(^|[\s,])للـ\s+/giu, "$1for ")
+    .replace(/(^|[\s,])لـ\s+/giu, "$1for ")
+    .replace(/(^|[\s,])في(?=$|[\s,])/giu, "$1in")
+    .replace(/(^|[\s,])على(?=$|[\s,])/giu, "$1on")
+    .replace(/(^|[\s,])إن(?=$|[\s,])/giu, "$1that")
+    .replace(/(^|[\s,])ان(?=$|[\s,])/giu, "$1that")
+    .replace(/(^|[\s,])أي(?=$|[\s,])/giu, "$1any")
+    .replace(/(^|[\s,])اي(?=$|[\s,])/giu, "$1any")
+    .replace(/(^|[\s,])أو(?=$|[\s,])/giu, "$1or")
+    .replace(/(^|[\s,])او(?=$|[\s,])/giu, "$1or")
     .replace(/\s+/g, " ")
     .trim();
 

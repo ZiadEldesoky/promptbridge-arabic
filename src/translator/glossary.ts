@@ -426,6 +426,31 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["fix"]
   },
   {
+    arabic: "صلحه",
+    english: "fix it",
+    tags: ["fix"]
+  },
+  {
+    arabic: "لما بشغل",
+    english: "when I run",
+    tags: ["fix"]
+  },
+  {
+    arabic: "بشغل",
+    english: "I run",
+    tags: ["fix"]
+  },
+  {
+    arabic: "بأقل تعديل",
+    english: "with the smallest safe change",
+    tags: ["fix", "small-change"]
+  },
+  {
+    arabic: "باقل تعديل",
+    english: "with the smallest safe change",
+    tags: ["fix", "small-change"]
+  },
+  {
     arabic: "متبوظش الديزاين",
     english: "preserve the existing design",
     tags: ["design"]
@@ -553,6 +578,11 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
   {
     arabic: "مش بيحفظ",
     english: "does not save",
+    tags: ["fix"]
+  },
+  {
+    arabic: "بيعمل reload",
+    english: "triggers a reload",
     tags: ["fix"]
   },
   {
@@ -711,6 +741,21 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["review"]
   },
   {
+    arabic: "وشوف لو فيه مشكلة",
+    english: "and check whether there is an issue",
+    tags: ["review"]
+  },
+  {
+    arabic: "لو فيه مشكلة",
+    english: "whether there is an issue",
+    tags: ["review"]
+  },
+  {
+    arabic: "مشكلة",
+    english: "issue",
+    tags: ["fix"]
+  },
+  {
     arabic: "اشرحلي",
     english: "explain to me",
     tags: ["explain"]
@@ -726,9 +771,44 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["explain"]
   },
   {
+    arabic: "ببساطة",
+    english: "simply",
+    tags: ["explain"]
+  },
+  {
+    arabic: "من غير كلام كتير",
+    english: "without too much explanation",
+    tags: ["explain"]
+  },
+  {
+    arabic: "كلام كتير",
+    english: "too much explanation",
+    tags: ["explain"]
+  },
+  {
     arabic: "اكتب tests",
     english: "write tests",
     tags: ["tests"]
+  },
+  {
+    arabic: "اكتب",
+    english: "write",
+    tags: ["general"]
+  },
+  {
+    arabic: "وتأكد إن",
+    english: "and make sure that",
+    tags: ["tests"]
+  },
+  {
+    arabic: "وتاكد ان",
+    english: "and make sure that",
+    tags: ["tests"]
+  },
+  {
+    arabic: "بتظهر",
+    english: "appear",
+    tags: ["tests", "general"]
   },
   {
     arabic: "اعمل tests",
@@ -864,6 +944,46 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     arabic: "فورم",
     english: "form",
     tags: ["business"]
+  },
+  {
+    arabic: "الفورم",
+    english: "the form",
+    tags: ["business"]
+  },
+  {
+    arabic: "على الموبايل",
+    english: "on mobile",
+    tags: ["responsive"]
+  },
+  {
+    arabic: "البيانات",
+    english: "the data",
+    tags: ["business"]
+  },
+  {
+    arabic: "اللوجيك",
+    english: "the business logic",
+    tags: ["logic"]
+  },
+  {
+    arabic: "تحذف",
+    english: "remove",
+    tags: ["general"]
+  },
+  {
+    arabic: "أي",
+    english: "any",
+    tags: ["general"]
+  },
+  {
+    arabic: "أو",
+    english: "or",
+    tags: ["general"]
+  },
+  {
+    arabic: "او",
+    english: "or",
+    tags: ["general"]
   },
   {
     arabic: "واجهة",
