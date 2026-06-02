@@ -553,6 +553,31 @@
       tags: ["fix"]
     },
     {
+      arabic: "\u0635\u0644\u062D\u0647",
+      english: "fix it",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0644\u0645\u0627 \u0628\u0634\u063A\u0644",
+      english: "when I run",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0628\u0634\u063A\u0644",
+      english: "I run",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0628\u0623\u0642\u0644 \u062A\u0639\u062F\u064A\u0644",
+      english: "with the smallest safe change",
+      tags: ["fix", "small-change"]
+    },
+    {
+      arabic: "\u0628\u0627\u0642\u0644 \u062A\u0639\u062F\u064A\u0644",
+      english: "with the smallest safe change",
+      tags: ["fix", "small-change"]
+    },
+    {
       arabic: "\u0645\u062A\u0628\u0648\u0638\u0634 \u0627\u0644\u062F\u064A\u0632\u0627\u064A\u0646",
       english: "preserve the existing design",
       tags: ["design"]
@@ -680,6 +705,11 @@
     {
       arabic: "\u0645\u0634 \u0628\u064A\u062D\u0641\u0638",
       english: "does not save",
+      tags: ["fix"]
+    },
+    {
+      arabic: "\u0628\u064A\u0639\u0645\u0644 reload",
+      english: "triggers a reload",
       tags: ["fix"]
     },
     {
@@ -838,6 +868,21 @@
       tags: ["review"]
     },
     {
+      arabic: "\u0648\u0634\u0648\u0641 \u0644\u0648 \u0641\u064A\u0647 \u0645\u0634\u0643\u0644\u0629",
+      english: "and check whether there is an issue",
+      tags: ["review"]
+    },
+    {
+      arabic: "\u0644\u0648 \u0641\u064A\u0647 \u0645\u0634\u0643\u0644\u0629",
+      english: "whether there is an issue",
+      tags: ["review"]
+    },
+    {
+      arabic: "\u0645\u0634\u0643\u0644\u0629",
+      english: "issue",
+      tags: ["fix"]
+    },
+    {
       arabic: "\u0627\u0634\u0631\u062D\u0644\u064A",
       english: "explain to me",
       tags: ["explain"]
@@ -853,9 +898,44 @@
       tags: ["explain"]
     },
     {
+      arabic: "\u0628\u0628\u0633\u0627\u0637\u0629",
+      english: "simply",
+      tags: ["explain"]
+    },
+    {
+      arabic: "\u0645\u0646 \u063A\u064A\u0631 \u0643\u0644\u0627\u0645 \u0643\u062A\u064A\u0631",
+      english: "without too much explanation",
+      tags: ["explain"]
+    },
+    {
+      arabic: "\u0643\u0644\u0627\u0645 \u0643\u062A\u064A\u0631",
+      english: "too much explanation",
+      tags: ["explain"]
+    },
+    {
       arabic: "\u0627\u0643\u062A\u0628 tests",
       english: "write tests",
       tags: ["tests"]
+    },
+    {
+      arabic: "\u0627\u0643\u062A\u0628",
+      english: "write",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0648\u062A\u0623\u0643\u062F \u0625\u0646",
+      english: "and make sure that",
+      tags: ["tests"]
+    },
+    {
+      arabic: "\u0648\u062A\u0627\u0643\u062F \u0627\u0646",
+      english: "and make sure that",
+      tags: ["tests"]
+    },
+    {
+      arabic: "\u0628\u062A\u0638\u0647\u0631",
+      english: "appear",
+      tags: ["tests", "general"]
     },
     {
       arabic: "\u0627\u0639\u0645\u0644 tests",
@@ -991,6 +1071,46 @@
       arabic: "\u0641\u0648\u0631\u0645",
       english: "form",
       tags: ["business"]
+    },
+    {
+      arabic: "\u0627\u0644\u0641\u0648\u0631\u0645",
+      english: "the form",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0639\u0644\u0649 \u0627\u0644\u0645\u0648\u0628\u0627\u064A\u0644",
+      english: "on mobile",
+      tags: ["responsive"]
+    },
+    {
+      arabic: "\u0627\u0644\u0628\u064A\u0627\u0646\u0627\u062A",
+      english: "the data",
+      tags: ["business"]
+    },
+    {
+      arabic: "\u0627\u0644\u0644\u0648\u062C\u064A\u0643",
+      english: "the business logic",
+      tags: ["logic"]
+    },
+    {
+      arabic: "\u062A\u062D\u0630\u0641",
+      english: "remove",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0623\u064A",
+      english: "any",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0623\u0648",
+      english: "or",
+      tags: ["general"]
+    },
+    {
+      arabic: "\u0627\u0648",
+      english: "or",
+      tags: ["general"]
     },
     {
       arabic: "\u0648\u0627\u062C\u0647\u0629",
@@ -1364,8 +1484,14 @@
     if (signals.review || tags.has("review")) {
       return "review";
     }
+    if (signals.buildError || signals.error || signals.crash || signals.saveReload) {
+      return "fix";
+    }
     if (signals.responsive || signals.cleanCode || signals.organizedCode || signals.preserveDesign || signals.preserveLogic || tags.has("refactor")) {
       return "refactor";
+    }
+    if (tags.has("fix")) {
+      return "fix";
     }
     if (signals.friendlyOnly || signals.business || signals.generalRequest || tags.has("friendly") || tags.has("business") || tags.has("general") || signals.hasArabic) {
       return "general";
@@ -1656,6 +1782,13 @@
       "harden",
       "hardening",
       "\u062D\u0645\u0627\u064A\u0629",
+      "auth",
+      "authentication",
+      "authorization",
+      "data leak",
+      "data leakage",
+      "\u062A\u0633\u0631\u064A\u0628",
+      "\u062A\u0633\u0631\u064A\u0628 \u0628\u064A\u0627\u0646\u0627\u062A",
       "\u0623\u0645\u0627\u0646",
       "\u0627\u0645\u0627\u0646",
       "\u0627\u0644\u0623\u0645\u0627\u0646",
@@ -1848,9 +1981,12 @@
     ]);
     const buildError = containsAny(normalized, [
       "build error",
+      "run build",
       "\u0628\u064A\u0644\u062F error",
       "\u062E\u0637\u0623 build",
       "\u0645\u0634\u0643\u0644\u0629 build",
+      "\u0628\u064A\u0641\u0634\u0644 build",
+      "\u0641\u0634\u0644 build",
       "npm run build"
     ]);
     const error = containsAny(normalized, [
@@ -1927,6 +2063,7 @@
         "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644\u0644\u0648\u062C\u064A\u0643",
         "\u0645\u062A\u063A\u064A\u0631\u0634 \u0627\u0644\u0644\u0648\u062C\u064A\u0643",
         "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u063A\u064A\u0631 \u0627\u0644 logic",
+        "\u0627\u0644\u0644\u0648\u062C\u064A\u0643",
         "business logic",
         "without changing the logic"
       ]),
@@ -1934,6 +2071,8 @@
         "\u062E\u0644\u064A \u0627\u0644\u062A\u0639\u062F\u064A\u0644 \u0628\u0633\u064A\u0637",
         "\u062A\u0639\u062F\u064A\u0644 \u0628\u0633\u064A\u0637",
         "\u0628\u0623\u0642\u0644 \u062A\u0639\u062F\u064A\u0644",
+        "\u0628\u0627\u0642\u0644 \u062A\u0639\u062F\u064A\u0644",
+        "\u0623\u0642\u0644 \u062A\u0639\u062F\u064A\u0644",
         "\u0627\u0642\u0644 \u062A\u0639\u062F\u064A\u0644",
         "smallest safe",
         "safe change"
@@ -1953,8 +2092,15 @@
       reviewFeedback,
       noDeletion: containsAny(normalized, [
         "\u0645\u062A\u062D\u0630\u0641\u0634",
+        "\u0645\u062A\u0645\u0633\u062D\u0634",
+        "\u0645\u062A\u0634\u064A\u0644\u0634",
         "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u062D\u0630\u0641",
+        "\u0645\u0646 \u063A\u064A\u0631 \u0645\u0627 \u062A\u0634\u064A\u0644",
         "\u0628\u062F\u0648\u0646 \u0645\u0627 \u062A\u062D\u0630\u0641",
+        "\u0623\u0648 \u062A\u062D\u0630\u0641",
+        "\u0627\u0648 \u062A\u062D\u0630\u0641",
+        "\u0623\u0648 \u062A\u0634\u064A\u0644",
+        "\u0627\u0648 \u062A\u0634\u064A\u0644",
         "do not remove",
         "without removing"
       ]),
@@ -2090,7 +2236,7 @@
     for (const entry of matches) {
       translated = replaceGlossaryPhrase(translated, entry.arabic, entry.english);
     }
-    translated = translated.replace(/[،؛]/g, ",").replace(/\s+/g, " ").trim();
+    translated = translated.replace(/[،؛]/g, ",").replace(/(^|[\s,])للـ\s+/giu, "$1for ").replace(/(^|[\s,])لـ\s+/giu, "$1for ").replace(/(^|[\s,])في(?=$|[\s,])/giu, "$1in").replace(/(^|[\s,])على(?=$|[\s,])/giu, "$1on").replace(/(^|[\s,])إن(?=$|[\s,])/giu, "$1that").replace(/(^|[\s,])ان(?=$|[\s,])/giu, "$1that").replace(/(^|[\s,])أي(?=$|[\s,])/giu, "$1any").replace(/(^|[\s,])اي(?=$|[\s,])/giu, "$1any").replace(/(^|[\s,])أو(?=$|[\s,])/giu, "$1or").replace(/(^|[\s,])او(?=$|[\s,])/giu, "$1or").replace(/\s+/g, " ").trim();
     return translated === text.trim() ? void 0 : translated;
   }
   function translateReviewFeedbackRequest(text) {
