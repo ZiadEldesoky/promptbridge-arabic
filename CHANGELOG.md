@@ -2,7 +2,7 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
-## Unreleased
+## v0.14.0
 
 - Added local intent scoring and slot extraction so mode selection uses weighted signals, glossary tags, targets, and constraints instead of first-match keyword checks.
 - Improved real Arabic prompt coverage for auth tests, security reviews, build errors, save/reload bugs, and responsive checkout constraints.
