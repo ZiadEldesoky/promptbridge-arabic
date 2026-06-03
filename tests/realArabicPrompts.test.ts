@@ -23,6 +23,7 @@ describe("real Arabic prompt corpus", () => {
     expect(result.englishPrompt).toContain(
       "Make the smallest safe change that solves the request."
     );
+    expect(result.englishPrompt).toContain("Likely target: app/orders/page.tsx.");
     expect(result.englishPrompt).toContain("npm run build");
     expect(result.englishPrompt).toContain("Next.js");
     expect(result.englishPrompt).toContain("app/orders/page.tsx");
@@ -41,6 +42,7 @@ describe("real Arabic prompt corpus", () => {
     expect(result.englishPrompt).toContain(
       "The user is reporting that a save action reloads the page."
     );
+    expect(result.englishPrompt).toContain("Save button");
     expect(result.englishPrompt).toContain("SettingsForm.tsx");
     expectNoArabicLeftovers(result.englishPrompt);
   });
@@ -75,6 +77,21 @@ describe("real Arabic prompt corpus", () => {
     expectNoArabicLeftovers(result.englishPrompt);
   });
 
+  it("keeps explicit auth test requests in tests mode instead of over-prioritizing security words", () => {
+    const result = translatePrompt(
+      "اكتب tests للـ auth flow وتأكد إن forbidden users مش بيدخلوا"
+    );
+
+    expect(result.mode).toBe("tests");
+    expect(result.englishPrompt).toContain(
+      "Add or improve tests for this feature."
+    );
+    expect(result.englishPrompt).toContain("Likely target: auth flow.");
+    expect(result.englishPrompt).toContain("auth flow");
+    expect(result.englishPrompt).toContain("forbidden users cannot access");
+    expectNoArabicLeftovers(result.englishPrompt);
+  });
+
   it("keeps explanation prompts simple and preserves hook names", () => {
     const result = translatePrompt(
       "اشرحلي useEffect دا ببساطة من غير كلام كتير"
@@ -104,6 +121,9 @@ describe("real Arabic prompt corpus", () => {
     );
     expect(result.englishPrompt).toContain(
       "Do not remove existing content or fields unless explicitly required."
+    );
+    expect(result.englishPrompt).toContain(
+      "Detected constraints: preserve business logic and do not remove existing content or fields."
     );
     expectNoArabicLeftovers(result.englishPrompt);
   });

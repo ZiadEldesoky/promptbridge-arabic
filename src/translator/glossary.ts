@@ -931,6 +931,16 @@ export const egyptianDeveloperGlossary: GlossaryEntry[] = [
     tags: ["business", "auth"]
   },
   {
+    arabic: "مش بيدخلوا",
+    english: "cannot access",
+    tags: ["business", "auth"]
+  },
+  {
+    arabic: "بيدخلوا",
+    english: "can access",
+    tags: ["business", "auth"]
+  },
+  {
     arabic: "صفحة",
     english: "page",
     tags: ["business"]

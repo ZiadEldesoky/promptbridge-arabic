@@ -17,6 +17,11 @@ import {
   type PromptMode
 } from "./modes.js";
 import {
+  analyzePromptIntent,
+  type PromptIntentAnalysis,
+  type PromptIntentSignals
+} from "./intentAnalysis.js";
+import {
   preserveTechnicalTokens,
   type PreservedTechnicalToken
 } from "./preserveTechnicalTokens.js";
@@ -37,35 +42,7 @@ export interface TranslatePromptResult {
   preservedTokens: PreservedTechnicalToken[];
 }
 
-interface PromptSignals {
-  hasArabic: boolean;
-  friendly: boolean;
-  friendlyOnly: boolean;
-  business: boolean;
-  generalRequest: boolean;
-  selectedFragment: boolean;
-  codingIntent: boolean;
-  cleanCode: boolean;
-  organizedCode: boolean;
-  responsive: boolean;
-  performance: boolean;
-  implementation: boolean;
-  preserveDesign: boolean;
-  preserveLogic: boolean;
-  smallSafeChange: boolean;
-  buildError: boolean;
-  error: boolean;
-  crash: boolean;
-  saveReload: boolean;
-  security: boolean;
-  securityHardening: boolean;
-  simpleExplanation: boolean;
-  tests: boolean;
-  review: boolean;
-  reviewFeedback: boolean;
-  noDeletion: boolean;
-  urgent: boolean;
-}
+type PromptSignals = PromptIntentSignals;
 
 export function translatePrompt(
   input: string,
@@ -78,13 +55,21 @@ export function translatePrompt(
   const preserved = preserveTechnicalTokens(sourceText);
   const glossary = mergeGlossaries(options.glossary);
   const signals = detectSignals(sourceText);
-  const mode = options.mode ?? inferMode(sourceText, signals, glossary);
+  const glossaryMatches = findGlossaryMatches(sourceText, glossary);
+  const intent = analyzePromptIntent({
+    text: sourceText,
+    signals,
+    glossaryMatches,
+    tokens: preserved.tokens
+  });
+  const mode = options.mode ?? intent.mode;
   const structuredPrompt = buildStructuredPrompt(
     mode,
     signals,
     sourceText,
     preserved.tokens,
-    glossary
+    glossary,
+    intent
   );
 
   if (redaction.redactionCount > 0) {
@@ -114,83 +99,13 @@ export function translatePrompt(
   };
 }
 
-function inferMode(
-  text: string,
-  signals: PromptSignals,
-  glossary: GlossaryEntry[]
-): PromptMode {
-  const glossaryMatches = findGlossaryMatches(text, glossary);
-  const tags = new Set(glossaryMatches.flatMap((match) => match.tags));
-
-  if (signals.selectedFragment) {
-    return "general";
-  }
-
-  if (signals.security || tags.has("security")) {
-    return "security";
-  }
-
-  if (signals.simpleExplanation || tags.has("explain")) {
-    return "explain";
-  }
-
-  if (signals.tests || tags.has("tests")) {
-    return "tests";
-  }
-
-  if (signals.reviewFeedback) {
-    return "review";
-  }
-
-  if (signals.review || tags.has("review")) {
-    return "review";
-  }
-
-  if (
-    signals.buildError ||
-    signals.error ||
-    signals.crash ||
-    signals.saveReload
-  ) {
-    return "fix";
-  }
-
-  if (
-    signals.responsive ||
-    signals.cleanCode ||
-    signals.organizedCode ||
-    signals.preserveDesign ||
-    signals.preserveLogic ||
-    tags.has("refactor")
-  ) {
-    return "refactor";
-  }
-
-  if (tags.has("fix")) {
-    return "fix";
-  }
-
-  if (
-    signals.friendlyOnly ||
-    signals.business ||
-    signals.generalRequest ||
-    tags.has("friendly") ||
-    tags.has("business") ||
-    tags.has("general") ||
-    signals.hasArabic
-  ) {
-    return "general";
-  }
-
-  return "fix";
-}
-
 function buildStructuredPrompt(
   mode: PromptMode,
   signals: PromptSignals,
   text: string,
   tokens: PreservedTechnicalToken[],
-  glossary: GlossaryEntry[]
+  glossary: GlossaryEntry[],
+  intent: PromptIntentAnalysis
 ): StructuredPrompt {
   const friendlyTranslation = translateFriendlyOnlyMessage(text);
   const naturalTranslation = translateNaturalMessage(text, glossary);
@@ -206,7 +121,7 @@ function buildStructuredPrompt(
   const template = modeTemplates[mode];
   const prompt: StructuredPrompt = {
     task: buildTask(mode, signals, template),
-    context: contextFromInput(text, signals, glossary),
+    context: contextFromInput(text, signals, glossary, intent),
     requirements: unique([
       ...modeRequirements(mode, template, signals),
       ...signalRequirements(mode, signals)
@@ -242,7 +157,8 @@ function buildStructuredPrompt(
 function contextFromInput(
   text: string,
   signals: PromptSignals,
-  glossary: GlossaryEntry[]
+  glossary: GlossaryEntry[],
+  intent: PromptIntentAnalysis
 ): string[] {
   const approximateRequest = approximateEnglishRequest(text, glossary);
   const handledTranslation =
@@ -255,6 +171,25 @@ function contextFromInput(
   const context = approximateRequest
     ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext]
     : [...phraseContext];
+  const targetSummary = formatIntentSlotSummary("Likely target", intent.slots.targets);
+  const constraintSummary = formatIntentSlotSummary(
+    "Detected constraints",
+    intent.slots.constraints
+  );
+
+  if (targetSummary) {
+    context.push(targetSummary);
+  }
+
+  if (constraintSummary) {
+    context.push(constraintSummary);
+  }
+
+  if (intent.confidence === "low" && signals.codingIntent) {
+    context.push(
+      "Intent confidence is low; confirm unclear details before making risky changes."
+    );
+  }
 
   if (signals.buildError) {
     context.push("The user is likely reporting a build failure.");
@@ -277,6 +212,17 @@ function contextFromInput(
   }
 
   return unique(context);
+}
+
+function formatIntentSlotSummary(
+  label: string,
+  values: string[]
+): string | undefined {
+  if (!values.length) {
+    return undefined;
+  }
+
+  return `${label}: ${formatEnglishList(values)}.`;
 }
 
 function buildTask(

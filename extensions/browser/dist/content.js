@@ -1058,6 +1058,16 @@
       tags: ["business", "auth"]
     },
     {
+      arabic: "\u0645\u0634 \u0628\u064A\u062F\u062E\u0644\u0648\u0627",
+      english: "cannot access",
+      tags: ["business", "auth"]
+    },
+    {
+      arabic: "\u0628\u064A\u062F\u062E\u0644\u0648\u0627",
+      english: "can access",
+      tags: ["business", "auth"]
+    },
+    {
       arabic: "\u0635\u0641\u062D\u0629",
       english: "page",
       tags: ["business"]
@@ -1337,6 +1347,253 @@
     return promptModes.includes(value);
   }
 
+  // src/translator/intentAnalysis.ts
+  var modeTieBreakPriority = [
+    "tests",
+    "explain",
+    "security",
+    "review",
+    "fix",
+    "refactor",
+    "general"
+  ];
+  function analyzePromptIntent(input) {
+    const scores = initialScores();
+    const matchedPatterns = [];
+    scoreSignals(scores, matchedPatterns, input.signals);
+    scoreGlossaryTags(scores, matchedPatterns, input.glossaryMatches);
+    scoreCombinedSignals(
+      scores,
+      matchedPatterns,
+      input.signals,
+      new Set(input.glossaryMatches.flatMap((match) => match.tags))
+    );
+    const mode = chooseMode(scores);
+    const confidence = confidenceFor(scores, mode, input.signals);
+    return {
+      mode,
+      confidence,
+      scores,
+      matchedPatterns: unique(matchedPatterns),
+      slots: extractSlots(input.text, input.signals, input.tokens)
+    };
+  }
+  function initialScores() {
+    return Object.fromEntries(promptModes.map((mode) => [mode, 0]));
+  }
+  function scoreSignals(scores, matchedPatterns, signals) {
+    if (signals.selectedFragment) {
+      addScore(scores, matchedPatterns, "general", 100, "selected fragment");
+      return;
+    }
+    if (signals.friendlyOnly) {
+      addScore(scores, matchedPatterns, "general", 10, "friendly-only message");
+    }
+    if (signals.security) {
+      addScore(scores, matchedPatterns, "security", 7, "security intent");
+    }
+    if (signals.security && signals.review) {
+      addScore(scores, matchedPatterns, "security", 4, "security review");
+    }
+    if (signals.securityHardening) {
+      addScore(scores, matchedPatterns, "security", 5, "security hardening");
+    }
+    if (signals.security && (signals.cleanCode || signals.organizedCode)) {
+      addScore(
+        scores,
+        matchedPatterns,
+        "security",
+        5,
+        "security plus code quality"
+      );
+    }
+    if (signals.simpleExplanation) {
+      addScore(scores, matchedPatterns, "explain", 8, "explanation request");
+    }
+    if (signals.tests) {
+      addScore(scores, matchedPatterns, "tests", 8, "test request");
+    }
+    if (signals.reviewFeedback) {
+      addScore(scores, matchedPatterns, "review", 9, "completed-work feedback");
+    } else if (signals.review) {
+      addScore(scores, matchedPatterns, "review", 6, "review request");
+    }
+    if (signals.buildError) {
+      addScore(scores, matchedPatterns, "fix", 9, "build error");
+    }
+    if (signals.saveReload) {
+      addScore(scores, matchedPatterns, "fix", 9, "save reload bug");
+    }
+    if (signals.crash) {
+      addScore(scores, matchedPatterns, "fix", 8, "crash or hang");
+    }
+    if (signals.error) {
+      addScore(scores, matchedPatterns, "fix", 5, "reported error");
+    }
+    if (signals.responsive) {
+      addScore(scores, matchedPatterns, "refactor", 8, "responsive UI");
+    }
+    if (signals.performance) {
+      addScore(scores, matchedPatterns, "refactor", 6, "performance request");
+    }
+    if (signals.cleanCode) {
+      addScore(scores, matchedPatterns, "refactor", 5, "clean code");
+    }
+    if (signals.organizedCode) {
+      addScore(scores, matchedPatterns, "refactor", 5, "organized code");
+    }
+    if (signals.preserveDesign) {
+      addScore(scores, matchedPatterns, "refactor", 3, "preserve design");
+    }
+    if (signals.preserveLogic) {
+      addScore(scores, matchedPatterns, "refactor", 3, "preserve logic");
+    }
+    if (signals.business) {
+      addScore(scores, matchedPatterns, "general", 3, "business context");
+    }
+    if (signals.generalRequest) {
+      addScore(scores, matchedPatterns, "general", 2, "general request");
+    }
+    if (signals.implementation) {
+      addScore(scores, matchedPatterns, "general", 2, "implementation wording");
+    }
+    if (signals.hasArabic) {
+      addScore(scores, matchedPatterns, "general", 1, "arabic text");
+    }
+  }
+  function scoreGlossaryTags(scores, matchedPatterns, matches) {
+    for (const tag of new Set(matches.flatMap((match) => match.tags))) {
+      switch (tag) {
+        case "security":
+          addScore(scores, matchedPatterns, "security", 8, "glossary:security");
+          break;
+        case "tests":
+          addScore(scores, matchedPatterns, "tests", 4, "glossary:tests");
+          break;
+        case "explain":
+          addScore(scores, matchedPatterns, "explain", 4, "glossary:explain");
+          break;
+        case "review":
+          addScore(scores, matchedPatterns, "review", 3, "glossary:review");
+          break;
+        case "fix":
+        case "error":
+        case "crash":
+          addScore(scores, matchedPatterns, "fix", 2, `glossary:${tag}`);
+          break;
+        case "refactor":
+        case "responsive":
+        case "performance":
+          addScore(scores, matchedPatterns, "refactor", 5, `glossary:${tag}`);
+          break;
+        case "friendly":
+        case "business":
+        case "general":
+          addScore(scores, matchedPatterns, "general", 1, `glossary:${tag}`);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  function scoreCombinedSignals(scores, matchedPatterns, signals, tags) {
+    if (signals.business && signals.generalRequest && tags.has("refactor") && !signals.buildError && !signals.error && !signals.review && !signals.security && !signals.tests && !signals.simpleExplanation) {
+      addScore(
+        scores,
+        matchedPatterns,
+        "refactor",
+        5,
+        "business workflow improvement"
+      );
+    }
+  }
+  function addScore(scores, matchedPatterns, mode, amount, pattern) {
+    scores[mode] += amount;
+    matchedPatterns.push(pattern);
+  }
+  function chooseMode(scores) {
+    return modeTieBreakPriority.reduce((bestMode, candidateMode) => {
+      if (scores[candidateMode] > scores[bestMode]) {
+        return candidateMode;
+      }
+      return bestMode;
+    }, "general");
+  }
+  function confidenceFor(scores, mode, signals) {
+    if (signals.selectedFragment || signals.friendlyOnly) {
+      return "high";
+    }
+    const sortedScores = [...promptModes].map((candidateMode) => scores[candidateMode]).sort((left, right) => right - left);
+    const winningScore = scores[mode];
+    const runnerUpScore = sortedScores[1] ?? 0;
+    if (winningScore <= 2) {
+      return "low";
+    }
+    if (winningScore >= 8 && winningScore - runnerUpScore >= 3) {
+      return "high";
+    }
+    return "medium";
+  }
+  function extractSlots(text, signals, tokens) {
+    return {
+      targets: extractTargets(text, tokens),
+      constraints: extractConstraints(signals),
+      technicalHints: unique(tokens.map((token) => token.value))
+    };
+  }
+  function extractTargets(text, tokens) {
+    const targets = tokens.filter((token) => token.kind === "file_path").filter((token) => isLikelyTargetToken(token.value)).map((token) => token.value);
+    addPatternTarget(targets, text, /\b([A-Za-z0-9_-]+)\s+flow\b/i, "$1 flow");
+    addPatternTarget(targets, text, /\b(API\s+route)\b/i, "$1");
+    addPatternTarget(targets, text, /صفحة\s+([A-Za-z0-9_-]+)/iu, "$1 page");
+    addPatternTarget(targets, text, /زرار\s+([A-Za-z0-9_-]+)/iu, "$1 button");
+    addPatternTarget(
+      targets,
+      text,
+      /(?:فورم|الفورم)\s+([A-Za-z0-9_-]+)/iu,
+      "$1 form"
+    );
+    return unique(targets.filter((target) => target && !hasArabicText(target)));
+  }
+  function isLikelyTargetToken(value) {
+    if (["Next.js", "React.js", "Vue.js"].includes(value)) {
+      return false;
+    }
+    return true;
+  }
+  function addPatternTarget(targets, text, pattern, replacement) {
+    const match = text.match(pattern);
+    if (!match) {
+      return;
+    }
+    targets.push(match[0].replace(pattern, replacement));
+  }
+  function extractConstraints(signals) {
+    const constraints = [];
+    if (signals.preserveDesign) {
+      constraints.push("preserve visual design");
+    }
+    if (signals.preserveLogic) {
+      constraints.push("preserve business logic");
+    }
+    if (signals.noDeletion) {
+      constraints.push("do not remove existing content or fields");
+    }
+    if (signals.smallSafeChange) {
+      constraints.push("smallest safe change");
+    }
+    if (signals.urgent) {
+      constraints.push("prioritize the blocking issue first");
+    }
+    return constraints;
+  }
+  function hasArabicText(input) {
+    return /[\u0600-\u06ff]/.test(input);
+  }
+  function unique(values) {
+    return values.filter((value, index, array) => array.indexOf(value) === index);
+  }
+
   // src/translator/preserveTechnicalTokens.ts
   var tokenPatterns = [
     {
@@ -1433,13 +1690,21 @@
     const preserved = preserveTechnicalTokens(sourceText);
     const glossary = mergeGlossaries(options.glossary);
     const signals = detectSignals(sourceText);
-    const mode = options.mode ?? inferMode(sourceText, signals, glossary);
+    const glossaryMatches = findGlossaryMatches(sourceText, glossary);
+    const intent = analyzePromptIntent({
+      text: sourceText,
+      signals,
+      glossaryMatches,
+      tokens: preserved.tokens
+    });
+    const mode = options.mode ?? intent.mode;
     const structuredPrompt = buildStructuredPrompt(
       mode,
       signals,
       sourceText,
       preserved.tokens,
-      glossary
+      glossary,
+      intent
     );
     if (redaction.redactionCount > 0) {
       structuredPrompt.notes = [
@@ -1463,42 +1728,7 @@
       preservedTokens: preserved.tokens
     };
   }
-  function inferMode(text, signals, glossary) {
-    const glossaryMatches = findGlossaryMatches(text, glossary);
-    const tags = new Set(glossaryMatches.flatMap((match) => match.tags));
-    if (signals.selectedFragment) {
-      return "general";
-    }
-    if (signals.security || tags.has("security")) {
-      return "security";
-    }
-    if (signals.simpleExplanation || tags.has("explain")) {
-      return "explain";
-    }
-    if (signals.tests || tags.has("tests")) {
-      return "tests";
-    }
-    if (signals.reviewFeedback) {
-      return "review";
-    }
-    if (signals.review || tags.has("review")) {
-      return "review";
-    }
-    if (signals.buildError || signals.error || signals.crash || signals.saveReload) {
-      return "fix";
-    }
-    if (signals.responsive || signals.cleanCode || signals.organizedCode || signals.preserveDesign || signals.preserveLogic || tags.has("refactor")) {
-      return "refactor";
-    }
-    if (tags.has("fix")) {
-      return "fix";
-    }
-    if (signals.friendlyOnly || signals.business || signals.generalRequest || tags.has("friendly") || tags.has("business") || tags.has("general") || signals.hasArabic) {
-      return "general";
-    }
-    return "fix";
-  }
-  function buildStructuredPrompt(mode, signals, text, tokens, glossary) {
+  function buildStructuredPrompt(mode, signals, text, tokens, glossary, intent) {
     const friendlyTranslation = translateFriendlyOnlyMessage(text);
     const naturalTranslation = translateNaturalMessage(text, glossary);
     if (mode === "general" && signals.friendlyOnly && friendlyTranslation) {
@@ -1510,13 +1740,13 @@
     const template = modeTemplates[mode];
     const prompt = {
       task: buildTask(mode, signals, template),
-      context: contextFromInput(text, signals, glossary),
-      requirements: unique([
+      context: contextFromInput(text, signals, glossary, intent),
+      requirements: unique2([
         ...modeRequirements(mode, template, signals),
         ...signalRequirements(mode, signals)
       ]),
       focus: template.focus,
-      constraints: unique([
+      constraints: unique2([
         ...modeConstraints(mode, template, signals),
         ...signalConstraints(mode, signals)
       ]),
@@ -1537,13 +1767,29 @@
     }
     return prompt;
   }
-  function contextFromInput(text, signals, glossary) {
+  function contextFromInput(text, signals, glossary, intent) {
     const approximateRequest = approximateEnglishRequest(text, glossary);
     const handledTranslation = translateReviewFeedbackRequest(text) ?? translateCodeQualityRequest(text);
     const phraseContext = handledTranslation ? [] : normalizeDeveloperPhrases(text, glossary).filter(
       (phrase) => !approximateRequest?.includes(phrase)
     );
     const context = approximateRequest ? [`Natural English interpretation: ${approximateRequest}`, ...phraseContext] : [...phraseContext];
+    const targetSummary = formatIntentSlotSummary("Likely target", intent.slots.targets);
+    const constraintSummary = formatIntentSlotSummary(
+      "Detected constraints",
+      intent.slots.constraints
+    );
+    if (targetSummary) {
+      context.push(targetSummary);
+    }
+    if (constraintSummary) {
+      context.push(constraintSummary);
+    }
+    if (intent.confidence === "low" && signals.codingIntent) {
+      context.push(
+        "Intent confidence is low; confirm unclear details before making risky changes."
+      );
+    }
     if (signals.buildError) {
       context.push("The user is likely reporting a build failure.");
     }
@@ -1559,7 +1805,13 @@
     if (signals.friendly && !signals.friendlyOnly) {
       context.push("The user included a friendly greeting or casual tone.");
     }
-    return unique(context);
+    return unique2(context);
+  }
+  function formatIntentSlotSummary(label, values) {
+    if (!values.length) {
+      return void 0;
+    }
+    return `${label}: ${formatEnglishList(values)}.`;
   }
   function buildTask(mode, signals, template) {
     if (mode === "general") {
@@ -2027,9 +2279,9 @@
       "ui",
       "ux"
     ]);
-    const selectedFragment = hasArabicText(normalized) && !generalRequest && !implementation && !review && !tests && !simpleExplanation && !buildError && !error && !crash && wordCount(normalized) <= 5;
+    const selectedFragment = hasArabicText2(normalized) && !generalRequest && !implementation && !review && !tests && !simpleExplanation && !buildError && !error && !crash && wordCount(normalized) <= 5;
     return {
-      hasArabic: hasArabicText(normalized),
+      hasArabic: hasArabicText2(normalized),
       friendly,
       friendlyOnly,
       business,
@@ -2156,7 +2408,7 @@
   function containsAny(input, values) {
     return values.some((value) => input.includes(value.toLowerCase()));
   }
-  function hasArabicText(input) {
+  function hasArabicText2(input) {
     return /[\u0600-\u06ff]/.test(input);
   }
   function wordCount(input) {
@@ -2215,7 +2467,7 @@
     return input.trim().replace(/[؟?!.,،؛:]+/g, "").replace(/\s+/g, " ").toLowerCase();
   }
   function approximateEnglishRequest(text, glossary) {
-    if (!hasArabicText(text)) {
+    if (!hasArabicText2(text)) {
       return void 0;
     }
     const reviewFeedbackTranslation = translateReviewFeedbackRequest(text);
@@ -2412,7 +2664,7 @@
     return formatEnglishList(attributes.map((attribute) => attribute.label));
   }
   function formatEnglishList(values) {
-    const uniqueValues = unique(values);
+    const uniqueValues = unique2(values);
     if (uniqueValues.length <= 1) {
       return uniqueValues[0] ?? "";
     }
@@ -2438,7 +2690,7 @@
     }
     return `${trimmed.charAt(0).toUpperCase()}${trimmed.slice(1)}`;
   }
-  function unique(values) {
+  function unique2(values) {
     return values.filter((value, index, array) => array.indexOf(value) === index);
   }
 
@@ -2529,7 +2781,7 @@
     const siteSelectors = matchingAdapters(hostname).flatMap(
       (adapter) => adapter.selectors
     );
-    return unique2([...siteSelectors, ...COMMON_PROMPT_SELECTORS]);
+    return unique3([...siteSelectors, ...COMMON_PROMPT_SELECTORS]);
   }
   function hasPromptFieldAdapter(hostname) {
     return matchingAdapters(hostname).length > 0;
@@ -2542,7 +2794,7 @@
       )
     );
   }
-  function unique2(values) {
+  function unique3(values) {
     return [...new Set(values)];
   }
 
