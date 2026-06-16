@@ -250,11 +250,11 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   }
 
   @objc private func toggleAutoReplace() {
-    let trusted = isAccessibilityTrusted(prompt: true)
+    let trusted = isAccessibilityTrusted(prompt: false)
     writeDebugLog("toggleAutoReplace current=\(autoReplaceEnabled) trusted=\(trusted)")
 
     if !autoReplaceEnabled && !trusted {
-      updateStatus("Waiting for Accessibility permission")
+      updateStatus("Use Request Accessibility Permission")
       return
     }
 
@@ -269,11 +269,11 @@ final class PromptBridgeMenuBarApp: NSObject, NSApplicationDelegate {
   }
 
   @objc private func convertCurrentSelectionNow() {
-    let trusted = isAccessibilityTrusted(prompt: true)
+    let trusted = isAccessibilityTrusted(prompt: false)
     writeDebugLog("convertCurrentSelectionNow trusted=\(trusted)")
 
     if !trusted {
-      updateStatus("Waiting for Accessibility permission")
+      updateStatus("Use Request Accessibility Permission")
       return
     }
 

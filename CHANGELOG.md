@@ -2,6 +2,11 @@
 
 All notable changes to PromptBridge Arabic are documented here.
 
+## v0.14.1
+
+- Stopped normal macOS menu bar actions from showing the Accessibility permission prompt repeatedly.
+- Kept the explicit **Request Accessibility Permission** menu item as the only action that asks macOS to open the Accessibility prompt.
+
 ## v0.14.0
 
 - Added local intent scoring and slot extraction so mode selection uses weighted signals, glossary tags, targets, and constraints instead of first-match keyword checks.
